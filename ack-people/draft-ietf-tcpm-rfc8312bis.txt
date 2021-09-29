@@ -7,12 +7,12 @@ Internet-Draft                                                       UNL
 Obsoletes: 8312 (if approved)                                      S. Ha
 Updates: 5681 (if approved)                                     Colorado
 Intended status: Standards Track                                 I. Rhee
-Expires: 1 April 2022                                             Bowery
+Expires: 2 April 2022                                             Bowery
                                                                  V. Goel
                                                               Apple Inc.
                                                           L. Eggert, Ed.
                                                                   NetApp
-                                                       28 September 2021
+                                                       29 September 2021
 
 
                CUBIC for Fast and Long-Distance Networks
@@ -72,7 +72,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 1 April 2022.
+   This Internet-Draft will expire on 2 April 2022.
 
 Copyright Notice
 
@@ -1181,25 +1181,45 @@ Appendix A.  Acknowledgments
 
    *  Bob Briscoe
 
+   *  Christian Huitema
+
    *  Gorry Fairhurst
 
    *  Jonathan Morton
 
    *  Juhamatti Kuusisaari
 
+   *  Junho Choi
+
    *  Markku Kojo
 
+   *  Martin Thomson
+
    *  Matt Olson
+
+   *  Michael Welzl
+
+   *  Mirja Kuehlewind
+
+   *  Mohit P.  Tahiliani
 
    *  Neal Cardwell
 
    *  Praveen Balasubramanian
 
+   *  Richard Scheffenegger
+
    *  Rod Grimes
+
+   *  Tom Henderson
 
    *  Tom Petch
 
+   *  Wesley Rosenblum
+
    *  Yoshifumi Nishida
+
+   *  Yuchung Cheng
 
 Appendix B.  Evolution of CUBIC
 
