@@ -1034,7 +1034,7 @@ address div.right {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Xu, et al.</td>
-<td class="center">Expires 31 March 2022</td>
+<td class="center">Expires 2 April 2022</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1053,12 +1053,12 @@ address div.right {
 <a href="https://datatracker.ietf.org/doc/html/rfc5681" class="eref">5681</a> (if approved)</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2021-09-27" class="published">27 September 2021</time>
+<time datetime="2021-09-29" class="published">29 September 2021</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2022-03-31">31 March 2022</time></dd>
+<dd class="expires"><time datetime="2022-04-02">2 April 2022</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1144,7 +1144,7 @@ do this.<a href="#section-note.2-3" class="pilcrow">¶</a></p>
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 31 March 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 2 April 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1186,7 +1186,7 @@ do this.<a href="#section-note.2-3" class="pilcrow">¶</a></p>
                 <p id="section-toc.1-1.3.2.1.1" class="keepWithNext"><a href="#section-3.1" class="xref">3.1</a>.  <a href="#name-principle-1-for-the-cubic-i" class="xref">Principle 1 for the CUBIC Increase Function</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2">
-                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="xref">3.2</a>.  <a href="#name-principle-2-for-aimd-friend" class="xref">Principle 2 for AIMD Friendliness</a></p>
+                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="xref">3.2</a>.  <a href="#name-principle-2-for-reno-friend" class="xref">Principle 2 for Reno-Friendliness</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3">
                 <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="xref">3.3</a>.  <a href="#name-principle-3-for-rtt-fairnes" class="xref">Principle 3 for RTT Fairness</a></p>
@@ -1214,7 +1214,7 @@ do this.<a href="#section-note.2-3" class="pilcrow">¶</a></p>
                 <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="xref">4.2</a>.  <a href="#name-window-increase-function" class="xref">Window Increase Function</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.3">
-                <p id="section-toc.1-1.4.2.3.1"><a href="#section-4.3" class="xref">4.3</a>.  <a href="#name-aimd-friendly-region" class="xref">AIMD-Friendly Region</a></p>
+                <p id="section-toc.1-1.4.2.3.1"><a href="#section-4.3" class="xref">4.3</a>.  <a href="#name-reno-friendly-region" class="xref">Reno-Friendly Region</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.4">
                 <p id="section-toc.1-1.4.2.4.1"><a href="#section-4.4" class="xref">4.4</a>.  <a href="#name-concave-region" class="xref">Concave Region</a></p>
@@ -1243,7 +1243,7 @@ do this.<a href="#section-note.2-3" class="pilcrow">¶</a></p>
             <p id="section-toc.1-1.5.1"><a href="#section-5" class="xref">5</a>.  <a href="#name-discussion" class="xref">Discussion</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
-                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="xref">5.1</a>.  <a href="#name-fairness-to-aimd-tcp" class="xref">Fairness to AIMD TCP</a></p>
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="xref">5.1</a>.  <a href="#name-fairness-to-reno" class="xref">Fairness to Reno</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
                 <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="xref">5.2</a>.  <a href="#name-using-spare-capacity" class="xref">Using Spare Capacity</a></p>
@@ -1349,36 +1349,35 @@ in the Linux, Windows, and Apple stacks, and has been used and
 deployed globally. Extensive, decade-long deployment experience in
 vastly different Internet scenarios has convincingly demonstrated
 that CUBIC is safe for deployment on the global Internet and delivers
-substantial benefits over classical AIMD congestion control. It is
+substantial benefits over classical Reno congestion control <span>[<a href="#RFC5681" class="xref">RFC5681</a>]</span>. It is
 therefore to be regarded as the currently most widely deployed
 standard for TCP congestion control. CUBIC can also be used for other
 transport protocols such as QUIC <span>[<a href="#RFC9000" class="xref">RFC9000</a>]</span> and SCTP <span>[<a href="#RFC4960" class="xref">RFC4960</a>]</span>
 as a default congestion controller.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">The design of CUBIC was motivated by the well-documented problem
-classical TCP has with  low utilization over fast and long-distance
+classical Reno TCP has with  low utilization over fast and long-distance
 networks <span>[<a href="#K03" class="xref">K03</a>]</span><span>[<a href="#RFC3649" class="xref">RFC3649</a>]</span>. This problem arises from a slow increase
-of the congestion window following a congestion event in a network
-with a large bandwidth-delay product (BDP). <span>[<a href="#HKLRX06" class="xref">HKLRX06</a>]</span> indicates that
-this problem is frequently observed even in the range of congestion
-window sizes over several hundreds of packets. This problem is equally
-applicable to all Reno-style TCP standards and their variants,
-including TCP-Reno <span>[<a href="#RFC5681" class="xref">RFC5681</a>]</span>, TCP-NewReno <span>[<a href="#RFC6582" class="xref">RFC6582</a>]</span><span>[<a href="#RFC6675" class="xref">RFC6675</a>]</span>,
-SCTP <span>[<a href="#RFC4960" class="xref">RFC4960</a>]</span>, and TFRC <span>[<a href="#RFC5348" class="xref">RFC5348</a>]</span>, which use the same linear
-increase function for window growth. We refer to all Reno-style TCP
-standards and their variants collectively as "AIMD TCP" below because
-they use the Additive Increase and Multiplicative Decrease algorithm
-(AIMD).<a href="#section-1-2" class="pilcrow">¶</a></p>
+of the congestion window following a congestion event in a network with
+a large bandwidth-delay product (BDP). <span>[<a href="#HKLRX06" class="xref">HKLRX06</a>]</span> indicates that this
+problem is frequently observed even in the range of congestion window
+sizes over several hundreds of packets. This problem is equally
+applicable to all Reno-style standards and their variants, including
+TCP-Reno <span>[<a href="#RFC5681" class="xref">RFC5681</a>]</span>, TCP-NewReno <span>[<a href="#RFC6582" class="xref">RFC6582</a>]</span><span>[<a href="#RFC6675" class="xref">RFC6675</a>]</span>, SCTP
+<span>[<a href="#RFC4960" class="xref">RFC4960</a>]</span>, TFRC <span>[<a href="#RFC5348" class="xref">RFC5348</a>]</span>, and QUIC congestion control
+<span>[<a href="#RFC9002" class="xref">RFC9002</a>]</span>, which use the same linear increase function for window
+growth.  We refer to all Reno-style standards and their variants
+collectively as "Reno" below.<a href="#section-1-2" class="pilcrow">¶</a></p>
 <p id="section-1-3">CUBIC, originally proposed in <span>[<a href="#HRX08" class="xref">HRX08</a>]</span>, is a modification to the
-congestion control algorithm of classical AIMD TCP to remedy this
+congestion control algorithm of classical Reno to remedy this
 problem. Specifically, CUBIC uses a cubic function instead of the linear
-window increase function of AIMD TCP to improve scalability and
+window increase function of Reno to improve scalability and
 stability under fast and long-distance networks.<a href="#section-1-3" class="pilcrow">¶</a></p>
 <p id="section-1-4">This document updates the specification of CUBIC to include algorithmic
 improvements based on the Linux, Windows, and Apple implementations and
 recent academic work. Based on the extensive deployment experience with
 CUBIC, it also moves the specification to the Standards Track,
 obsoleting <span>[<a href="#RFC8312" class="xref">RFC8312</a>]</span>. This requires an update to <span>[<a href="#RFC5681" class="xref">RFC5681</a>]</span>, which
-limits the aggressiveness of TCP implementations in its Section 3.
+limits the aggressiveness of Reno TCP implementations in its Section 3.
 Since CUBIC is occasionally more aggressive than the <span>[<a href="#RFC5681" class="xref">RFC5681</a>]</span>
 algorithms, this document updates <span>[<a href="#RFC5681" class="xref">RFC5681</a>]</span> to allow for CUBIC's
 behavior.<a href="#section-1-4" class="pilcrow">¶</a></p>
@@ -1387,7 +1386,7 @@ of CUBIC, was selected as the default TCP congestion control algorithm
 by Linux in the year 2005 and had been used for several years by the
 Internet community at large.<a href="#section-1-5" class="pilcrow">¶</a></p>
 <p id="section-1-6">CUBIC uses a similar window increase function as BIC-TCP and is
-designed to be less aggressive and fairer to AIMD TCP in bandwidth
+designed to be less aggressive and fairer to Reno in bandwidth
 usage than BIC-TCP while maintaining the strengths of BIC-TCP such as
 stability, window scalability, and round-trip time (RTT) fairness.<a href="#section-1-6" class="pilcrow">¶</a></p>
 <p id="section-1-7">In the following sections, we first briefly explain the design
@@ -1427,8 +1426,8 @@ convex function.<a href="#section-3-2.2.1" class="pilcrow">¶</a></p>
 <dt id="section-3-2.3">
 Principle 2:  </dt>
         <dd style="margin-left: 1.5em" id="section-3-2.4">
-          <p id="section-3-2.4.1">To be AIMD-friendly, CUBIC is designed to behave like AIMD TCP in
-networks with short RTTs and small bandwidth where AIMD TCP
+          <p id="section-3-2.4.1">To be Reno-friendly, CUBIC is designed to behave like Reno in
+networks with short RTTs and small bandwidth where Reno
 performs well.<a href="#section-3-2.4.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
@@ -1455,7 +1454,7 @@ in order to balance between the scalability and convergence speed.<a href="#sect
 <p id="section-3.1-1">For better network utilization and stability, CUBIC <span>[<a href="#HRX08" class="xref">HRX08</a>]</span> uses a
 cubic window increase function in terms of the elapsed time from the
 last congestion event. While most alternative congestion control
-algorithms to AIMD TCP increase the congestion window using convex
+algorithms to Reno increase the congestion window using convex
 functions, CUBIC uses both the concave and convex profiles of a cubic
 function for window growth.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
 <p id="section-3.1-2">After a window reduction in response to a congestion event detected by
@@ -1485,16 +1484,16 @@ saturation point of the network, likely causing frequent global loss
 synchronizations.<a href="#section-3.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="principle-2-for-aimd-friendliness">
+<div id="principle-2-for-reno-friendliness">
 <section id="section-3.2">
-        <h3 id="name-principle-2-for-aimd-friend">
-<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-principle-2-for-aimd-friend" class="section-name selfRef">Principle 2 for AIMD Friendliness</a>
+        <h3 id="name-principle-2-for-reno-friend">
+<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-principle-2-for-reno-friend" class="section-name selfRef">Principle 2 for Reno-Friendliness</a>
         </h3>
-<p id="section-3.2-1">CUBIC promotes per-flow fairness to AIMD TCP. Note that AIMD TCP
+<p id="section-3.2-1">CUBIC promotes per-flow fairness to Reno. Note that Reno
 performs well over paths with short RTTs and small bandwidths (or
 small BDPs). There is only a scalability problem in networks with long
 RTTs and large bandwidths (or large BDPs).<a href="#section-3.2-1" class="pilcrow">¶</a></p>
-<p id="section-3.2-2">A congestion control algorithm designed to be friendly to AIMD TCP on
+<p id="section-3.2-2">A congestion control algorithm designed to be friendly to Reno on
 a per-flow basis must increase its congestion window less aggressively
 in small BDP networks than in large BDP networks.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
 <p id="section-3.2-3">The aggressiveness of CUBIC mainly depends on the maximum window size
@@ -1502,10 +1501,10 @@ before a window reduction, which is smaller in small-BDP networks than
 in large-BDP networks. Thus, CUBIC increases its congestion window
 less aggressively in small-BDP networks than in large-BDP networks.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
 <p id="section-3.2-4">Furthermore, in cases when the cubic function of CUBIC would increase
-the congestion window less aggressively than AIMD TCP, CUBIC simply
-follows the window size of AIMD TCP to ensure that CUBIC achieves at
-least the same throughput as AIMD TCP in small-BDP networks. We call
-this region where CUBIC behaves like AIMD TCP the "AIMD-friendly
+the congestion window less aggressively than Reno, CUBIC simply
+follows the window size of Reno to ensure that CUBIC achieves at
+least the same throughput as Reno in small-BDP networks. We call
+this region where CUBIC behaves like Reno the "Reno-friendly
 region".<a href="#section-3.2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1519,23 +1518,23 @@ linearly proportional to the inverse of their RTT ratio, where the
 throughput of a flow is approximately the size of its congestion
 window divided by its RTT.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
 <p id="section-3.3-2">Specifically, CUBIC maintains a window increase rate independent of
-RTTs outside the AIMD-friendly region, and thus flows with
+RTTs outside the Reno-friendly region, and thus flows with
 different RTTs have similar congestion window sizes under steady state
-when they operate outside the AIMD-friendly region.<a href="#section-3.3-2" class="pilcrow">¶</a></p>
-<p id="section-3.3-3">This notion of a linear throughput ratio is similar to that of AIMD
-TCP under high statistical multiplexing where packet loss is
+when they operate outside the Reno-friendly region.<a href="#section-3.3-2" class="pilcrow">¶</a></p>
+<p id="section-3.3-3">This notion of a linear throughput ratio is similar to that of Reno
+under high statistical multiplexing where packet loss is
 independent of individual flow rates. However, under low statistical
-multiplexing, the throughput ratio of AIMD TCP flows with different
+multiplexing, the throughput ratio of Reno flows with different
 RTTs is quadratically proportional to the inverse of their RTT ratio
 <span>[<a href="#XHR04" class="xref">XHR04</a>]</span>.<a href="#section-3.3-3" class="pilcrow">¶</a></p>
 <p id="section-3.3-4">CUBIC always ensures a linear throughput ratio independent of the
-amount of statistical multiplexing. This is an improvement over AIMD
-TCP. While there is no consensus on particular throughput ratios for
+amount of statistical multiplexing. This is an improvement over Reno.
+While there is no consensus on particular throughput ratios for
 different RTT flows, we believe that over wired Internet paths, use of
 a linear throughput ratio seems more reasonable than equal throughputs
 (i.e., the same throughput for flows with different RTTs) or a
 higher-order throughput ratio (e.g., a quadratical throughput ratio of
-AIMD TCP under low statistical multiplexing environments).<a href="#section-3.3-4" class="pilcrow">¶</a></p>
+Reno under low statistical multiplexing environments).<a href="#section-3.3-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="principle-4-for-the-cubic-decrease-factor">
@@ -1544,7 +1543,7 @@ AIMD TCP under low statistical multiplexing environments).<a href="#section-3.3-
 <a href="#section-3.4" class="section-number selfRef">3.4. </a><a href="#name-principle-4-for-the-cubic-d" class="section-name selfRef">Principle 4 for the CUBIC Decrease Factor</a>
         </h3>
 <p id="section-3.4-1">To balance between scalability and convergence speed, CUBIC sets the
-multiplicative window decrease factor to 0.7, whereas AIMD TCP uses
+multiplicative window decrease factor to 0.7, whereas Reno uses
 0.5.<a href="#section-3.4-1" class="pilcrow">¶</a></p>
 <p id="section-3.4-2">While this improves the scalability of CUBIC, a side effect of this
 decision is slower convergence, especially under low statistical
@@ -1589,8 +1588,8 @@ acknowledged in <a href="#eq4" class="xref">Figure 4</a>.<a href="#section-4.1-1
 <p id="section-4.1.1-1"><span class="contact-name">β</span><em><sub>cubic</sub></em>:
 CUBIC multiplication decrease factor as described in <a href="#mult-dec" class="xref">Section 4.6</a>.<a href="#section-4.1.1-1" class="pilcrow">¶</a></p>
 <p id="section-4.1.1-2"><span class="contact-name">α</span><em><sub>cubic</sub></em>:
-CUBIC additive increase factor used in AIMD-friendly region
-as described in <a href="#aimd-friendly" class="xref">Section 4.3</a>.<a href="#section-4.1.1-2" class="pilcrow">¶</a></p>
+CUBIC additive increase factor used in Reno-friendly region
+as described in <a href="#Reno-friendly" class="xref">Section 4.3</a>.<a href="#section-4.1.1-2" class="pilcrow">¶</a></p>
 <p id="section-4.1.1-3"><em>C</em>:
 constant that determines the aggressiveness of CUBIC in competing with
 other congestion control algorithms in high BDP networks. Please see
@@ -1678,8 +1677,8 @@ based on the cubic increase function, as described in <a href="#win-inc" class="
 Target value of congestion window in segments after the next RTT,
 that is, W<sub>cubic</sub>(<em>t</em> + <em>RTT</em>), as described in <a href="#win-inc" class="xref">Section 4.2</a>.<a href="#section-4.1.2-11" class="pilcrow">¶</a></p>
 <p id="section-4.1.2-12"><em>W<sub>est</sub></em>:
-An estimate for the congestion window in segments in the AIMD-friendly
-region, that is, an estimate for the congestion window of AIMD TCP.<a href="#section-4.1.2-12" class="pilcrow">¶</a></p>
+An estimate for the congestion window in segments in the Reno-friendly
+region, that is, an estimate for the congestion window of Reno.<a href="#section-4.1.2-12" class="pilcrow">¶</a></p>
 <p id="section-4.1.2-13"><em>segments_acked</em>:
 Number of MSS-sized segments acked when a "new ACK" is received, i.e., an
 ACK that cumulatively acknowledges the delivery of new data. This
@@ -1695,13 +1694,13 @@ new ACK acknowledges a segment smaller than the MSS.<a href="#section-4.1.2-13" 
         <h3 id="name-window-increase-function">
 <a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-window-increase-function" class="section-name selfRef">Window Increase Function</a>
         </h3>
-<p id="section-4.2-1">CUBIC maintains the acknowledgment (ACK) clocking of AIMD TCP by
+<p id="section-4.2-1">CUBIC maintains the acknowledgment (ACK) clocking of Reno by
 increasing the congestion window only at the reception of a new ACK. It
 does not make any changes to the TCP Fast Recovery and Fast Retransmit
 algorithms <span>[<a href="#RFC6582" class="xref">RFC6582</a>]</span><span>[<a href="#RFC6675" class="xref">RFC6675</a>]</span>.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
 <p id="section-4.2-2">During congestion avoidance, after a congestion event is detected
 by mechanisms described in <a href="#cubic-inc" class="xref">Section 3.1</a>, CUBIC changes the window
-increase function of AIMD TCP.<a href="#section-4.2-2" class="pilcrow">¶</a></p>
+increase function of Reno.<a href="#section-4.2-2" class="pilcrow">¶</a></p>
 <p id="section-4.2-3">CUBIC uses the following window increase function:<a href="#section-4.2-3" class="pilcrow">¶</a></p>
 <div id="eq1">
 <figure id="figure-1">
@@ -1897,9 +1896,7 @@ calculated using the following equation:<a href="#section-4.2-7" class="pilcrow"
 <figcaption><a href="#figure-2" class="selfRef">Figure 2</a></figcaption></figure>
 </div>
 <p id="section-4.2-9">where <em>cwnd<sub>start</sub></em> is the congestion window at the beginning
-of the current congestion avoidance stage. For example, right after a
-congestion event, <em>cwnd<sub>start</sub></em> is equal to the new cwnd
-calculated as described in <a href="#mult-dec" class="xref">Section 4.6</a>.<a href="#section-4.2-9" class="pilcrow">¶</a></p>
+of the current congestion avoidance stage.<a href="#section-4.2-9" class="pilcrow">¶</a></p>
 <p id="section-4.2-10">Upon receiving a new ACK during congestion avoidance, CUBIC computes the
 <em>target</em> congestion window size after the next <em>RTT</em> using <a href="#eq1" class="xref">Figure 1</a> as
 follows, where <em>RTT</em> is the smoothed round-trip time. The lower and
@@ -2085,29 +2082,29 @@ is non-decreasing and is less than the increase rate of slow start.<a href="#sec
 <p id="section-4.2-12">Depending on the value of the current congestion window size <em>cwnd</em>,
 CUBIC runs in three different regions:<a href="#section-4.2-12" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-4.2-13">
-<li id="section-4.2-13.1">The AIMD-friendly region, which ensures that CUBIC achieves at
-least the same throughput as AIMD TCP.<a href="#section-4.2-13.1" class="pilcrow">¶</a>
+<li id="section-4.2-13.1">The Reno-friendly region, which ensures that CUBIC achieves at
+least the same throughput as Reno.<a href="#section-4.2-13.1" class="pilcrow">¶</a>
 </li>
-          <li id="section-4.2-13.2">The concave region, if CUBIC is not in the AIMD-friendly region
+          <li id="section-4.2-13.2">The concave region, if CUBIC is not in the Reno-friendly region
 and <em>cwnd</em> is less than <em>W<sub>max</sub></em>.<a href="#section-4.2-13.2" class="pilcrow">¶</a>
 </li>
-          <li id="section-4.2-13.3">The convex region, if CUBIC is not in the AIMD-friendly region and
+          <li id="section-4.2-13.3">The convex region, if CUBIC is not in the Reno-friendly region and
 <em>cwnd</em> is greater than <em>W<sub>max</sub></em>.<a href="#section-4.2-13.3" class="pilcrow">¶</a>
 </li>
         </ol>
 <p id="section-4.2-14">Below, we describe the exact actions taken by CUBIC in each region.<a href="#section-4.2-14" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="aimd-friendly">
+<div id="Reno-friendly">
 <section id="section-4.3">
-        <h3 id="name-aimd-friendly-region">
-<a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-aimd-friendly-region" class="section-name selfRef">AIMD-Friendly Region</a>
+        <h3 id="name-reno-friendly-region">
+<a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-reno-friendly-region" class="section-name selfRef">Reno-Friendly Region</a>
         </h3>
-<p id="section-4.3-1">AIMD TCP performs well in certain types of networks, for example,
+<p id="section-4.3-1">Reno performs well in certain types of networks, for example,
 under short RTTs and small bandwidths (or small BDPs). In these
-networks, CUBIC remains in the AIMD-friendly region to achieve at
-least the same throughput as AIMD TCP.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
-<p id="section-4.3-2">The AIMD-friendly region is designed according to the analysis in
+networks, CUBIC remains in the Reno-friendly region to achieve at
+least the same throughput as Reno.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
+<p id="section-4.3-2">The Reno-friendly region is designed according to the analysis in
 <span>[<a href="#FHP00" class="xref">FHP00</a>]</span>, which studies the performance of an AIMD algorithm with an
 additive factor of <span class="contact-name">α</span> (segments per <em>RTT</em>) and
 a multiplicative factor of <span class="contact-name">β</span>, denoted by
@@ -2192,7 +2189,7 @@ calculated using <a href="#eq3" class="xref">Figure 3</a>.<a href="#section-4.3-
 </div>
 <figcaption><a href="#figure-3" class="selfRef">Figure 3</a></figcaption></figure>
 </div>
-<p id="section-4.3-4">By the same analysis, to achieve the same average window size as AIMD TCP
+<p id="section-4.3-4">By the same analysis, to achieve the same average window size as Reno
 that uses AIMD(1, 0.5), <span class="contact-name">α</span> must be equal to,<a href="#section-4.3-4" class="pilcrow">¶</a></p>
 <div id="section-4.3-5">
           <div class="alignCenter art-svg artwork" id="section-4.3-5.1">
@@ -2228,7 +2225,7 @@ that uses AIMD(1, 0.5), <span class="contact-name">α</span> must be equal to,<a
 </div>
 </div>
 <p id="section-4.3-6">Thus, CUBIC uses <a href="#eq4" class="xref">Figure 4</a> to estimate the window
-size <em>W<sub>est</sub></em> in the AIMD-friendly region with<a href="#section-4.3-6" class="pilcrow">¶</a></p>
+size <em>W<sub>est</sub></em> in the Reno-friendly region with<a href="#section-4.3-6" class="pilcrow">¶</a></p>
 <div id="section-4.3-7">
           <div class="alignCenter art-svg artwork" id="section-4.3-7.1">
 <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="7.176ex" role="img" viewBox="0 -1580.7 43055.4 3089.6" width="100ex">
@@ -2297,11 +2294,11 @@ size <em>W<sub>est</sub></em> in the AIMD-friendly region with<a href="#section-
             </svg><a href="#section-4.3-7.1" class="pilcrow">¶</a>
 </div>
 </div>
-<p id="section-4.3-8">which achieves the same average window size as AIMD TCP. When
+<p id="section-4.3-8">which achieves the same average window size as Reno. When
 receiving a new ACK in congestion avoidance (where <em>cwnd</em> could be
 greater than or less than <em>W<sub>max</sub></em>), CUBIC checks whether
 W<sub>cubic</sub>(<em>t</em>) is less than <em>W<sub>est</sub></em>. If so, CUBIC is
-in the AIMD-friendly region and <em>cwnd</em> SHOULD be set to
+in the Reno-friendly region and <em>cwnd</em> SHOULD be set to
 <em>W<sub>est</sub></em> at each reception of a new ACK.<a href="#section-4.3-8" class="pilcrow">¶</a></p>
 <p id="section-4.3-9"><em>W<sub>est</sub></em> is set equal to <em>cwnd<sub>start</sub></em> at the start
 of the congestion avoidance stage. After that, on every new ACK,
@@ -2405,8 +2402,8 @@ the segments actually acknowledged by a new ACK.<a href="#section-4.3-9" class="
 <em>W<sub>est</sub></em> &gt;= <em>W<sub>max</sub></em>, CUBIC needs to start probing to
 determine the new value of <em>W<sub>max</sub></em>. At this point,
 <span class="contact-name">α</span><em><sub>cubic</sub></em> SHOULD be set to 1 to ensure that
-CUBIC can achieve the same congestion window increment as AIMD
-TCP, which uses AIMD(1, 0.5).<a href="#section-4.3-11" class="pilcrow">¶</a></p>
+CUBIC can achieve the same congestion window increment as Reno,
+which uses AIMD(1, 0.5).<a href="#section-4.3-11" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="concave-region">
@@ -2415,7 +2412,7 @@ TCP, which uses AIMD(1, 0.5).<a href="#section-4.3-11" class="pilcrow">¶</a></p
 <a href="#section-4.4" class="section-number selfRef">4.4. </a><a href="#name-concave-region" class="section-name selfRef">Concave Region</a>
         </h3>
 <p id="section-4.4-1">When receiving a new ACK in congestion avoidance, if CUBIC is not in the
-AIMD-friendly region and <em>cwnd</em> is less than <em>W<sub>max</sub></em>, then
+Reno-friendly region and <em>cwnd</em> is less than <em>W<sub>max</sub></em>, then
 CUBIC is in the concave region. In this region, <em>cwnd</em> MUST be
 incremented by<a href="#section-4.4-1" class="pilcrow">¶</a></p>
 <div id="section-4.4-2">
@@ -2470,7 +2467,7 @@ incremented by<a href="#section-4.4-1" class="pilcrow">¶</a></p>
 <a href="#section-4.5" class="section-number selfRef">4.5. </a><a href="#name-convex-region" class="section-name selfRef">Convex Region</a>
         </h3>
 <p id="section-4.5-1">When receiving a new ACK in congestion avoidance, if CUBIC is not in the
-AIMD-friendly region and <em>cwnd</em> is larger than or equal to
+Reno-friendly region and <em>cwnd</em> is larger than or equal to
 <em>W<sub>max</sub></em>, then CUBIC is in the convex region.<a href="#section-4.5-1" class="pilcrow">¶</a></p>
 <p id="section-4.5-2">The convex region indicates that the network conditions might have
 changed since the last congestion event, possibly implying more
@@ -2999,16 +2996,16 @@ without any other traffic, Fast Convergence SHOULD be disabled.<a href="#section
         <h3 id="name-timeout">
 <a href="#section-4.8" class="section-number selfRef">4.8. </a><a href="#name-timeout" class="section-name selfRef">Timeout</a>
         </h3>
-<p id="section-4.8-1">In case of a timeout, CUBIC follows AIMD TCP to reduce <em>cwnd</em>
+<p id="section-4.8-1">In case of a timeout, CUBIC follows Reno to reduce <em>cwnd</em>
           <span>[<a href="#RFC5681" class="xref">RFC5681</a>]</span>, but sets <em>ssthresh</em> using <span class="contact-name">β</span><em><sub>cubic</sub></em>
-(same as in <a href="#mult-dec" class="xref">Section 4.6</a>) in a way that is different from AIMD TCP
+(same as in <a href="#mult-dec" class="xref">Section 4.6</a>) in a way that is different from Reno TCP
 <span>[<a href="#RFC5681" class="xref">RFC5681</a>]</span>.<a href="#section-4.8-1" class="pilcrow">¶</a></p>
 <p id="section-4.8-2">During the first congestion avoidance stage after a timeout, CUBIC
 increases its congestion window size using <a href="#eq1" class="xref">Figure 1</a>, where <em>t</em> is the
 elapsed time since the beginning of the current congestion avoidance,
 <em>K</em> is set to 0, and <em>W<sub>max</sub></em> is set to the congestion window
 size at the beginning of the current congestion avoidance stage. In
-addition, for the AIMD-friendly region, <em>W<sub>est</sub></em> SHOULD be
+addition, for the Reno-friendly region, <em>W<sub>est</sub></em> SHOULD be
 set to the congestion window size at the beginning of the current
 congestion avoidance.<a href="#section-4.8-2" class="pilcrow">¶</a></p>
 </section>
@@ -3694,36 +3691,36 @@ to:<a href="#section-5-4" class="pilcrow">¶</a></p>
 </div>
 <p id="section-5-6">We will determine the value of <em>C</em> in the following subsection using
 <a href="#eq6" class="xref">Figure 6</a>.<a href="#section-5-6" class="pilcrow">¶</a></p>
-<div id="fairness-to-aimd-tcp">
+<div id="fairness-to-reno">
 <section id="section-5.1">
-        <h3 id="name-fairness-to-aimd-tcp">
-<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-fairness-to-aimd-tcp" class="section-name selfRef">Fairness to AIMD TCP</a>
+        <h3 id="name-fairness-to-reno">
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-fairness-to-reno" class="section-name selfRef">Fairness to Reno</a>
         </h3>
-<p id="section-5.1-1">In environments where AIMD TCP is able to make reasonable use of the
+<p id="section-5.1-1">In environments where Reno is able to make reasonable use of the
 available bandwidth, CUBIC does not significantly change this state.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
-<p id="section-5.1-2">AIMD TCP performs well in the following two types of networks:<a href="#section-5.1-2" class="pilcrow">¶</a></p>
+<p id="section-5.1-2">Reno performs well in the following two types of networks:<a href="#section-5.1-2" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-5.1-3">
 <li id="section-5.1-3.1">networks with a small bandwidth-delay product (BDP)<a href="#section-5.1-3.1" class="pilcrow">¶</a>
 </li>
           <li id="section-5.1-3.2">networks with a short RTTs, but not necessarily a small BDP<a href="#section-5.1-3.2" class="pilcrow">¶</a>
 </li>
         </ol>
-<p id="section-5.1-4">CUBIC is designed to behave very similarly to AIMD TCP in the above
+<p id="section-5.1-4">CUBIC is designed to behave very similarly to Reno in the above
 two types of networks. The following two tables show the average
-window sizes of AIMD TCP, HSTCP, and CUBIC. The average window sizes
-of AIMD TCP and HSTCP are from <span>[<a href="#RFC3649" class="xref">RFC3649</a>]</span>. The average window size
-of CUBIC is calculated using <a href="#eq6" class="xref">Figure 6</a> and the CUBIC AIMD-friendly
+window sizes of Reno TCP, HSTCP, and CUBIC TCP. The average window sizes
+of Reno TCP and HSTCP are from <span>[<a href="#RFC3649" class="xref">RFC3649</a>]</span>. The average window size
+of CUBIC is calculated using <a href="#eq6" class="xref">Figure 6</a> and the CUBIC Reno-friendly
 region for three different values of <em>C</em>.<a href="#section-5.1-4" class="pilcrow">¶</a></p>
-<span id="name-aimd-tcp-hstcp-and-cubic-wi"></span><div id="tab1">
+<span id="name-reno-tcp-hstcp-and-cubic-wi"></span><div id="tab1">
 <table class="center" id="table-1">
           <caption>
 <a href="#table-1" class="selfRef">Table 1</a>:
-<a href="#name-aimd-tcp-hstcp-and-cubic-wi" class="selfRef">AIMD TCP, HSTCP, and CUBIC with RTT = 0.1 seconds</a>
+<a href="#name-reno-tcp-hstcp-and-cubic-wi" class="selfRef">Reno TCP, HSTCP, and CUBIC with RTT = 0.1 seconds</a>
           </caption>
 <thead>
             <tr>
               <th class="text-right" rowspan="1" colspan="1">Loss Rate P</th>
-              <th class="text-right" rowspan="1" colspan="1">AIMD</th>
+              <th class="text-right" rowspan="1" colspan="1">Reno</th>
               <th class="text-right" rowspan="1" colspan="1">HSTCP</th>
               <th class="text-right" rowspan="1" colspan="1">CUBIC (C=0.04)</th>
               <th class="text-right" rowspan="1" colspan="1">CUBIC (C=0.4)</th>
@@ -3790,19 +3787,19 @@ region for three different values of <em>C</em>.<a href="#section-5.1-4" class="
           </tbody>
         </table>
 </div>
-<p id="section-5.1-6"><a href="#tab1" class="xref">Table 1</a> describes the response function of AIMD TCP, HSTCP, and CUBIC
+<p id="section-5.1-6"><a href="#tab1" class="xref">Table 1</a> describes the response function of Reno TCP, HSTCP, and CUBIC
 in networks with <em>RTT</em> = 0.1 seconds. The average window size is in
 MSS-sized segments.<a href="#section-5.1-6" class="pilcrow">¶</a></p>
-<span id="name-aimd-tcp-hstcp-and-cubic-wit"></span><div id="tab2">
+<span id="name-reno-tcp-hstcp-and-cubic-wit"></span><div id="tab2">
 <table class="center" id="table-2">
           <caption>
 <a href="#table-2" class="selfRef">Table 2</a>:
-<a href="#name-aimd-tcp-hstcp-and-cubic-wit" class="selfRef">AIMD TCP, HSTCP, and CUBIC with RTT = 0.01 seconds</a>
+<a href="#name-reno-tcp-hstcp-and-cubic-wit" class="selfRef">Reno TCP, HSTCP, and CUBIC with RTT = 0.01 seconds</a>
           </caption>
 <thead>
             <tr>
               <th class="text-right" rowspan="1" colspan="1">Loss Rate P</th>
-              <th class="text-right" rowspan="1" colspan="1">AIMD</th>
+              <th class="text-right" rowspan="1" colspan="1">Reno</th>
               <th class="text-right" rowspan="1" colspan="1">HSTCP</th>
               <th class="text-right" rowspan="1" colspan="1">CUBIC (C=0.04)</th>
               <th class="text-right" rowspan="1" colspan="1">CUBIC (C=0.4)</th>
@@ -3869,25 +3866,25 @@ MSS-sized segments.<a href="#section-5.1-6" class="pilcrow">¶</a></p>
           </tbody>
         </table>
 </div>
-<p id="section-5.1-8"><a href="#tab2" class="xref">Table 2</a> describes the response function of AIMD TCP, HSTCP, and CUBIC
+<p id="section-5.1-8"><a href="#tab2" class="xref">Table 2</a> describes the response function of Reno TCP, HSTCP, and CUBIC
 in networks with <em>RTT</em> = 0.01 seconds. The average window size is in
 MSS-sized segments.<a href="#section-5.1-8" class="pilcrow">¶</a></p>
 <p id="section-5.1-9">Both tables show that CUBIC with any of these three <em>C</em> values is more
-friendly to AIMD TCP than HSTCP, especially in networks with a short
-<em>RTT</em> where AIMD TCP performs reasonably well. For example, in a
-network with <em>RTT</em> = 0.01 seconds and p=10^-6, AIMD TCP has an average
-window of 1200 packets. If the packet size is 1500 bytes, then AIMD
+friendly to Reno TCP than HSTCP, especially in networks with a short
+<em>RTT</em> where Reno TCP performs reasonably well. For example, in a
+network with <em>RTT</em> = 0.01 seconds and p=10^-6, Reno TCP has an average
+window of 1200 packets. If the packet size is 1500 bytes, then Reno
 TCP can achieve an average rate of 1.44 Gbps. In this case, CUBIC with
-<em>C</em>=0.04 or <em>C</em>=0.4 achieves exactly the same rate as AIMD TCP,
-whereas HSTCP is about ten times more aggressive than AIMD TCP.<a href="#section-5.1-9" class="pilcrow">¶</a></p>
+<em>C</em>=0.04 or <em>C</em>=0.4 achieves exactly the same rate as Reno TCP,
+whereas HSTCP is about ten times more aggressive than Reno TCP.<a href="#section-5.1-9" class="pilcrow">¶</a></p>
 <p id="section-5.1-10">We can see that <em>C</em> determines the aggressiveness of CUBIC in
 competing with other congestion control algorithms for bandwidth.
-CUBIC is more friendly to AIMD TCP, if the value of <em>C</em> is lower.
+CUBIC is more friendly to Reno TCP, if the value of <em>C</em> is lower.
 However, we do not recommend setting <em>C</em> to a very low value like
 0.04, since CUBIC with a low <em>C</em> cannot efficiently use the bandwidth
 in fast and long-distance networks. Based on these observations and
 extensive deployment experience, we find <em>C</em>=0.4 gives a good balance
-between AIMD- friendliness and aggressiveness of window increase.
+between Reno-friendliness and aggressiveness of window increase.
 Therefore, <em>C</em> SHOULD be set to 0.4. With <em>C</em> set to 0.4, <a href="#eq6" class="xref">Figure 6</a> is
 reduced to:<a href="#section-5.1-10" class="pilcrow">¶</a></p>
 <div id="eq7">
@@ -3984,22 +3981,22 @@ CUBIC.<a href="#section-5.1-12" class="pilcrow">¶</a></p>
         <h3 id="name-using-spare-capacity">
 <a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-using-spare-capacity" class="section-name selfRef">Using Spare Capacity</a>
         </h3>
-<p id="section-5.2-1">CUBIC uses a more aggressive window increase function than AIMD TCP
+<p id="section-5.2-1">CUBIC uses a more aggressive window increase function than Reno
 for fast and long-distance networks.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
-<p id="section-5.2-2">The following table shows that to achieve the 10 Gbps rate, AIMD TCP
-requires a packet loss rate of 2.0e-10, while CUBIC requires a packet
+<p id="section-5.2-2">The following table shows that to achieve the 10 Gbps rate, Reno TCP
+requires a packet loss rate of 2.0e-10, while CUBIC TCP requires a packet
 loss rate of 2.9e-8.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
 <span id="name-required-packet-loss-rate-f"></span><div id="tab3">
 <table class="center" id="table-3">
           <caption>
 <a href="#table-3" class="selfRef">Table 3</a>:
-<a href="#name-required-packet-loss-rate-f" class="selfRef">Required packet loss rate for AIMD TCP, HSTCP, and CUBIC to achieve a certain throughput</a>
+<a href="#name-required-packet-loss-rate-f" class="selfRef">Required packet loss rate for Reno TCP, HSTCP, and CUBIC to achieve a certain throughput</a>
           </caption>
 <thead>
             <tr>
               <th class="text-right" rowspan="1" colspan="1">Throughput (Mbps)</th>
               <th class="text-right" rowspan="1" colspan="1">Average W</th>
-              <th class="text-right" rowspan="1" colspan="1">AIMD P</th>
+              <th class="text-right" rowspan="1" colspan="1">Reno P</th>
               <th class="text-right" rowspan="1" colspan="1">HSTCP P</th>
               <th class="text-right" rowspan="1" colspan="1">CUBIC P</th>
             </tr>
@@ -4043,11 +4040,11 @@ loss rate of 2.9e-8.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
           </tbody>
         </table>
 </div>
-<p id="section-5.2-4"><a href="#tab3" class="xref">Table 3</a> describes the required packet loss rate for AIMD TCP, HSTCP,
+<p id="section-5.2-4"><a href="#tab3" class="xref">Table 3</a> describes the required packet loss rate for Reno TCP, HSTCP,
 and CUBIC to achieve a certain throughput. We use 1500-byte packets
 and an <em>RTT</em> of 0.1 seconds.<a href="#section-5.2-4" class="pilcrow">¶</a></p>
 <p id="section-5.2-5">Our test results in <span>[<a href="#HKLRX06" class="xref">HKLRX06</a>]</span> indicate that CUBIC uses the spare
-bandwidth left unused by existing AIMD TCP flows in the same
+bandwidth left unused by existing Reno TCP flows in the same
 bottleneck link without taking away much bandwidth from the existing
 flows.<a href="#section-5.2-5" class="pilcrow">¶</a></p>
 </section>
@@ -4057,7 +4054,7 @@ flows.<a href="#section-5.2-5" class="pilcrow">¶</a></p>
         <h3 id="name-difficult-environments">
 <a href="#section-5.3" class="section-number selfRef">5.3. </a><a href="#name-difficult-environments" class="section-name selfRef">Difficult Environments</a>
         </h3>
-<p id="section-5.3-1">CUBIC is designed to remedy the poor performance of AIMD TCP in fast
+<p id="section-5.3-1">CUBIC is designed to remedy the poor performance of Reno in fast
 and long-distance networks.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -4070,11 +4067,11 @@ and long-distance networks.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
 CUBIC has also been extensively studied by using both NS-2 simulation
 and testbed experiments, covering a wide range of network
 environments. More information can be found in <span>[<a href="#HKLRX06" class="xref">HKLRX06</a>]</span>.<a href="#section-5.4-1" class="pilcrow">¶</a></p>
-<p id="section-5.4-2">Same as AIMD TCP, CUBIC is a loss-based congestion control algorithm.
+<p id="section-5.4-2">Same as Reno, CUBIC is a loss-based congestion control algorithm.
 Because CUBIC is designed to be more aggressive (due to a faster
 window increase function and bigger multiplicative decrease factor)
-than AIMD TCP in fast and long-distance networks, it can fill large
-drop-tail buffers more quickly than AIMD TCP and increases the risk of
+than Reno in fast and long-distance networks, it can fill large
+drop-tail buffers more quickly than Reno and increases the risk of
 a standing queue <span>[<a href="#RFC8511" class="xref">RFC8511</a>]</span>. In this case, proper queue sizing and
 management <span>[<a href="#RFC7567" class="xref">RFC7567</a>]</span> could be used to reduce the packet queuing
 delay.<a href="#section-5.4-2" class="pilcrow">¶</a></p>
@@ -4086,9 +4083,9 @@ delay.<a href="#section-5.4-2" class="pilcrow">¶</a></p>
 <a href="#section-5.5" class="section-number selfRef">5.5. </a><a href="#name-protection-against-congesti" class="section-name selfRef">Protection against Congestion Collapse</a>
         </h3>
 <p id="section-5.5-1">With regard to the potential of causing congestion collapse, CUBIC
-behaves like AIMD TCP, since CUBIC modifies only the window adjustment
-algorithm of AIMD TCP. Thus, it does not modify the ACK clocking and
-timeout behaviors of AIMD TCP.<a href="#section-5.5-1" class="pilcrow">¶</a></p>
+behaves like Reno, since CUBIC modifies only the window adjustment
+algorithm of Reno. Thus, it does not modify the ACK clocking and
+timeout behaviors of Reno.<a href="#section-5.5-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="fairness-within-the-alternative-congestion-control-algorithm">
@@ -4129,8 +4126,13 @@ might be very high after restarting from these periods.<a href="#section-5.8-1" 
         <h3 id="name-responses-to-sudden-or-tran">
 <a href="#section-5.9" class="section-number selfRef">5.9. </a><a href="#name-responses-to-sudden-or-tran" class="section-name selfRef">Responses to Sudden or Transient Events</a>
         </h3>
-<p id="section-5.9-1">If there is a sudden congestion, a routing change, or a mobility
-event, CUBIC behaves the same as AIMD TCP.<a href="#section-5.9-1" class="pilcrow">¶</a></p>
+<p id="section-5.9-1">If there is a sudden increase in capacity, e.g., due to variable radio
+capacity, a routing change, or a mobility event, CUBIC is designed to
+utilize the newly available capacity faster than Reno.<a href="#section-5.9-1" class="pilcrow">¶</a></p>
+<p id="section-5.9-2">On the other hand, if there is a sudden decrease in capacity, CUBIC
+reduces more slowly than Reno. This remains true whether or not CUBIC
+is in Reno-friendly mode and whether or not fast convergence is
+enabled.<a href="#section-5.9-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="incremental-deployment">
@@ -4138,9 +4140,9 @@ event, CUBIC behaves the same as AIMD TCP.<a href="#section-5.9-1" class="pilcro
         <h3 id="name-incremental-deployment">
 <a href="#section-5.10" class="section-number selfRef">5.10. </a><a href="#name-incremental-deployment" class="section-name selfRef">Incremental Deployment</a>
         </h3>
-<p id="section-5.10-1">CUBIC requires only changes to TCP senders, and it does not require
-any changes at TCP receivers. That is, a CUBIC sender works correctly
-with the AIMD TCP receivers. In addition, CUBIC does not require any
+<p id="section-5.10-1">CUBIC requires only changes to the congestion control at the sender, and it does
+not require any changes at receivers. That is, a CUBIC sender works correctly
+with Reno receivers. In addition, CUBIC does not require any
 changes to routers and does not require any assistance from routers.<a href="#section-5.10-1" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -4321,6 +4323,51 @@ information about TCP security concerns can be found in <span>[<a href="#RFC5681
       </h2>
 <p id="appendix-A-1">Richard Scheffenegger and Alexander Zimmermann originally co-authored
 <span>[<a href="#RFC8312" class="xref">RFC8312</a>]</span>.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<p id="appendix-A-2">These individuals suggested improvements to this document:<a href="#appendix-A-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-A-3.1">Bob Briscoe<a href="#appendix-A-3.1" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-3.2">Christian Huitema<a href="#appendix-A-3.2" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-3.3">Gorry Fairhurst<a href="#appendix-A-3.3" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-3.4">Jonathan Morton<a href="#appendix-A-3.4" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-3.5">Juhamatti Kuusisaari<a href="#appendix-A-3.5" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-3.6">Junho Choi<a href="#appendix-A-3.6" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-3.7">Markku Kojo<a href="#appendix-A-3.7" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-3.8">Martin Thomson<a href="#appendix-A-3.8" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-3.9">Matt Olson<a href="#appendix-A-3.9" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-3.10">Michael Welzl<a href="#appendix-A-3.10" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-3.11">Mirja Kuehlewind<a href="#appendix-A-3.11" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-3.12">Mohit P. Tahiliani<a href="#appendix-A-3.12" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-3.13">Neal Cardwell<a href="#appendix-A-3.13" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-3.14">Praveen Balasubramanian<a href="#appendix-A-3.14" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-3.15">Richard Scheffenegger<a href="#appendix-A-3.15" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-3.16">Rod Grimes<a href="#appendix-A-3.16" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-3.17">Tom Henderson<a href="#appendix-A-3.17" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-3.18">Tom Petch<a href="#appendix-A-3.18" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-3.19">Wesley Rosenblum<a href="#appendix-A-3.19" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-3.20">Yoshifumi Nishida<a href="#appendix-A-3.20" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-3.21">Yuchung Cheng<a href="#appendix-A-3.21" class="pilcrow">¶</a>
+</li>
+      </ul>
 </section>
 </div>
 <div id="evolution-of-cubic">
@@ -4347,6 +4394,15 @@ information about TCP security concerns can be found in <span>[<a href="#RFC5681
 </li>
           <li class="normal" id="appendix-B.1-1.4">Clarify what we mean by "new ACK" and use it in the text in more places.
 (<a href="https://github.com/NTAP/rfc8312bis/issues/101">#101</a>)<a href="#appendix-B.1-1.4" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="appendix-B.1-1.5">Rewrite the Responses to Sudden or Transient Events section
+(<a href="https://github.com/NTAP/rfc8312bis/issues/98">#98</a>)<a href="#appendix-B.1-1.5" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="appendix-B.1-1.6">Remove confusing text about <em>cwnd<sub>start</sub></em> in Section 4.2
+(<a href="https://github.com/NTAP/rfc8312bis/issues/100">#100</a>)<a href="#appendix-B.1-1.6" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="appendix-B.1-1.7">Change terminology from "AIMD" to "Reno"
+(<a href="https://github.com/NTAP/rfc8312bis/issues/108">#108</a>)<a href="#appendix-B.1-1.7" class="pilcrow">¶</a>
 </li>
         </ul>
 </section>

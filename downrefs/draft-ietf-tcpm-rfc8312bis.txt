@@ -7,12 +7,12 @@ Internet-Draft                                                       UNL
 Obsoletes: 8312 (if approved)                                      S. Ha
 Updates: 5681 (if approved)                                     Colorado
 Intended status: Standards Track                                 I. Rhee
-Expires: 31 March 2022                                            Bowery
+Expires: 2 April 2022                                             Bowery
                                                                  V. Goel
                                                               Apple Inc.
                                                           L. Eggert, Ed.
                                                                   NetApp
-                                                       27 September 2021
+                                                       29 September 2021
 
 
                CUBIC for Fast and Long-Distance Networks
@@ -72,7 +72,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 31 March 2022.
+   This Internet-Draft will expire on 2 April 2022.
 
 Copyright Notice
 
@@ -94,7 +94,7 @@ Table of Contents
    2.  Conventions
    3.  Design Principles of CUBIC
      3.1.  Principle 1 for the CUBIC Increase Function
-     3.2.  Principle 2 for AIMD Friendliness
+     3.2.  Principle 2 for Reno-Friendliness
      3.3.  Principle 3 for RTT Fairness
      3.4.  Principle 4 for the CUBIC Decrease Factor
    4.  CUBIC Congestion Control
@@ -102,7 +102,7 @@ Table of Contents
        4.1.1.  Constants of Interest
        4.1.2.  Variables of Interest
      4.2.  Window Increase Function
-     4.3.  AIMD-Friendly Region
+     4.3.  Reno-Friendly Region
      4.4.  Concave Region
      4.5.  Convex Region
      4.6.  Multiplicative Decrease
@@ -111,7 +111,7 @@ Table of Contents
      4.9.  Spurious Congestion Events
      4.10. Slow Start
    5.  Discussion
-     5.1.  Fairness to AIMD TCP
+     5.1.  Fairness to Reno
      5.2.  Using Spare Capacity
      5.3.  Difficult Environments
      5.4.  Investigating a Range of Environments
@@ -149,41 +149,41 @@ Table of Contents
    and deployed globally.  Extensive, decade-long deployment experience
    in vastly different Internet scenarios has convincingly demonstrated
    that CUBIC is safe for deployment on the global Internet and delivers
-   substantial benefits over classical AIMD congestion control.  It is
-   therefore to be regarded as the currently most widely deployed
-   standard for TCP congestion control.  CUBIC can also be used for
-   other transport protocols such as QUIC [RFC9000] and SCTP [RFC4960]
-   as a default congestion controller.
+   substantial benefits over classical Reno congestion control
+   [RFC5681].  It is therefore to be regarded as the currently most
+   widely deployed standard for TCP congestion control.  CUBIC can also
+   be used for other transport protocols such as QUIC [RFC9000] and SCTP
+   [RFC4960] as a default congestion controller.
 
    The design of CUBIC was motivated by the well-documented problem
-   classical TCP has with low utilization over fast and long-distance
-   networks [K03][RFC3649].  This problem arises from a slow increase of
-   the congestion window following a congestion event in a network with
-   a large bandwidth-delay product (BDP).  [HKLRX06] indicates that this
-   problem is frequently observed even in the range of congestion window
-   sizes over several hundreds of packets.  This problem is equally
-   applicable to all Reno-style TCP standards and their variants,
-   including TCP-Reno [RFC5681], TCP-NewReno [RFC6582][RFC6675], SCTP
-   [RFC4960], and TFRC [RFC5348], which use the same linear increase
-   function for window growth.  We refer to all Reno-style TCP standards
-   and their variants collectively as "AIMD TCP" below because they use
-   the Additive Increase and Multiplicative Decrease algorithm (AIMD).
+   classical Reno TCP has with low utilization over fast and long-
+   distance networks [K03][RFC3649].  This problem arises from a slow
+   increase of the congestion window following a congestion event in a
+   network with a large bandwidth-delay product (BDP).  [HKLRX06]
+   indicates that this problem is frequently observed even in the range
+   of congestion window sizes over several hundreds of packets.  This
+   problem is equally applicable to all Reno-style standards and their
+   variants, including TCP-Reno [RFC5681], TCP-NewReno
+   [RFC6582][RFC6675], SCTP [RFC4960], TFRC [RFC5348], and QUIC
+   congestion control [RFC9002], which use the same linear increase
+   function for window growth.  We refer to all Reno-style standards and
+   their variants collectively as "Reno" below.
 
    CUBIC, originally proposed in [HRX08], is a modification to the
-   congestion control algorithm of classical AIMD TCP to remedy this
+   congestion control algorithm of classical Reno to remedy this
    problem.  Specifically, CUBIC uses a cubic function instead of the
-   linear window increase function of AIMD TCP to improve scalability
-   and stability under fast and long-distance networks.
+   linear window increase function of Reno to improve scalability and
+   stability under fast and long-distance networks.
 
    This document updates the specification of CUBIC to include
    algorithmic improvements based on the Linux, Windows, and Apple
    implementations and recent academic work.  Based on the extensive
    deployment experience with CUBIC, it also moves the specification to
    the Standards Track, obsoleting [RFC8312].  This requires an update
-   to [RFC5681], which limits the aggressiveness of TCP implementations
-   in its Section 3.  Since CUBIC is occasionally more aggressive than
-   the [RFC5681] algorithms, this document updates [RFC5681] to allow
-   for CUBIC's behavior.
+   to [RFC5681], which limits the aggressiveness of Reno TCP
+   implementations in its Section 3.  Since CUBIC is occasionally more
+   aggressive than the [RFC5681] algorithms, this document updates
+   [RFC5681] to allow for CUBIC's behavior.
 
    Binary Increase Congestion Control (BIC-TCP) [XHR04], a predecessor
    of CUBIC, was selected as the default TCP congestion control
@@ -191,8 +191,8 @@ Table of Contents
    years by the Internet community at large.
 
    CUBIC uses a similar window increase function as BIC-TCP and is
-   designed to be less aggressive and fairer to AIMD TCP in bandwidth
-   usage than BIC-TCP while maintaining the strengths of BIC-TCP such as
+   designed to be less aggressive and fairer to Reno in bandwidth usage
+   than BIC-TCP while maintaining the strengths of BIC-TCP such as
    stability, window scalability, and round-trip time (RTT) fairness.
 
    In the following sections, we first briefly explain the design
@@ -217,9 +217,9 @@ Table of Contents
       increase the congestion window size, instead of using just a
       convex function.
 
-   Principle 2:  To be AIMD-friendly, CUBIC is designed to behave like
-      AIMD TCP in networks with short RTTs and small bandwidth where
-      AIMD TCP performs well.
+   Principle 2:  To be Reno-friendly, CUBIC is designed to behave like
+      Reno in networks with short RTTs and small bandwidth where Reno
+      performs well.
 
    Principle 3:  For RTT-fairness, CUBIC is designed to achieve linear
       bandwidth sharing among flows with different RTTs.
@@ -233,7 +233,7 @@ Table of Contents
    For better network utilization and stability, CUBIC [HRX08] uses a
    cubic window increase function in terms of the elapsed time from the
    last congestion event.  While most alternative congestion control
-   algorithms to AIMD TCP increase the congestion window using convex
+   algorithms to Reno increase the congestion window using convex
    functions, CUBIC uses both the concave and convex profiles of a cubic
    function for window growth.
 
@@ -266,16 +266,16 @@ Table of Contents
    saturation point of the network, likely causing frequent global loss
    synchronizations.
 
-3.2.  Principle 2 for AIMD Friendliness
+3.2.  Principle 2 for Reno-Friendliness
 
-   CUBIC promotes per-flow fairness to AIMD TCP.  Note that AIMD TCP
-   performs well over paths with short RTTs and small bandwidths (or
-   small BDPs).  There is only a scalability problem in networks with
-   long RTTs and large bandwidths (or large BDPs).
+   CUBIC promotes per-flow fairness to Reno.  Note that Reno performs
+   well over paths with short RTTs and small bandwidths (or small BDPs).
+   There is only a scalability problem in networks with long RTTs and
+   large bandwidths (or large BDPs).
 
-   A congestion control algorithm designed to be friendly to AIMD TCP on
-   a per-flow basis must increase its congestion window less
-   aggressively in small BDP networks than in large BDP networks.
+   A congestion control algorithm designed to be friendly to Reno on a
+   per-flow basis must increase its congestion window less aggressively
+   in small BDP networks than in large BDP networks.
 
    The aggressiveness of CUBIC mainly depends on the maximum window size
    before a window reduction, which is smaller in small-BDP networks
@@ -284,11 +284,10 @@ Table of Contents
    networks.
 
    Furthermore, in cases when the cubic function of CUBIC would increase
-   the congestion window less aggressively than AIMD TCP, CUBIC simply
-   follows the window size of AIMD TCP to ensure that CUBIC achieves at
-   least the same throughput as AIMD TCP in small-BDP networks.  We call
-   this region where CUBIC behaves like AIMD TCP the "AIMD-friendly
-   region".
+   the congestion window less aggressively than Reno, CUBIC simply
+   follows the window size of Reno to ensure that CUBIC achieves at
+   least the same throughput as Reno in small-BDP networks.  We call
+   this region where CUBIC behaves like Reno the "Reno-friendly region".
 
 3.3.  Principle 3 for RTT Fairness
 
@@ -298,31 +297,30 @@ Table of Contents
    window divided by its RTT.
 
    Specifically, CUBIC maintains a window increase rate independent of
-   RTTs outside the AIMD-friendly region, and thus flows with different
+   RTTs outside the Reno-friendly region, and thus flows with different
    RTTs have similar congestion window sizes under steady state when
-   they operate outside the AIMD-friendly region.
+   they operate outside the Reno-friendly region.
 
-   This notion of a linear throughput ratio is similar to that of AIMD
-   TCP under high statistical multiplexing where packet loss is
-   independent of individual flow rates.  However, under low statistical
-   multiplexing, the throughput ratio of AIMD TCP flows with different
-   RTTs is quadratically proportional to the inverse of their RTT ratio
+   This notion of a linear throughput ratio is similar to that of Reno
+   under high statistical multiplexing where packet loss is independent
+   of individual flow rates.  However, under low statistical
+   multiplexing, the throughput ratio of Reno flows with different RTTs
+   is quadratically proportional to the inverse of their RTT ratio
    [XHR04].
 
    CUBIC always ensures a linear throughput ratio independent of the
-   amount of statistical multiplexing.  This is an improvement over AIMD
-   TCP.  While there is no consensus on particular throughput ratios for
-   different RTT flows, we believe that over wired Internet paths, use
-   of a linear throughput ratio seems more reasonable than equal
+   amount of statistical multiplexing.  This is an improvement over
+   Reno.  While there is no consensus on particular throughput ratios
+   for different RTT flows, we believe that over wired Internet paths,
+   use of a linear throughput ratio seems more reasonable than equal
    throughputs (i.e., the same throughput for flows with different RTTs)
    or a higher-order throughput ratio (e.g., a quadratical throughput
-   ratio of AIMD TCP under low statistical multiplexing environments).
+   ratio of Reno under low statistical multiplexing environments).
 
 3.4.  Principle 4 for the CUBIC Decrease Factor
 
    To balance between scalability and convergence speed, CUBIC sets the
-   multiplicative window decrease factor to 0.7, whereas AIMD TCP uses
-   0.5.
+   multiplicative window decrease factor to 0.7, whereas Reno uses 0.5.
 
    While this improves the scalability of CUBIC, a side effect of this
    decision is slower convergence, especially under low statistical
@@ -357,7 +355,7 @@ Table of Contents
    β__cubic_: CUBIC multiplication decrease factor as described in
    Section 4.6.
 
-   α__cubic_: CUBIC additive increase factor used in AIMD-friendly
+   α__cubic_: CUBIC additive increase factor used in Reno-friendly
    region as described in Section 4.3.
 
    _C_: constant that determines the aggressiveness of CUBIC in
@@ -406,8 +404,8 @@ Table of Contents
    next RTT, that is, W_cubic(_t_ + _RTT_), as described in Section 4.2.
 
    _W_est_: An estimate for the congestion window in segments in the
-   AIMD-friendly region, that is, an estimate for the congestion window
-   of AIMD TCP.
+   Reno-friendly region, that is, an estimate for the congestion window
+   of Reno.
 
    _segments_acked_: Number of MSS-sized segments acked when a "new ACK"
    is received, i.e., an ACK that cumulatively acknowledges the delivery
@@ -418,14 +416,14 @@ Table of Contents
 
 4.2.  Window Increase Function
 
-   CUBIC maintains the acknowledgment (ACK) clocking of AIMD TCP by
+   CUBIC maintains the acknowledgment (ACK) clocking of Reno by
    increasing the congestion window only at the reception of a new ACK.
    It does not make any changes to the TCP Fast Recovery and Fast
    Retransmit algorithms [RFC6582][RFC6675].
 
    During congestion avoidance, after a congestion event is detected by
    mechanisms described in Section 3.1, CUBIC changes the window
-   increase function of AIMD TCP.
+   increase function of Reno.
 
    CUBIC uses the following window increase function:
 
@@ -457,9 +455,7 @@ Table of Contents
                                   Figure 2
 
    where _cwnd_start_ is the congestion window at the beginning of the
-   current congestion avoidance stage.  For example, right after a
-   congestion event, _cwnd_start_ is equal to the new cwnd calculated as
-   described in Section 4.6.
+   current congestion avoidance stage.
 
    Upon receiving a new ACK during congestion avoidance, CUBIC computes
    the _target_ congestion window size after the next _RTT_ using
@@ -485,25 +481,25 @@ Table of Contents
    Depending on the value of the current congestion window size _cwnd_,
    CUBIC runs in three different regions:
 
-   1.  The AIMD-friendly region, which ensures that CUBIC achieves at
-       least the same throughput as AIMD TCP.
+   1.  The Reno-friendly region, which ensures that CUBIC achieves at
+       least the same throughput as Reno.
 
-   2.  The concave region, if CUBIC is not in the AIMD-friendly region
+   2.  The concave region, if CUBIC is not in the Reno-friendly region
        and _cwnd_ is less than _W_max_.
 
-   3.  The convex region, if CUBIC is not in the AIMD-friendly region
+   3.  The convex region, if CUBIC is not in the Reno-friendly region
        and _cwnd_ is greater than _W_max_.
 
    Below, we describe the exact actions taken by CUBIC in each region.
 
-4.3.  AIMD-Friendly Region
+4.3.  Reno-Friendly Region
 
-   AIMD TCP performs well in certain types of networks, for example,
-   under short RTTs and small bandwidths (or small BDPs).  In these
-   networks, CUBIC remains in the AIMD-friendly region to achieve at
-   least the same throughput as AIMD TCP.
+   Reno performs well in certain types of networks, for example, under
+   short RTTs and small bandwidths (or small BDPs).  In these networks,
+   CUBIC remains in the Reno-friendly region to achieve at least the
+   same throughput as Reno.
 
-   The AIMD-friendly region is designed according to the analysis in
+   The Reno-friendly region is designed according to the analysis in
    [FHP00], which studies the performance of an AIMD algorithm with an
    additive factor of α (segments per _RTT_) and a multiplicative factor
    of β, denoted by AIMD(α, β). _p_ is the packet loss rate.
@@ -517,15 +513,15 @@ Table of Contents
 
                                   Figure 3
 
-   By the same analysis, to achieve the same average window size as AIMD
-   TCP that uses AIMD(1, 0.5), α must be equal to,
+   By the same analysis, to achieve the same average window size as Reno
+   that uses AIMD(1, 0.5), α must be equal to,
 
                                      1 - β
                                  3 * -----
                                      1 + β
 
    Thus, CUBIC uses Figure 4 to estimate the window size _W_est_ in the
-   AIMD-friendly region with
+   Reno-friendly region with
 
                                        1 - β
                                             cubic
@@ -533,11 +529,11 @@ Table of Contents
                            cubic       1 + β
                                             cubic
 
-   which achieves the same average window size as AIMD TCP.  When
-   receiving a new ACK in congestion avoidance (where _cwnd_ could be
-   greater than or less than _W_max_), CUBIC checks whether W_cubic(_t_)
-   is less than _W_est_. If so, CUBIC is in the AIMD-friendly region and
-   _cwnd_ SHOULD be set to _W_est_ at each reception of a new ACK.
+   which achieves the same average window size as Reno.  When receiving
+   a new ACK in congestion avoidance (where _cwnd_ could be greater than
+   or less than _W_max_), CUBIC checks whether W_cubic(_t_) is less than
+   _W_est_. If so, CUBIC is in the Reno-friendly region and _cwnd_
+   SHOULD be set to _W_est_ at each reception of a new ACK.
 
    _W_est_ is set equal to _cwnd_start_ at the start of the congestion
    avoidance stage.  After that, on every new ACK, _W_est_ is updated
@@ -559,13 +555,13 @@ Table of Contents
    Note that once _W_est_ reaches _W_max_, that is, _W_est_ >= _W_max_,
    CUBIC needs to start probing to determine the new value of _W_max_.
    At this point, α__cubic_ SHOULD be set to 1 to ensure that CUBIC can
-   achieve the same congestion window increment as AIMD TCP, which uses
+   achieve the same congestion window increment as Reno, which uses
    AIMD(1, 0.5).
 
 4.4.  Concave Region
 
    When receiving a new ACK in congestion avoidance, if CUBIC is not in
-   the AIMD-friendly region and _cwnd_ is less than _W_max_, then CUBIC
+   the Reno-friendly region and _cwnd_ is less than _W_max_, then CUBIC
    is in the concave region.  In this region, _cwnd_ MUST be incremented
    by
 
@@ -579,7 +575,7 @@ Table of Contents
 4.5.  Convex Region
 
    When receiving a new ACK in congestion avoidance, if CUBIC is not in
-   the AIMD-friendly region and _cwnd_ is larger than or equal to
+   the Reno-friendly region and _cwnd_ is larger than or equal to
    _W_max_, then CUBIC is in the convex region.
 
    The convex region indicates that the network conditions might have
@@ -668,16 +664,16 @@ W    = <
 
 4.8.  Timeout
 
-   In case of a timeout, CUBIC follows AIMD TCP to reduce _cwnd_
-   [RFC5681], but sets _ssthresh_ using β__cubic_ (same as in
-   Section 4.6) in a way that is different from AIMD TCP [RFC5681].
+   In case of a timeout, CUBIC follows Reno to reduce _cwnd_ [RFC5681],
+   but sets _ssthresh_ using β__cubic_ (same as in Section 4.6) in a way
+   that is different from Reno TCP [RFC5681].
 
    During the first congestion avoidance stage after a timeout, CUBIC
    increases its congestion window size using Figure 1, where _t_ is the
    elapsed time since the beginning of the current congestion avoidance,
    _K_ is set to 0, and _W_max_ is set to the congestion window size at
    the beginning of the current congestion avoidance stage.  In
-   addition, for the AIMD-friendly region, _W_est_ SHOULD be set to the
+   addition, for the Reno-friendly region, _W_est_ SHOULD be set to the
    congestion window size at the beginning of the current congestion
    avoidance.
 
@@ -798,26 +794,26 @@ W    = <
    We will determine the value of _C_ in the following subsection using
    Figure 6.
 
-5.1.  Fairness to AIMD TCP
+5.1.  Fairness to Reno
 
-   In environments where AIMD TCP is able to make reasonable use of the
+   In environments where Reno is able to make reasonable use of the
    available bandwidth, CUBIC does not significantly change this state.
 
-   AIMD TCP performs well in the following two types of networks:
+   Reno performs well in the following two types of networks:
 
    1.  networks with a small bandwidth-delay product (BDP)
 
    2.  networks with a short RTTs, but not necessarily a small BDP
 
-   CUBIC is designed to behave very similarly to AIMD TCP in the above
-   two types of networks.  The following two tables show the average
-   window sizes of AIMD TCP, HSTCP, and CUBIC.  The average window sizes
-   of AIMD TCP and HSTCP are from [RFC3649].  The average window size of
-   CUBIC is calculated using Figure 6 and the CUBIC AIMD-friendly region
+   CUBIC is designed to behave very similarly to Reno in the above two
+   types of networks.  The following two tables show the average window
+   sizes of Reno TCP, HSTCP, and CUBIC TCP.  The average window sizes of
+   Reno TCP and HSTCP are from [RFC3649].  The average window size of
+   CUBIC is calculated using Figure 6 and the CUBIC Reno-friendly region
    for three different values of _C_.
 
    +=============+=======+========+================+=========+========+
-   | Loss Rate P |  AIMD |  HSTCP | CUBIC (C=0.04) |   CUBIC |  CUBIC |
+   | Loss Rate P |  Reno |  HSTCP | CUBIC (C=0.04) |   CUBIC |  CUBIC |
    |             |       |        |                | (C=0.4) |  (C=4) |
    +=============+=======+========+================+=========+========+
    |     1.0e-02 |    12 |     12 |             12 |      12 |     12 |
@@ -835,14 +831,14 @@ W    = <
    |     1.0e-08 | 12000 | 574356 |         105383 |  187400 | 333250 |
    +-------------+-------+--------+----------------+---------+--------+
 
-        Table 1: AIMD TCP, HSTCP, and CUBIC with RTT = 0.1 seconds
+        Table 1: Reno TCP, HSTCP, and CUBIC with RTT = 0.1 seconds
 
-   Table 1 describes the response function of AIMD TCP, HSTCP, and CUBIC
+   Table 1 describes the response function of Reno TCP, HSTCP, and CUBIC
    in networks with _RTT_ = 0.1 seconds.  The average window size is in
    MSS-sized segments.
 
     +=============+=======+========+================+=========+=======+
-    | Loss Rate P |  AIMD |  HSTCP | CUBIC (C=0.04) |   CUBIC | CUBIC |
+    | Loss Rate P |  Reno |  HSTCP | CUBIC (C=0.04) |   CUBIC | CUBIC |
     |             |       |        |                | (C=0.4) | (C=4) |
     +=============+=======+========+================+=========+=======+
     |     1.0e-02 |    12 |     12 |             12 |      12 |    12 |
@@ -860,30 +856,30 @@ W    = <
     |     1.0e-08 | 12000 | 574356 |          18740 |   33325 | 59261 |
     +-------------+-------+--------+----------------+---------+-------+
 
-        Table 2: AIMD TCP, HSTCP, and CUBIC with RTT = 0.01 seconds
+        Table 2: Reno TCP, HSTCP, and CUBIC with RTT = 0.01 seconds
 
-   Table 2 describes the response function of AIMD TCP, HSTCP, and CUBIC
+   Table 2 describes the response function of Reno TCP, HSTCP, and CUBIC
    in networks with _RTT_ = 0.01 seconds.  The average window size is in
    MSS-sized segments.
 
    Both tables show that CUBIC with any of these three _C_ values is
-   more friendly to AIMD TCP than HSTCP, especially in networks with a
-   short _RTT_ where AIMD TCP performs reasonably well.  For example, in
-   a network with _RTT_ = 0.01 seconds and p=10^-6, AIMD TCP has an
+   more friendly to Reno TCP than HSTCP, especially in networks with a
+   short _RTT_ where Reno TCP performs reasonably well.  For example, in
+   a network with _RTT_ = 0.01 seconds and p=10^-6, Reno TCP has an
    average window of 1200 packets.  If the packet size is 1500 bytes,
-   then AIMD TCP can achieve an average rate of 1.44 Gbps.  In this
+   then Reno TCP can achieve an average rate of 1.44 Gbps.  In this
    case, CUBIC with _C_=0.04 or _C_=0.4 achieves exactly the same rate
-   as AIMD TCP, whereas HSTCP is about ten times more aggressive than
-   AIMD TCP.
+   as Reno TCP, whereas HSTCP is about ten times more aggressive than
+   Reno TCP.
 
    We can see that _C_ determines the aggressiveness of CUBIC in
    competing with other congestion control algorithms for bandwidth.
-   CUBIC is more friendly to AIMD TCP, if the value of _C_ is lower.
+   CUBIC is more friendly to Reno TCP, if the value of _C_ is lower.
    However, we do not recommend setting _C_ to a very low value like
    0.04, since CUBIC with a low _C_ cannot efficiently use the bandwidth
    in fast and long-distance networks.  Based on these observations and
    extensive deployment experience, we find _C_=0.4 gives a good balance
-   between AIMD- friendliness and aggressiveness of window increase.
+   between Reno-friendliness and aggressiveness of window increase.
    Therefore, _C_ SHOULD be set to 0.4.  With _C_ set to 0.4, Figure 6
    is reduced to:
 
@@ -902,15 +898,15 @@ W    = <
 
 5.2.  Using Spare Capacity
 
-   CUBIC uses a more aggressive window increase function than AIMD TCP
-   for fast and long-distance networks.
+   CUBIC uses a more aggressive window increase function than Reno for
+   fast and long-distance networks.
 
-   The following table shows that to achieve the 10 Gbps rate, AIMD TCP
-   requires a packet loss rate of 2.0e-10, while CUBIC requires a packet
-   loss rate of 2.9e-8.
+   The following table shows that to achieve the 10 Gbps rate, Reno TCP
+   requires a packet loss rate of 2.0e-10, while CUBIC TCP requires a
+   packet loss rate of 2.9e-8.
 
       +===================+===========+=========+=========+=========+
-      | Throughput (Mbps) | Average W |  AIMD P | HSTCP P | CUBIC P |
+      | Throughput (Mbps) | Average W |  Reno P | HSTCP P | CUBIC P |
       +===================+===========+=========+=========+=========+
       |                 1 |       8.3 |  2.0e-2 |  2.0e-2 |  2.0e-2 |
       +-------------------+-----------+---------+---------+---------+
@@ -923,22 +919,22 @@ W    = <
       |             10000 |   83333.3 | 2.0e-10 |  1.0e-7 |  2.9e-8 |
       +-------------------+-----------+---------+---------+---------+
 
-        Table 3: Required packet loss rate for AIMD TCP, HSTCP, and
+        Table 3: Required packet loss rate for Reno TCP, HSTCP, and
                    CUBIC to achieve a certain throughput
 
-   Table 3 describes the required packet loss rate for AIMD TCP, HSTCP,
+   Table 3 describes the required packet loss rate for Reno TCP, HSTCP,
    and CUBIC to achieve a certain throughput.  We use 1500-byte packets
    and an _RTT_ of 0.1 seconds.
 
    Our test results in [HKLRX06] indicate that CUBIC uses the spare
-   bandwidth left unused by existing AIMD TCP flows in the same
+   bandwidth left unused by existing Reno TCP flows in the same
    bottleneck link without taking away much bandwidth from the existing
    flows.
 
 5.3.  Difficult Environments
 
-   CUBIC is designed to remedy the poor performance of AIMD TCP in fast
-   and long-distance networks.
+   CUBIC is designed to remedy the poor performance of Reno in fast and
+   long-distance networks.
 
 5.4.  Investigating a Range of Environments
 
@@ -947,21 +943,21 @@ W    = <
    simulation and testbed experiments, covering a wide range of network
    environments.  More information can be found in [HKLRX06].
 
-   Same as AIMD TCP, CUBIC is a loss-based congestion control algorithm.
+   Same as Reno, CUBIC is a loss-based congestion control algorithm.
    Because CUBIC is designed to be more aggressive (due to a faster
    window increase function and bigger multiplicative decrease factor)
-   than AIMD TCP in fast and long-distance networks, it can fill large
-   drop-tail buffers more quickly than AIMD TCP and increases the risk
-   of a standing queue [RFC8511].  In this case, proper queue sizing and
+   than Reno in fast and long-distance networks, it can fill large drop-
+   tail buffers more quickly than Reno and increases the risk of a
+   standing queue [RFC8511].  In this case, proper queue sizing and
    management [RFC7567] could be used to reduce the packet queuing
    delay.
 
 5.5.  Protection against Congestion Collapse
 
    With regard to the potential of causing congestion collapse, CUBIC
-   behaves like AIMD TCP, since CUBIC modifies only the window
-   adjustment algorithm of AIMD TCP.  Thus, it does not modify the ACK
-   clocking and timeout behaviors of AIMD TCP.
+   behaves like Reno, since CUBIC modifies only the window adjustment
+   algorithm of Reno.  Thus, it does not modify the ACK clocking and
+   timeout behaviors of Reno.
 
 5.6.  Fairness within the Alternative Congestion Control Algorithm
 
@@ -986,16 +982,22 @@ W    = <
 
 5.9.  Responses to Sudden or Transient Events
 
-   If there is a sudden congestion, a routing change, or a mobility
-   event, CUBIC behaves the same as AIMD TCP.
+   If there is a sudden increase in capacity, e.g., due to variable
+   radio capacity, a routing change, or a mobility event, CUBIC is
+   designed to utilize the newly available capacity faster than Reno.
+
+   On the other hand, if there is a sudden decrease in capacity, CUBIC
+   reduces more slowly than Reno.  This remains true whether or not
+   CUBIC is in Reno-friendly mode and whether or not fast convergence is
+   enabled.
 
 5.10.  Incremental Deployment
 
-   CUBIC requires only changes to TCP senders, and it does not require
-   any changes at TCP receivers.  That is, a CUBIC sender works
-   correctly with the AIMD TCP receivers.  In addition, CUBIC does not
-   require any changes to routers and does not require any assistance
-   from routers.
+   CUBIC requires only changes to the congestion control at the sender,
+   and it does not require any changes at receivers.  That is, a CUBIC
+   sender works correctly with Reno receivers.  In addition, CUBIC does
+   not require any changes to routers and does not require any
+   assistance from routers.
 
 6.  Security Considerations
 
@@ -1186,6 +1188,50 @@ Appendix A.  Acknowledgments
    Richard Scheffenegger and Alexander Zimmermann originally co-authored
    [RFC8312].
 
+   These individuals suggested improvements to this document:
+
+   *  Bob Briscoe
+
+   *  Christian Huitema
+
+   *  Gorry Fairhurst
+
+   *  Jonathan Morton
+
+   *  Juhamatti Kuusisaari
+
+   *  Junho Choi
+
+   *  Markku Kojo
+
+   *  Martin Thomson
+
+   *  Matt Olson
+
+   *  Michael Welzl
+
+   *  Mirja Kuehlewind
+
+   *  Mohit P.  Tahiliani
+
+   *  Neal Cardwell
+
+   *  Praveen Balasubramanian
+
+   *  Richard Scheffenegger
+
+   *  Rod Grimes
+
+   *  Tom Henderson
+
+   *  Tom Petch
+
+   *  Wesley Rosenblum
+
+   *  Yoshifumi Nishida
+
+   *  Yuchung Cheng
+
 Appendix B.  Evolution of CUBIC
 
 B.1.  Since draft-ietf-tcpm-rfc8312bis-04
@@ -1203,6 +1249,15 @@ B.1.  Since draft-ietf-tcpm-rfc8312bis-04
 
    *  Clarify what we mean by "new ACK" and use it in the text in more
       places. (#101 (https://github.com/NTAP/rfc8312bis/issues/101))
+
+   *  Rewrite the Responses to Sudden or Transient Events section (#98
+      (https://github.com/NTAP/rfc8312bis/issues/98))
+
+   *  Remove confusing text about _cwnd_start_ in Section 4.2 (#100
+      (https://github.com/NTAP/rfc8312bis/issues/100))
+
+   *  Change terminology from "AIMD" to "Reno" (#108
+      (https://github.com/NTAP/rfc8312bis/issues/108))
 
 B.2.  Since draft-ietf-tcpm-rfc8312bis-03
 
