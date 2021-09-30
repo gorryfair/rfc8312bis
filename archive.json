@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-09-28T00:01:08.095494+00:00",
+  "timestamp": "2021-09-30T00:01:05.538885+00:00",
   "repo": "NTAP/rfc8312bis",
   "labels": [
     {
@@ -3033,12 +3033,12 @@
       "labels": [],
       "body": "Markku Kojo said,\r\n> ABE (RFC 8511) is currently the only experimental RFC to modify\r\n  the TCP-sender response to ECE. ABE allows modifying multiplicative\r\n  decrease factor only for AIMD TCP and only when ECE arrives in\r\n  congestion avoidance, that is, not when the sender is in slow-start.\r\n>\r\n>  Applying a decrease factor of 0.7 (or higher) when a congestion\r\n  singnal arrives and ends the initial slow start would be\r\n  inconsiderate because it extends the convergence time from\r\n  the slow-start overshoot. ABE has found that using a larger decrease\r\n  factor yields performance improvement when applied in congestion\r\n  avoidance, but not otherwise. Do we have data that would support\r\n  different findings with CUBIC?",
       "createdAt": "2021-08-31T08:13:28Z",
-      "updatedAt": "2021-09-21T08:35:35Z",
+      "updatedAt": "2021-09-29T19:59:13Z",
       "closedAt": null,
       "comments": [
         {
           "author": "bbriscoe",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "body": "Markku raises a good question about how large the first reduction should be to come out of the flow-startup phase. Most cubic implementations resolve this by using a start-up algo that intends to overshoot by less than 2x, so that a reduction of 30% will usually be sufficient without another round.\r\n\r\n[\u00a7 4.10 of the rfc8312bis draft](https://datatracker.ietf.org/doc/html/draft-ietf-tcpm-rfc8312bis#section-4.10) mentions LSS, Hystart and standard RFC5681 SS.\r\n\r\nIf the draft did not mention RFC5681 slow-start as an option, I think this would resolve the matter (given I believe no Cubic implementations use it). It also ought to list the Hystart++ draft as the first option, given it is currently adopted  for the stds track, so it has potentially higher IETF 'status' than LSS (EXP) or Hystart (research paper).",
           "createdAt": "2021-09-15T08:21:38Z",
           "updatedAt": "2021-09-15T08:21:38Z"
@@ -3077,6 +3077,20 @@
           "body": "Leaving this open until the PR #111  gets merged.",
           "createdAt": "2021-09-21T08:35:35Z",
           "updatedAt": "2021-09-21T08:35:35Z"
+        },
+        {
+          "author": "markkukojo",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> Markku raises a good question about how large the first reduction should be to come out of the flow-startup phase. Most cubic implementations resolve this by using a start-up algo that intends to overshoot by less than 2x, so that a reduction of 30% will usually be sufficient without another round.\r\n>\r\nThis logic above seems to assume that a start-up algo (e.g., Hystart++) never fails. That is, it always exits slow start before the first congestion signal (drop or ECE), resulting in no or some number of drops. If a TCP sender still is in slow start when congestion is signalled, it means that the overshoot detection has failed and everything occurred just like without such an algo.\r\nAt least in such a case the TCP sender should not apply reduction other than 0.5. I cannot speak for Van Jacobson but I believe that the selection of the MD factor (0.5) was no coincidence but carefully selected to match with the maximum cwnd increase during slow start (double cwnd in each RTT) as otherwise it would result in an intentional overloading of the bottleneck immediately after the congestion event!\r\n\r\nSo, even if HyStart++ or any such algo is in use, we should not use a decrease factor larger than 0.5 if the TCP sender still is in slow start when congestion event occurs. And, even though I didn't mention it, this should be applied always with slow start, not only to initial slow start.\r\n\r\nWith Hystart++ we may distinguish between 3 major cases:\r\n1) The algo succeeds ideally and exits early early enough to avoid any pkt losses (or ECE signal).\r\n     This case does not need MD, so everything is fine.\r\n\r\n2) The algo fails to detect overshoot and exit slow start before a pkt loss is detected (or ECE arrives), i.e., the TCP sender is in slow start when congestion is signalled. In this case, a MD factor larger than 0.5 should not be used.\r\n\r\n3) The algo detects overshoot and exits slow start before the first pkt loss is detected (or ECE arrives) but cannot avoid losses (or ECE), i.e., it mitigates the impact of the overshoot by reducing the number of losses which vary from a single loss to the number of losses in case 2 minus 1 loss. The experimental results in the Hystart++ draft suggest that this might be the common case as  there is ~50% reduction is losses. Because RTOs are still quite common, it may suggest that case 2 is not that uncommon but more details would be needed to make any reliable conclusions. \r\n\r\nBob's suggestion that a reduction of 30% will usually be sufficient does not sound well advised, because it would not be enough for the avg case 3 where a half of the losses are avoided (i.e., 1.5x overshoot) as it would still result in too high cwnd value exceeding the actually available capacity. Note that overshoot by only 1 segment (one drop) basically would request for the same reaction as in normal CA where just one segment is dropped per cycle.\r\n  \r\nThe presence of the case 3 also suggests that it may be possible and reasonable to have a heuristic with Hystart++ that varies MD factor between 0.5 and beta (0.7) depending on how much cwnd exceeded the actual congestion (saturation) point, that is, how many losses the Hystart++ early exit was able to avoid; if only one or a few losses occur, then apply a MD factor of 0.7, and decrease the MD factor towards the case where the algo avoids only one or a few losses where a MD factor of 0.5 is applied. \r\n\r\n> [\u00a7 4.10 of the rfc8312bis draft](https://datatracker.ietf.org/doc/html/draft-ietf-tcpm-rfc8312bis#section-4.10) mentions LSS, Hystart and standard RFC5681 SS.\r\n> \r\n> If the draft did not mention RFC5681 slow-start as an option, I think this would resolve the matter (given I believe no Cubic implementations use it). It also ought to list the Hystart++ draft as the first option, given it is currently adopted for the stds track, so it has potentially higher IETF 'status' than LSS (EXP) or Hystart (research paper).\r\n",
+          "createdAt": "2021-09-29T19:14:09Z",
+          "updatedAt": "2021-09-29T19:14:09Z"
+        },
+        {
+          "author": "nealcardwell",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Yes, IIRC from discussions years ago with Van, the 0.5 MD in Reno was motivated by the expected 2x overshoot from slow-start.\r\n\r\nAnd I definitely have seen many traces where CUBIC requires two consecutive fast recoveries after slow start to converge cwnd to the available BDP + buffer space, due this issue (two because 0.7^2 = 0.49).\r\n\r\nI agree using a 0.5 MD rather than 0.7 after slow start makes sense, and would probably show some nice benefits.\r\n\r\nBut this is a pretty significant change, and my sense is that it would be best to get some real world test data from at least one implementation to back up our intuitions before codifying a change this big.\r\n\r\n",
+          "createdAt": "2021-09-29T19:54:18Z",
+          "updatedAt": "2021-09-29T19:54:18Z"
         }
       ]
     },
@@ -3181,7 +3195,7 @@
       "labels": [],
       "body": "Markku Kojo said,\r\n>The equation on page 12 to derive increase factor \u03b1_cubic that\r\n intends to achieve the same average window as AIMD TCP seems to\r\n  have its origins in a preliminary paper that states that the\r\n  authors do not have an explanation to the discrepancy between\r\n  their AIMD model and experimental results, which clearly deviate.\r\n  It seems to have gone unnoticed that the equation assumes equal\r\n  drop probability for the different values of the increase factor\r\n  and multiplicative decrease factor but the drop probability\r\n  changes when these factors change. The equations for the drop\r\n  probability / the # of packets in one congestion epoch\r\n  are available in the original paper and one can easily verify\r\n  this. Therefore, the equations used in CUBIC are not correct\r\n  and seem to underestimate _W_est_ for AIMD TCP, resulting in\r\n  moving away from AIMD-Friendly region too early. This gives\r\n  CUBIC unjustified advantage over AIMD TCP particularly in\r\n  environments with low level of statistical multiplexing. With\r\n  high level of multiplexing, drop probability goes higher and\r\n  differences in the drop probablilities tend to get small. On the\r\n  other hand, with such high level of competition, the theoretical\r\n  equations may not be that valid anymore.",
       "createdAt": "2021-08-31T08:21:37Z",
-      "updatedAt": "2021-09-16T14:00:31Z",
+      "updatedAt": "2021-09-29T15:37:22Z",
       "closedAt": null,
       "comments": [
         {
@@ -3190,6 +3204,13 @@
           "body": "@lisongxu, any update?",
           "createdAt": "2021-09-16T14:00:31Z",
           "updatedAt": "2021-09-16T14:00:31Z"
+        },
+        {
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Thanks, Markku! I agree with you that the AIMD model presented in [FHP00] and adopted by Cubic is only an approximate model (e.g., assumption of packet loss). Cubic chooses this model to calculate alpha_cubic, because it is simple and thus easier to implement and captures some basic behaviors of AIMD algorithms. If there are other more accurate and easy-to-implement AIMD models, Cubic should be updated to adopt these models.\r\n\r\n[FHP00] Floyd, S., Handley, M., and J. Padhye, \"A Comparison of Equation-Based and AIMD Congestion Control\", May 2000, <https://www.icir.org/tfrc/aimd.pdf>.\r\n\r\nThanks again",
+          "createdAt": "2021-09-29T15:37:22Z",
+          "updatedAt": "2021-09-29T15:37:22Z"
         }
       ]
     },
@@ -3256,7 +3277,7 @@
       ],
       "body": "Markku Kojo said,\r\n> The draft says that CUBIC MAY implement DSACK [RFC3708], limited slow\r\n  start [RFC 3742], [RFC7661] and hybrid slow start [cites a paper].\r\n  Aren't the first three down references? Not sure if it is appropriate\r\n  for a Stds Track document to cite experimental work or a paper like\r\n  this even though it's a MAY.",
       "createdAt": "2021-08-31T08:24:27Z",
-      "updatedAt": "2021-09-21T08:48:12Z",
+      "updatedAt": "2021-09-29T08:17:10Z",
       "closedAt": null,
       "comments": [
         {
@@ -3307,6 +3328,20 @@
           "body": "The latter seems easier to me, but I don't have a strong preference. Waiting to hear from @markkukojo and/or @gorryfair.",
           "createdAt": "2021-09-21T08:48:12Z",
           "updatedAt": "2021-09-21T08:48:12Z"
+        },
+        {
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "body": "I'd like to merge #111 soon. Is there anything that needs to be changes in it to address this issue?",
+          "createdAt": "2021-09-29T08:08:09Z",
+          "updatedAt": "2021-09-29T08:08:09Z"
+        },
+        {
+          "author": "markkukojo",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I'll take a look at it later today.",
+          "createdAt": "2021-09-29T08:17:09Z",
+          "updatedAt": "2021-09-29T08:17:09Z"
         }
       ]
     },
@@ -3350,7 +3385,7 @@
       "labels": [],
       "body": "[Markku Kojo said](https://mailarchive.ietf.org/arch/msg/tcpm/nd4Af8QRQMDkp_R_9ZQMkI4yGAc):\r\n>Sec 5.1\r\n>\r\n>In this subsection, one should show the impact of CUBIC when competing with AIMD TCP. The numbers in tables are derived from\r\nanalytical models that give average window size with fixed random loss probabilities and unlimited bandwidth. That is not the same as when flows are combeting in the same congested bottleneck that builds a queue.\r\nLoss probabilities for different flows are likely to be different especially at lower levels of statistical multiplexing.\r\n>\r\n>The first para of sec 5.1 does not sound like true. Simply looking at the original CUBIC paper [HRX08] reveals that CUBIC dominates AIMD TCP (SACK TCP) in the regions where SACK TCP alone is able to fully utilize the available bandwidth (Figure 10 c up until 200 Mbps, and to some extent in Fig 10 a with 40 ms delay). And \u00edn all cases where SACK TCP alone is not able to utilize all available b/w, CUBIC steals multiple times more b/w from SACK TCP than what SACK TCP is not able to utilize. Figures 5 and 6 tell the same story. Has something changed and/or is there possibly data that provides alternative evidence.\r\n>\r\n>In addition, the recommended value for constant C and the two alternative values presented in the draft are the same as in the original paper. It would be interesting to see if there has been any experimentation with different values and what might be the outcome?",
       "createdAt": "2021-08-31T10:49:35Z",
-      "updatedAt": "2021-09-17T02:43:16Z",
+      "updatedAt": "2021-09-28T15:28:08Z",
       "closedAt": null,
       "comments": [
         {
@@ -3366,6 +3401,13 @@
           "body": "@larseggert sorry for the delay, will catch up soon",
           "createdAt": "2021-09-17T02:43:16Z",
           "updatedAt": "2021-09-17T02:43:16Z"
+        },
+        {
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Thanks, @markkukojo \r\n\r\nYou are right that the analytical model \"gives average window size with fixed random loss probabilities and unlimited bandwidth.\" This demonstrates to some extent the AIMD friendliness (now referred to as Reno Friendliness in the document). \r\n\r\nThe original Cubic paper [HRX08] shows the experiment results when Cubic is competing with AIMD/Sack. Figure 10 shows that Cubic is friendly to Sack in low bandwidth or low RTT networks (although not exactly fair share). For example, in Fig 10(a), bandwidth=400Mbps, RTT=10 or 20ms; also in in Fig 10(b), bandwidth=10 -- 400 Mbps, RTT=10ms; Cubic is friendly to AIMD/Sack.\r\n\r\n\r\n\r\n",
+          "createdAt": "2021-09-28T15:28:07Z",
+          "updatedAt": "2021-09-28T15:28:07Z"
         }
       ]
     },
@@ -3487,12 +3529,12 @@
       "labels": [],
       "body": "[Markku Kojo said](https://mailarchive.ietf.org/arch/msg/tcpm/nd4Af8QRQMDkp_R_9ZQMkI4yGAc):\r\n>Sec 5.6\r\n>\r\n>Competing CUBIC flows will converge but it happens very slowly and requires a large amount of data to send, i.e., short flows are more unlikely to live long enough to converge. This seems to be case at least according to the results in original paper [HRX08, Fig 4 b].\r\nSummary and citing some performance data would be very useful and much more convincing.",
       "createdAt": "2021-08-31T10:51:06Z",
-      "updatedAt": "2021-09-16T13:59:08Z",
+      "updatedAt": "2021-09-29T16:02:39Z",
       "closedAt": null,
       "comments": [
         {
           "author": "bbriscoe",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "body": "See [my comment](https://github.com/NTAP/rfc8312bis/issues/89#issuecomment-919896820) under #89, part of which duplicates this issue.",
           "createdAt": "2021-09-15T11:31:55Z",
           "updatedAt": "2021-09-15T11:31:55Z"
@@ -3503,6 +3545,13 @@
           "body": "@lisongxu, any update?",
           "createdAt": "2021-09-16T13:59:08Z",
           "updatedAt": "2021-09-16T13:59:08Z"
+        },
+        {
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Thanks, Markku! How about the following revised paragraphs?\r\n\r\nCUBIC ensures convergence of competing CUBIC flows with the same RTT in the same bottleneck links to an equal throughput. When competing flows have different RTT values, their throughput ratio is linearly proportional to the inverse of their RTT ratios. This is true independently of the level of statistical multiplexing on the link. The convergence time depends on the network environments (e.g., bandwidth, RTT) and the level of statistical multiplexing, as mentioned in Section 3.4. Generally, Cubic converges faster than Reno in fast and long-distance networks mainly due to its faster window increase function. \r\n\r\n",
+          "createdAt": "2021-09-29T16:02:39Z",
+          "updatedAt": "2021-09-29T16:02:39Z"
         }
       ]
     },
@@ -3839,7 +3888,7 @@
       "id": "I_kwDOEpK-U847cBix",
       "title": "AIMD -> Reno",
       "url": "https://github.com/NTAP/rfc8312bis/issues/108",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "larseggert",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -3848,8 +3897,8 @@
       "labels": [],
       "body": "Based on @bbriscoe's [email](https://mailarchive.ietf.org/arch/msg/tcpm/AYcFztqVPqZHj5s4UNIZmC-uAUI)",
       "createdAt": "2021-09-15T15:11:25Z",
-      "updatedAt": "2021-09-16T11:33:31Z",
-      "closedAt": null,
+      "updatedAt": "2021-09-28T07:24:48Z",
+      "closedAt": "2021-09-28T07:24:48Z",
       "comments": []
     },
     {
@@ -3866,7 +3915,7 @@
       "labels": [],
       "body": "@markkukojo said,\r\n> More importantly. The draft says in Sec. 4.2:\r\n\"It does not make any changes to the TCP Fast Recovery and Fast\r\nRetransmit algorithms [RFC6582][RFC6675].\"\r\n\r\n> But it does modify RFC6582, RFC 6675, and RFC 5681 Fast Retransmit&Fast Recovery by applying beta_cubic to cwnd, not FlightSize. This is incorrect and would bring back an old design&implementation bug that was corrected more than two decades ago when RFC 2581 was published (and subsequently corrected also for RFC 6582 and RFC 6675). Please see the implementation note attached to Equation (4) of RFC 5681: \"An easy mistake to make is to simply use cwnd, rather than FlightSize, which in some implementations may incidentally increase well beyond rwnd.\"\r\n\r\n> Using cwnd in the equation will also result in incorrect outcome in some other cases as well, for example, if the sender is application limited.",
       "createdAt": "2021-09-21T08:52:56Z",
-      "updatedAt": "2021-09-27T22:05:13Z",
+      "updatedAt": "2021-09-29T23:56:40Z",
       "closedAt": null,
       "comments": [
         {
@@ -3931,6 +3980,41 @@
           "body": "neal, are you suggesting that we might need to update 5681? just curious.",
           "createdAt": "2021-09-27T22:05:13Z",
           "updatedAt": "2021-09-27T22:05:13Z"
+        },
+        {
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "body": "FWIW, the current editor's copy already updates 5681: https://tools.ietf.org/rfcdiff?url1=https://tools.ietf.org/id/draft-ietf-tcpm-rfc8312bis.txt&url2=https://NTAP.github.io/rfc8312bis/draft-ietf-tcpm-rfc8312bis.txt\r\n\r\nSo if we need to add other reasons for doing so, that is not an issue.",
+          "createdAt": "2021-09-28T07:03:21Z",
+          "updatedAt": "2021-09-28T07:03:21Z"
+        },
+        {
+          "author": "nealcardwell",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Personally I think the Reno and CUBIC RFCs  should use:\r\n   ssthresh = beta * cwnd\r\n(This is what Linux TCP has done since 2013).\r\n\r\nOr if the receiver window case mentioned by @markkukojo is a big concern, then perhaps something like:\r\n   ssthresh = beta * min(cwnd, rwnd)\r\n\r\nBut I don't think we need to hold up rfc8312bis if this is a controversial point, since it is somewhat orthogonal to CUBIC.\r\n\r\n\r\n\r\n\r\n",
+          "createdAt": "2021-09-28T13:10:11Z",
+          "updatedAt": "2021-09-28T13:10:11Z"
+        },
+        {
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Thanks, @nealcardwell . You are right that Linux Cubic sets cwnds to ssthresh at the end of fast recovery. \r\n\r\nBecause Reno(RFC5681)/NewReno(RFC6582)/Sack(RFC6675) all set ssthresh using FlightSize, and because Cubic does not intend to modify the fast retransmit and fast recovery algorithms of Reno/NewReno/Sack except the multiplicative decrease parameter, it would be better/consistent for this rfc8312bis to set ssthresh using FlightSize. \r\n\r\nWe may describe what is implemented in Linux/Window and why (\"since reducing cwnd based on FlightSize is not robust; it causes very poor performance in the very common application-limited case\").\r\n\r\n",
+          "createdAt": "2021-09-28T14:55:41Z",
+          "updatedAt": "2021-09-28T14:55:41Z"
+        },
+        {
+          "author": "nealcardwell",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Sounds good to me. Thanks!\r\n",
+          "createdAt": "2021-09-28T15:12:30Z",
+          "updatedAt": "2021-09-28T15:12:30Z"
+        },
+        {
+          "author": "yuchungcheng",
+          "authorAssociation": "NONE",
+          "body": "I completely disagree the compromise to use FlightSize.\r\n\r\nUsing FlightSize has the detrimental performance effect when losses are encountered in application-limited case, which is prevalent in today's structured Internet application traffic. Consider a simple case where the application bursts and a drop occurs toward the end of the burst. At that time FlightSize is likely very small. Cubic is reducing the window based on an underestimated amount of volume during the congestion.\r\n\r\nEver since Cubic was invented, it has been using cwnd. Shouldn't this RFC reflect the Internet-wide decades long running implementation w better algorithm?\r\n\r\nNow on the \"Implementation Note: An easy mistake to make is to simply use cwnd, rather than FlightSize, which in some implementations may incidentally increase well beyond rwnd.\" in RFC5681. First why is cwnd going beyond rwnd an issue when the effective window is the min of the two? second can someone come up an example to illustrate such incident b/c I can't tell.\r\n\r\nI have indicated the same exact issue to Jana so I am glad RFC9002 QUIC does not repeat the mistake to use FlightSize\r\n(https://www.rfc-editor.org/rfc/rfc9002.html#name-recovery). I really want to stress the point using FlightSize simply makes TCP spec worse and out-sync'd of modern TCP implementations. It's really a mistake.",
+          "createdAt": "2021-09-29T23:56:40Z",
+          "updatedAt": "2021-09-29T23:56:40Z"
         }
       ]
     },
@@ -3939,7 +4023,7 @@
       "id": "I_kwDOEpK-U847-oPR",
       "title": "Acknowledge contributors",
       "url": "https://github.com/NTAP/rfc8312bis/issues/118",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "larseggert",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -3948,8 +4032,8 @@
       "labels": [],
       "body": "We need to acknowledge the contributors to this bis document.",
       "createdAt": "2021-09-24T09:35:28Z",
-      "updatedAt": "2021-09-24T09:35:31Z",
-      "closedAt": null,
+      "updatedAt": "2021-09-29T08:03:50Z",
+      "closedAt": "2021-09-29T08:03:50Z",
       "comments": []
     }
   ],
@@ -9508,24 +9592,26 @@
       "id": "PR_kwDOEpK-U84ryjGa",
       "title": "AIMD -> Reno (in most places)",
       "url": "https://github.com/NTAP/rfc8312bis/pull/109",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "larseggert",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2021-09-15T15:19:03Z",
-      "updatedAt": "2021-09-27T16:27:55Z",
+      "updatedAt": "2021-09-28T07:24:52Z",
       "baseRepository": "NTAP/rfc8312bis",
       "baseRefName": "main",
-      "baseRefOid": "b28a2bada0c71ce665a96add557fac0c070bc1f6",
+      "baseRefOid": "bcd9022a1b1ce46d1b985db1b61f2f4bd0994b2e",
       "headRepository": "NTAP/rfc8312bis",
       "headRefName": "aimd-to-reno",
-      "headRefOid": "dfd18731f5aefff30a6a82dcdf98baece7105a84",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "3a6a843eb365bf3efd0f6487899f9ba4315546b0",
+      "closedAt": "2021-09-28T07:24:48Z",
+      "mergedAt": "2021-09-28T07:24:48Z",
+      "mergedBy": "larseggert",
+      "mergeCommit": {
+        "oid": "f3db2837f6d4ab927848833fd93dff6b1be32325"
+      },
       "comments": [
         {
           "author": "lisongxu",
@@ -9680,13 +9766,13 @@
       "labels": [],
       "body": "Fixes #90.",
       "createdAt": "2021-09-16T11:59:26Z",
-      "updatedAt": "2021-09-27T11:55:39Z",
+      "updatedAt": "2021-09-29T08:05:41Z",
       "baseRepository": "NTAP/rfc8312bis",
       "baseRefName": "main",
-      "baseRefOid": "b28a2bada0c71ce665a96add557fac0c070bc1f6",
+      "baseRefOid": "e9231bf28b4f00618a47586890e8b305e574ad05",
       "headRepository": "NTAP/rfc8312bis",
       "headRefName": "downrefs",
-      "headRefOid": "74f003eda17bc1df0d7450974b4e912cea9f5da0",
+      "headRefOid": "2363cdea378a411e3f060cc3e3c2e84b2056b238",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -9918,6 +10004,19 @@
               "updatedAt": "2021-09-27T11:55:34Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOEpK-U84to92Z",
+          "commit": {
+            "abbreviatedOid": "74f003e"
+          },
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-09-28T16:55:37Z",
+          "updatedAt": "2021-09-28T16:55:37Z",
+          "comments": []
         }
       ]
     },
@@ -10182,7 +10281,7 @@
       "labels": [],
       "body": "Intended to resolve NTAP/rfc8312bis/#97",
       "createdAt": "2021-09-23T14:48:30Z",
-      "updatedAt": "2021-09-27T16:38:50Z",
+      "updatedAt": "2021-09-28T07:05:38Z",
       "baseRepository": "NTAP/rfc8312bis",
       "baseRefName": "main",
       "baseRefOid": "b28a2bada0c71ce665a96add557fac0c070bc1f6",
@@ -10295,6 +10394,32 @@
           "createdAt": "2021-09-27T16:21:31Z",
           "updatedAt": "2021-09-27T16:21:31Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDOEpK-U84tmafB",
+          "commit": {
+            "abbreviatedOid": "ba095f0"
+          },
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "state": "CHANGES_REQUESTED",
+          "body": "This removes \"long\" as suggested in this thread.",
+          "createdAt": "2021-09-28T07:04:58Z",
+          "updatedAt": "2021-09-28T07:05:38Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "```suggestion\r\nThe elapsed time *t* in {{eq1}} MUST NOT include periods during\r\n```",
+              "createdAt": "2021-09-28T07:04:58Z",
+              "updatedAt": "2021-09-28T07:05:38Z"
+            },
+            {
+              "originalPosition": 24,
+              "body": "```suggestion\r\n{{win-inc}} requires that *t* in {{eq1}} does not include\r\n```",
+              "createdAt": "2021-09-28T07:05:16Z",
+              "updatedAt": "2021-09-28T07:05:38Z"
+            }
+          ]
         }
       ]
     },
@@ -10542,6 +10667,63 @@
           "body": "",
           "createdAt": "2021-09-27T12:11:27Z",
           "updatedAt": "2021-09-27T12:11:27Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 120,
+      "id": "PR_kwDOEpK-U84sYKgL",
+      "title": "Add list of people to ACK. Fixes #118.",
+      "url": "https://github.com/NTAP/rfc8312bis/pull/120",
+      "state": "MERGED",
+      "author": "larseggert",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Anyone else to ACK?",
+      "createdAt": "2021-09-28T07:44:32Z",
+      "updatedAt": "2021-09-29T08:03:54Z",
+      "baseRepository": "NTAP/rfc8312bis",
+      "baseRefName": "main",
+      "baseRefOid": "f3db2837f6d4ab927848833fd93dff6b1be32325",
+      "headRepository": "NTAP/rfc8312bis",
+      "headRefName": "ack-people",
+      "headRefOid": "34c1a15c8298cdc33758797b49fbd85ab0e9a25f",
+      "closedAt": "2021-09-29T08:03:50Z",
+      "mergedAt": "2021-09-29T08:03:50Z",
+      "mergedBy": "larseggert",
+      "mergeCommit": {
+        "oid": "e9231bf28b4f00618a47586890e8b305e574ad05"
+      },
+      "comments": [
+        {
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Just checked the closed issues history, below folks had raised issues / provided suggestions:\r\n- Wesley Rosenblum \r\n- Martin Thomson\r\n- Mirja Kuehlewind\r\n- Mohit P. Tahiliani\r\n- Yuchung Cheng\r\n- Richard Scheffenegger\r\n- Michael Welzl\r\n- Junho Choi\r\n- Michael Scharf",
+          "createdAt": "2021-09-28T17:19:25Z",
+          "updatedAt": "2021-09-28T17:19:25Z"
+        },
+        {
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "body": "Thank you! I used the `gh` command line client to extract contributors, and forgot it only retrieves 30 issues by default. So people were missed.",
+          "createdAt": "2021-09-29T07:54:42Z",
+          "updatedAt": "2021-09-29T07:54:42Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpK-U84to-nN",
+          "commit": {
+            "abbreviatedOid": "38fc2a3"
+          },
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-09-28T16:58:40Z",
+          "updatedAt": "2021-09-28T16:58:40Z",
           "comments": []
         }
       ]
