@@ -20,12 +20,13 @@ algorithm by the Linux, Windows, and Apple stacks.
 algorithmic improvements based on these implementations and recent
 academic work. Based on the extensive deployment experience with
 CUBIC, it also moves the specification to the Standards Track,
-obsoleting RFC 8312. 
+obsoleting RFC 8312.  This also requires updating RFC 5681, to allow
+for CUBIC's occasionally more aggressive sending behavior. 
     " name="description">
-<meta content="xml2rfc 3.9.1" name="generator">
+<meta content="xml2rfc 3.10.0" name="generator">
 <meta content="draft-ietf-tcpm-rfc8312bis-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.9.1
+  xml2rfc 3.10.0
     Python 3.9.5
     appdirs 1.4.4
     ConfigArgParse 1.3
@@ -281,10 +282,15 @@ h4, h5, h6 {
 .author {
   padding-bottom: 0.3em;
 }
-#abstract+p, #abstract+p code, #abstract+p samp, #abstract+p tt {
+#abstract+p {
   font-size: 18px;
   line-height: 24px;
 }
+#abstract+p code, #abstract+p samp, #abstract+p tt {
+  font-size: 16px;
+  line-height: 0;
+}
+
 p {
   padding: 0;
   margin: 0.5em 0;
@@ -416,6 +422,12 @@ a.xref {
 tt, code, pre {
   background-color: var(--highlight-color);
   font: 14px/22px 'Oxygen Mono', monospace;
+}
+tt, code {
+  /* changing the font for inline elements leads to different ascender
+     and descender heights; as we want to retain baseline alignment,
+     remove leading to avoid altering the final height of lines */
+  line-height: 0;
 }
 pre {
   border: 1px solid var(--line-color);
@@ -1018,11 +1030,11 @@ address div.right {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">CUBIC</td>
-<td class="right">September 2021</td>
+<td class="right">October 2021</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Xu, et al.</td>
-<td class="center">Expires 5 March 2022</td>
+<td class="center">Expires 5 April 2022</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1036,14 +1048,17 @@ address div.right {
 <dt class="label-obsoletes">Obsoletes:</dt>
 <dd class="obsoletes">
 <a href="https://datatracker.ietf.org/doc/html/rfc8312" class="eref">8312</a> (if approved)</dd>
+<dt class="label-updates">Updates:</dt>
+<dd class="updates">
+<a href="https://datatracker.ietf.org/doc/html/rfc5681" class="eref">5681</a> (if approved)</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2021-09-01" class="published">1 September 2021</time>
+<time datetime="2021-10-02" class="published">2 October 2021</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2022-03-05">5 March 2022</time></dd>
+<dd class="expires"><time datetime="2022-04-05">5 April 2022</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1082,7 +1097,8 @@ algorithm by the Linux, Windows, and Apple stacks.<a href="#section-abstract-1" 
 algorithmic improvements based on these implementations and recent
 academic work. Based on the extensive deployment experience with
 CUBIC, it also moves the specification to the Standards Track,
-obsoleting RFC 8312.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
+obsoleting RFC 8312.  This also requires updating RFC 5681, to allow
+for CUBIC's occasionally more aggressive sending behavior.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
 </section>
 <section class="note" id="section-note.1">
       <h2 id="name-note-to-readers">
@@ -1128,7 +1144,7 @@ do this.<a href="#section-note.2-3" class="pilcrow">¶</a></p>
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 5 March 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 5 April 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1156,164 +1172,167 @@ do this.<a href="#section-note.2-3" class="pilcrow">¶</a></p>
         <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
 <a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
         </h2>
-<nav class="toc"><ul class="ulEmpty compact ulBare toc">
-<li class="ulEmpty compact ulBare toc" id="section-toc.1-1.1">
+<nav class="toc"><ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1">
             <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="xref">1</a>.  <a href="#name-introduction" class="xref">Introduction</a></p>
 </li>
-          <li class="ulEmpty compact ulBare toc" id="section-toc.1-1.2">
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
             <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="xref">2</a>.  <a href="#name-conventions" class="xref">Conventions</a></p>
 </li>
-          <li class="ulEmpty compact ulBare toc" id="section-toc.1-1.3">
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
             <p id="section-toc.1-1.3.1"><a href="#section-3" class="xref">3</a>.  <a href="#name-design-principles-of-cubic" class="xref">Design Principles of CUBIC</a></p>
-<ul class="ulEmpty ulBare compact toc">
-<li class="ulEmpty ulBare compact toc" id="section-toc.1-1.3.2.1">
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1">
                 <p id="section-toc.1-1.3.2.1.1" class="keepWithNext"><a href="#section-3.1" class="xref">3.1</a>.  <a href="#name-principle-1-for-the-cubic-i" class="xref">Principle 1 for the CUBIC Increase Function</a></p>
 </li>
-              <li class="ulEmpty ulBare compact toc" id="section-toc.1-1.3.2.2">
-                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="xref">3.2</a>.  <a href="#name-principle-2-for-aimd-friend" class="xref">Principle 2 for AIMD Friendliness</a></p>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2">
+                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="xref">3.2</a>.  <a href="#name-principle-2-for-reno-friend" class="xref">Principle 2 for Reno-Friendliness</a></p>
 </li>
-              <li class="ulEmpty ulBare compact toc" id="section-toc.1-1.3.2.3">
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3">
                 <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="xref">3.3</a>.  <a href="#name-principle-3-for-rtt-fairnes" class="xref">Principle 3 for RTT Fairness</a></p>
 </li>
-              <li class="ulEmpty ulBare compact toc" id="section-toc.1-1.3.2.4">
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.4">
                 <p id="section-toc.1-1.3.2.4.1"><a href="#section-3.4" class="xref">3.4</a>.  <a href="#name-principle-4-for-the-cubic-d" class="xref">Principle 4 for the CUBIC Decrease Factor</a></p>
 </li>
             </ul>
 </li>
-          <li class="ulEmpty compact ulBare toc" id="section-toc.1-1.4">
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
             <p id="section-toc.1-1.4.1"><a href="#section-4" class="xref">4</a>.  <a href="#name-cubic-congestion-control" class="xref">CUBIC Congestion Control</a></p>
-<ul class="ulEmpty ulBare compact toc">
-<li class="ulEmpty ulBare compact toc" id="section-toc.1-1.4.2.1">
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1">
                 <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="xref">4.1</a>.  <a href="#name-definitions" class="xref">Definitions</a></p>
-<ul class="ulEmpty ulBare compact toc">
-<li class="ulEmpty ulBare compact toc" id="section-toc.1-1.4.2.1.2.1">
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1.2.1">
                     <p id="section-toc.1-1.4.2.1.2.1.1"><a href="#section-4.1.1" class="xref">4.1.1</a>.  <a href="#name-constants-of-interest" class="xref">Constants of Interest</a></p>
 </li>
-                  <li class="ulEmpty ulBare compact toc" id="section-toc.1-1.4.2.1.2.2">
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1.2.2">
                     <p id="section-toc.1-1.4.2.1.2.2.1"><a href="#section-4.1.2" class="xref">4.1.2</a>.  <a href="#name-variables-of-interest" class="xref">Variables of Interest</a></p>
 </li>
                 </ul>
 </li>
-              <li class="ulEmpty ulBare compact toc" id="section-toc.1-1.4.2.2">
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2">
                 <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="xref">4.2</a>.  <a href="#name-window-increase-function" class="xref">Window Increase Function</a></p>
 </li>
-              <li class="ulEmpty ulBare compact toc" id="section-toc.1-1.4.2.3">
-                <p id="section-toc.1-1.4.2.3.1"><a href="#section-4.3" class="xref">4.3</a>.  <a href="#name-aimd-friendly-region" class="xref">AIMD-Friendly Region</a></p>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.3">
+                <p id="section-toc.1-1.4.2.3.1"><a href="#section-4.3" class="xref">4.3</a>.  <a href="#name-reno-friendly-region" class="xref">Reno-Friendly Region</a></p>
 </li>
-              <li class="ulEmpty ulBare compact toc" id="section-toc.1-1.4.2.4">
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.4">
                 <p id="section-toc.1-1.4.2.4.1"><a href="#section-4.4" class="xref">4.4</a>.  <a href="#name-concave-region" class="xref">Concave Region</a></p>
 </li>
-              <li class="ulEmpty ulBare compact toc" id="section-toc.1-1.4.2.5">
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.5">
                 <p id="section-toc.1-1.4.2.5.1"><a href="#section-4.5" class="xref">4.5</a>.  <a href="#name-convex-region" class="xref">Convex Region</a></p>
 </li>
-              <li class="ulEmpty ulBare compact toc" id="section-toc.1-1.4.2.6">
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.6">
                 <p id="section-toc.1-1.4.2.6.1"><a href="#section-4.6" class="xref">4.6</a>.  <a href="#name-multiplicative-decrease" class="xref">Multiplicative Decrease</a></p>
 </li>
-              <li class="ulEmpty ulBare compact toc" id="section-toc.1-1.4.2.7">
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.7">
                 <p id="section-toc.1-1.4.2.7.1"><a href="#section-4.7" class="xref">4.7</a>.  <a href="#name-fast-convergence" class="xref">Fast Convergence</a></p>
 </li>
-              <li class="ulEmpty ulBare compact toc" id="section-toc.1-1.4.2.8">
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.8">
                 <p id="section-toc.1-1.4.2.8.1"><a href="#section-4.8" class="xref">4.8</a>.  <a href="#name-timeout" class="xref">Timeout</a></p>
 </li>
-              <li class="ulEmpty ulBare compact toc" id="section-toc.1-1.4.2.9">
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.9">
                 <p id="section-toc.1-1.4.2.9.1"><a href="#section-4.9" class="xref">4.9</a>.  <a href="#name-spurious-congestion-events" class="xref">Spurious Congestion Events</a></p>
 </li>
-              <li class="ulEmpty ulBare compact toc" id="section-toc.1-1.4.2.10">
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.10">
                 <p id="section-toc.1-1.4.2.10.1"><a href="#section-4.10" class="xref">4.10</a>. <a href="#name-slow-start" class="xref">Slow Start</a></p>
 </li>
             </ul>
 </li>
-          <li class="ulEmpty compact ulBare toc" id="section-toc.1-1.5">
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
             <p id="section-toc.1-1.5.1"><a href="#section-5" class="xref">5</a>.  <a href="#name-discussion" class="xref">Discussion</a></p>
-<ul class="ulEmpty ulBare compact toc">
-<li class="ulEmpty ulBare compact toc" id="section-toc.1-1.5.2.1">
-                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="xref">5.1</a>.  <a href="#name-fairness-to-aimd-tcp" class="xref">Fairness to AIMD TCP</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="xref">5.1</a>.  <a href="#name-fairness-to-reno" class="xref">Fairness to Reno</a></p>
 </li>
-              <li class="ulEmpty ulBare compact toc" id="section-toc.1-1.5.2.2">
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
                 <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="xref">5.2</a>.  <a href="#name-using-spare-capacity" class="xref">Using Spare Capacity</a></p>
 </li>
-              <li class="ulEmpty ulBare compact toc" id="section-toc.1-1.5.2.3">
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3">
                 <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="xref">5.3</a>.  <a href="#name-difficult-environments" class="xref">Difficult Environments</a></p>
 </li>
-              <li class="ulEmpty ulBare compact toc" id="section-toc.1-1.5.2.4">
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.4">
                 <p id="section-toc.1-1.5.2.4.1"><a href="#section-5.4" class="xref">5.4</a>.  <a href="#name-investigating-a-range-of-en" class="xref">Investigating a Range of Environments</a></p>
 </li>
-              <li class="ulEmpty ulBare compact toc" id="section-toc.1-1.5.2.5">
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.5">
                 <p id="section-toc.1-1.5.2.5.1"><a href="#section-5.5" class="xref">5.5</a>.  <a href="#name-protection-against-congesti" class="xref">Protection against Congestion Collapse</a></p>
 </li>
-              <li class="ulEmpty ulBare compact toc" id="section-toc.1-1.5.2.6">
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.6">
                 <p id="section-toc.1-1.5.2.6.1"><a href="#section-5.6" class="xref">5.6</a>.  <a href="#name-fairness-within-the-alterna" class="xref">Fairness within the Alternative Congestion Control Algorithm</a></p>
 </li>
-              <li class="ulEmpty ulBare compact toc" id="section-toc.1-1.5.2.7">
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.7">
                 <p id="section-toc.1-1.5.2.7.1"><a href="#section-5.7" class="xref">5.7</a>.  <a href="#name-performance-with-misbehavin" class="xref">Performance with Misbehaving Nodes and Outside Attackers</a></p>
 </li>
-              <li class="ulEmpty ulBare compact toc" id="section-toc.1-1.5.2.8">
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.8">
                 <p id="section-toc.1-1.5.2.8.1"><a href="#section-5.8" class="xref">5.8</a>.  <a href="#name-behavior-for-application-li" class="xref">Behavior for Application-Limited Flows</a></p>
 </li>
-              <li class="ulEmpty ulBare compact toc" id="section-toc.1-1.5.2.9">
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.9">
                 <p id="section-toc.1-1.5.2.9.1"><a href="#section-5.9" class="xref">5.9</a>.  <a href="#name-responses-to-sudden-or-tran" class="xref">Responses to Sudden or Transient Events</a></p>
 </li>
-              <li class="ulEmpty ulBare compact toc" id="section-toc.1-1.5.2.10">
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.10">
                 <p id="section-toc.1-1.5.2.10.1"><a href="#section-5.10" class="xref">5.10</a>. <a href="#name-incremental-deployment" class="xref">Incremental Deployment</a></p>
 </li>
             </ul>
 </li>
-          <li class="ulEmpty compact ulBare toc" id="section-toc.1-1.6">
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
             <p id="section-toc.1-1.6.1"><a href="#section-6" class="xref">6</a>.  <a href="#name-security-considerations" class="xref">Security Considerations</a></p>
 </li>
-          <li class="ulEmpty compact ulBare toc" id="section-toc.1-1.7">
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
             <p id="section-toc.1-1.7.1"><a href="#section-7" class="xref">7</a>.  <a href="#name-iana-considerations" class="xref">IANA Considerations</a></p>
 </li>
-          <li class="ulEmpty compact ulBare toc" id="section-toc.1-1.8">
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
             <p id="section-toc.1-1.8.1"><a href="#section-8" class="xref">8</a>.  <a href="#name-references" class="xref">References</a></p>
-<ul class="ulEmpty ulBare compact toc">
-<li class="ulEmpty ulBare compact toc" id="section-toc.1-1.8.2.1">
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
                 <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="xref">8.1</a>.  <a href="#name-normative-references" class="xref">Normative References</a></p>
 </li>
-              <li class="ulEmpty ulBare compact toc" id="section-toc.1-1.8.2.2">
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
                 <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="xref">8.2</a>.  <a href="#name-informative-references" class="xref">Informative References</a></p>
 </li>
             </ul>
 </li>
-          <li class="ulEmpty compact ulBare toc" id="section-toc.1-1.9">
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
             <p id="section-toc.1-1.9.1"><a href="#appendix-A" class="xref">Appendix A</a>.  <a href="#name-acknowledgments" class="xref">Acknowledgments</a></p>
 </li>
-          <li class="ulEmpty compact ulBare toc" id="section-toc.1-1.10">
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
             <p id="section-toc.1-1.10.1"><a href="#appendix-B" class="xref">Appendix B</a>.  <a href="#name-evolution-of-cubic" class="xref">Evolution of CUBIC</a></p>
-<ul class="ulEmpty ulBare compact toc">
-<li class="ulEmpty ulBare compact toc" id="section-toc.1-1.10.2.1">
-                <p id="section-toc.1-1.10.2.1.1"><a href="#appendix-B.1" class="xref">B.1</a>.  <a href="#name-since-draft-ietf-tcpm-rfc83" class="xref">Since draft-ietf-tcpm-rfc8312bis-03</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.1">
+                <p id="section-toc.1-1.10.2.1.1"><a href="#appendix-B.1" class="xref">B.1</a>.  <a href="#name-since-draft-ietf-tcpm-rfc83" class="xref">Since draft-ietf-tcpm-rfc8312bis-04</a></p>
 </li>
-              <li class="ulEmpty ulBare compact toc" id="section-toc.1-1.10.2.2">
-                <p id="section-toc.1-1.10.2.2.1"><a href="#appendix-B.2" class="xref">B.2</a>.  <a href="#name-since-draft-ietf-tcpm-rfc831" class="xref">Since draft-ietf-tcpm-rfc8312bis-02</a></p>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.2">
+                <p id="section-toc.1-1.10.2.2.1"><a href="#appendix-B.2" class="xref">B.2</a>.  <a href="#name-since-draft-ietf-tcpm-rfc831" class="xref">Since draft-ietf-tcpm-rfc8312bis-03</a></p>
 </li>
-              <li class="ulEmpty ulBare compact toc" id="section-toc.1-1.10.2.3">
-                <p id="section-toc.1-1.10.2.3.1"><a href="#appendix-B.3" class="xref">B.3</a>.  <a href="#name-since-draft-ietf-tcpm-rfc8312" class="xref">Since draft-ietf-tcpm-rfc8312bis-01</a></p>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.3">
+                <p id="section-toc.1-1.10.2.3.1"><a href="#appendix-B.3" class="xref">B.3</a>.  <a href="#name-since-draft-ietf-tcpm-rfc8312" class="xref">Since draft-ietf-tcpm-rfc8312bis-02</a></p>
 </li>
-              <li class="ulEmpty ulBare compact toc" id="section-toc.1-1.10.2.4">
-                <p id="section-toc.1-1.10.2.4.1"><a href="#appendix-B.4" class="xref">B.4</a>.  <a href="#name-since-draft-ietf-tcpm-rfc8312b" class="xref">Since draft-ietf-tcpm-rfc8312bis-00</a></p>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.4">
+                <p id="section-toc.1-1.10.2.4.1"><a href="#appendix-B.4" class="xref">B.4</a>.  <a href="#name-since-draft-ietf-tcpm-rfc8312b" class="xref">Since draft-ietf-tcpm-rfc8312bis-01</a></p>
 </li>
-              <li class="ulEmpty ulBare compact toc" id="section-toc.1-1.10.2.5">
-                <p id="section-toc.1-1.10.2.5.1"><a href="#appendix-B.5" class="xref">B.5</a>.  <a href="#name-since-draft-eggert-tcpm-rfc" class="xref">Since draft-eggert-tcpm-rfc8312bis-03</a></p>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.5">
+                <p id="section-toc.1-1.10.2.5.1"><a href="#appendix-B.5" class="xref">B.5</a>.  <a href="#name-since-draft-ietf-tcpm-rfc8312bi" class="xref">Since draft-ietf-tcpm-rfc8312bis-00</a></p>
 </li>
-              <li class="ulEmpty ulBare compact toc" id="section-toc.1-1.10.2.6">
-                <p id="section-toc.1-1.10.2.6.1"><a href="#appendix-B.6" class="xref">B.6</a>.  <a href="#name-since-draft-eggert-tcpm-rfc8" class="xref">Since draft-eggert-tcpm-rfc8312bis-02</a></p>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.6">
+                <p id="section-toc.1-1.10.2.6.1"><a href="#appendix-B.6" class="xref">B.6</a>.  <a href="#name-since-draft-eggert-tcpm-rfc" class="xref">Since draft-eggert-tcpm-rfc8312bis-03</a></p>
 </li>
-              <li class="ulEmpty ulBare compact toc" id="section-toc.1-1.10.2.7">
-                <p id="section-toc.1-1.10.2.7.1"><a href="#appendix-B.7" class="xref">B.7</a>.  <a href="#name-since-draft-eggert-tcpm-rfc83" class="xref">Since draft-eggert-tcpm-rfc8312bis-01</a></p>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.7">
+                <p id="section-toc.1-1.10.2.7.1"><a href="#appendix-B.7" class="xref">B.7</a>.  <a href="#name-since-draft-eggert-tcpm-rfc8" class="xref">Since draft-eggert-tcpm-rfc8312bis-02</a></p>
 </li>
-              <li class="ulEmpty ulBare compact toc" id="section-toc.1-1.10.2.8">
-                <p id="section-toc.1-1.10.2.8.1"><a href="#appendix-B.8" class="xref">B.8</a>.  <a href="#name-since-draft-eggert-tcpm-rfc831" class="xref">Since draft-eggert-tcpm-rfc8312bis-00</a></p>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.8">
+                <p id="section-toc.1-1.10.2.8.1"><a href="#appendix-B.8" class="xref">B.8</a>.  <a href="#name-since-draft-eggert-tcpm-rfc83" class="xref">Since draft-eggert-tcpm-rfc8312bis-01</a></p>
 </li>
-              <li class="ulEmpty ulBare compact toc" id="section-toc.1-1.10.2.9">
-                <p id="section-toc.1-1.10.2.9.1"><a href="#appendix-B.9" class="xref">B.9</a>.  <a href="#name-since-rfc8312" class="xref">Since RFC8312</a></p>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.9">
+                <p id="section-toc.1-1.10.2.9.1"><a href="#appendix-B.9" class="xref">B.9</a>.  <a href="#name-since-draft-eggert-tcpm-rfc831" class="xref">Since draft-eggert-tcpm-rfc8312bis-00</a></p>
 </li>
-              <li class="ulEmpty ulBare compact toc" id="section-toc.1-1.10.2.10">
-                <p id="section-toc.1-1.10.2.10.1"><a href="#appendix-B.10" class="xref">B.10</a>. <a href="#name-since-the-original-paper" class="xref">Since the Original Paper</a></p>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.10">
+                <p id="section-toc.1-1.10.2.10.1"><a href="#appendix-B.10" class="xref">B.10</a>. <a href="#name-since-rfc8312" class="xref">Since RFC8312</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.11">
+                <p id="section-toc.1-1.10.2.11.1"><a href="#appendix-B.11" class="xref">B.11</a>. <a href="#name-since-the-original-paper" class="xref">Since the Original Paper</a></p>
 </li>
             </ul>
 </li>
-          <li class="ulEmpty compact ulBare toc" id="section-toc.1-1.11">
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
             <p id="section-toc.1-1.11.1"><a href="#appendix-C" class="xref"></a><a href="#name-authors-addresses" class="xref">Authors' Addresses</a></p>
 </li>
         </ul>
@@ -1328,42 +1347,46 @@ do this.<a href="#section-note.2-3" class="pilcrow">¶</a></p>
 <p id="section-1-1">CUBIC has been adopted as the default TCP congestion control algorithm
 in the Linux, Windows, and Apple stacks, and has been used and
 deployed globally. Extensive, decade-long deployment experience in
-vastly different Internet scenarios has convincingly demonstrated that
-CUBIC is safe for deployment on the global Internet and delivers
-substantial benefits over classical AIMD congestion control. It is
-therefore to be regarded as the current standard for TCP congestion
-control. CUBIC can also be used for other transport protocols such as
-QUIC <span>[<a href="#RFC9000" class="xref">RFC9000</a>]</span> and SCTP <span>[<a href="#RFC4960" class="xref">RFC4960</a>]</span> as a default congestion controller.<a href="#section-1-1" class="pilcrow">¶</a></p>
+vastly different Internet scenarios has convincingly demonstrated
+that CUBIC is safe for deployment on the global Internet and delivers
+substantial benefits over classical Reno congestion control <span>[<a href="#RFC5681" class="xref">RFC5681</a>]</span>. It is
+therefore to be regarded as the currently most widely deployed
+standard for TCP congestion control. CUBIC can also be used for other
+transport protocols such as QUIC <span>[<a href="#RFC9000" class="xref">RFC9000</a>]</span> and SCTP <span>[<a href="#RFC4960" class="xref">RFC4960</a>]</span>
+as a default congestion controller.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">The design of CUBIC was motivated by the well-documented problem
-classical TCP has with  low utilization over fast and long-distance
+classical Reno TCP has with  low utilization over fast and long-distance
 networks <span>[<a href="#K03" class="xref">K03</a>]</span><span>[<a href="#RFC3649" class="xref">RFC3649</a>]</span>. This problem arises from a slow increase
-of the congestion window following a congestion event in a network
-with a large bandwidth-delay product (BDP). <span>[<a href="#HKLRX06" class="xref">HKLRX06</a>]</span> indicates that
-this problem is frequently observed even in the range of congestion
-window sizes over several hundreds of packets. This problem is equally
-applicable to all Reno-style TCP standards and their variants,
-including TCP-Reno <span>[<a href="#RFC5681" class="xref">RFC5681</a>]</span>, TCP-NewReno <span>[<a href="#RFC6582" class="xref">RFC6582</a>]</span><span>[<a href="#RFC6675" class="xref">RFC6675</a>]</span>,
-SCTP <span>[<a href="#RFC4960" class="xref">RFC4960</a>]</span>, and TFRC <span>[<a href="#RFC5348" class="xref">RFC5348</a>]</span>, which use the same linear
-increase function for window growth. We refer to all Reno-style TCP
-standards and their variants collectively as "AIMD TCP" below because
-they use the Additive Increase and Multiplicative Decrease algorithm
-(AIMD).<a href="#section-1-2" class="pilcrow">¶</a></p>
+of the congestion window following a congestion event in a network with
+a large bandwidth-delay product (BDP). <span>[<a href="#HKLRX06" class="xref">HKLRX06</a>]</span> indicates that this
+problem is frequently observed even in the range of congestion window
+sizes over several hundreds of packets. This problem is equally
+applicable to all Reno-style standards and their variants, including
+TCP-Reno <span>[<a href="#RFC5681" class="xref">RFC5681</a>]</span>, TCP-NewReno <span>[<a href="#RFC6582" class="xref">RFC6582</a>]</span><span>[<a href="#RFC6675" class="xref">RFC6675</a>]</span>, SCTP
+<span>[<a href="#RFC4960" class="xref">RFC4960</a>]</span>, TFRC <span>[<a href="#RFC5348" class="xref">RFC5348</a>]</span>, and QUIC congestion control
+<span>[<a href="#RFC9002" class="xref">RFC9002</a>]</span>, which use the same linear increase function for window
+growth.  We refer to all Reno-style standards and their variants
+collectively as "Reno" below.<a href="#section-1-2" class="pilcrow">¶</a></p>
 <p id="section-1-3">CUBIC, originally proposed in <span>[<a href="#HRX08" class="xref">HRX08</a>]</span>, is a modification to the
-congestion control algorithm of classical AIMD TCP to remedy this
+congestion control algorithm of classical Reno to remedy this
 problem. Specifically, CUBIC uses a cubic function instead of the linear
-window increase function of AIMD TCP to improve scalability and
+window increase function of Reno to improve scalability and
 stability under fast and long-distance networks.<a href="#section-1-3" class="pilcrow">¶</a></p>
 <p id="section-1-4">This document updates the specification of CUBIC to include algorithmic
 improvements based on the Linux, Windows, and Apple implementations and
 recent academic work. Based on the extensive deployment experience with
 CUBIC, it also moves the specification to the Standards Track,
-obsoleting <span>[<a href="#RFC8312" class="xref">RFC8312</a>]</span>.<a href="#section-1-4" class="pilcrow">¶</a></p>
+obsoleting <span>[<a href="#RFC8312" class="xref">RFC8312</a>]</span>. This requires an update to <span>[<a href="#RFC5681" class="xref">RFC5681</a>]</span>, which
+limits the aggressiveness of Reno TCP implementations in its Section 3.
+Since CUBIC is occasionally more aggressive than the <span>[<a href="#RFC5681" class="xref">RFC5681</a>]</span>
+algorithms, this document updates <span>[<a href="#RFC5681" class="xref">RFC5681</a>]</span> to allow for CUBIC's
+behavior.<a href="#section-1-4" class="pilcrow">¶</a></p>
 <p id="section-1-5">Binary Increase Congestion Control (BIC-TCP) <span>[<a href="#XHR04" class="xref">XHR04</a>]</span>, a predecessor
 of CUBIC, was selected as the default TCP congestion control algorithm
 by Linux in the year 2005 and had been used for several years by the
 Internet community at large.<a href="#section-1-5" class="pilcrow">¶</a></p>
 <p id="section-1-6">CUBIC uses a similar window increase function as BIC-TCP and is
-designed to be less aggressive and fairer to AIMD TCP in bandwidth
+designed to be less aggressive and fairer to Reno in bandwidth
 usage than BIC-TCP while maintaining the strengths of BIC-TCP such as
 stability, window scalability, and round-trip time (RTT) fairness.<a href="#section-1-6" class="pilcrow">¶</a></p>
 <p id="section-1-7">In the following sections, we first briefly explain the design
@@ -1403,8 +1426,8 @@ convex function.<a href="#section-3-2.2.1" class="pilcrow">¶</a></p>
 <dt id="section-3-2.3">
 Principle 2:  </dt>
         <dd style="margin-left: 1.5em" id="section-3-2.4">
-          <p id="section-3-2.4.1">To be AIMD-friendly, CUBIC is designed to behave like AIMD TCP in
-networks with short RTTs and small bandwidth where AIMD TCP
+          <p id="section-3-2.4.1">To be Reno-friendly, CUBIC is designed to behave like Reno in
+networks with short RTTs and small bandwidth where Reno
 performs well.<a href="#section-3-2.4.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
@@ -1431,7 +1454,7 @@ in order to balance between the scalability and convergence speed.<a href="#sect
 <p id="section-3.1-1">For better network utilization and stability, CUBIC <span>[<a href="#HRX08" class="xref">HRX08</a>]</span> uses a
 cubic window increase function in terms of the elapsed time from the
 last congestion event. While most alternative congestion control
-algorithms to AIMD TCP increase the congestion window using convex
+algorithms to Reno increase the congestion window using convex
 functions, CUBIC uses both the concave and convex profiles of a cubic
 function for window growth.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
 <p id="section-3.1-2">After a window reduction in response to a congestion event detected by
@@ -1461,16 +1484,16 @@ saturation point of the network, likely causing frequent global loss
 synchronizations.<a href="#section-3.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="principle-2-for-aimd-friendliness">
+<div id="principle-2-for-reno-friendliness">
 <section id="section-3.2">
-        <h3 id="name-principle-2-for-aimd-friend">
-<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-principle-2-for-aimd-friend" class="section-name selfRef">Principle 2 for AIMD Friendliness</a>
+        <h3 id="name-principle-2-for-reno-friend">
+<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-principle-2-for-reno-friend" class="section-name selfRef">Principle 2 for Reno-Friendliness</a>
         </h3>
-<p id="section-3.2-1">CUBIC promotes per-flow fairness to AIMD TCP. Note that AIMD TCP
+<p id="section-3.2-1">CUBIC promotes per-flow fairness to Reno. Note that Reno
 performs well over paths with short RTTs and small bandwidths (or
 small BDPs). There is only a scalability problem in networks with long
 RTTs and large bandwidths (or large BDPs).<a href="#section-3.2-1" class="pilcrow">¶</a></p>
-<p id="section-3.2-2">A congestion control algorithm designed to be friendly to AIMD TCP on
+<p id="section-3.2-2">A congestion control algorithm designed to be friendly to Reno on
 a per-flow basis must increase its congestion window less aggressively
 in small BDP networks than in large BDP networks.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
 <p id="section-3.2-3">The aggressiveness of CUBIC mainly depends on the maximum window size
@@ -1478,10 +1501,10 @@ before a window reduction, which is smaller in small-BDP networks than
 in large-BDP networks. Thus, CUBIC increases its congestion window
 less aggressively in small-BDP networks than in large-BDP networks.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
 <p id="section-3.2-4">Furthermore, in cases when the cubic function of CUBIC would increase
-the congestion window less aggressively than AIMD TCP, CUBIC simply
-follows the window size of AIMD TCP to ensure that CUBIC achieves at
-least the same throughput as AIMD TCP in small-BDP networks. We call
-this region where CUBIC behaves like AIMD TCP the "AIMD-friendly
+the congestion window less aggressively than Reno, CUBIC simply
+follows the window size of Reno to ensure that CUBIC achieves at
+least the same throughput as Reno in small-BDP networks. We call
+this region where CUBIC behaves like Reno the "Reno-friendly
 region".<a href="#section-3.2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1495,23 +1518,23 @@ linearly proportional to the inverse of their RTT ratio, where the
 throughput of a flow is approximately the size of its congestion
 window divided by its RTT.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
 <p id="section-3.3-2">Specifically, CUBIC maintains a window increase rate independent of
-RTTs outside the AIMD-friendly region, and thus flows with
+RTTs outside the Reno-friendly region, and thus flows with
 different RTTs have similar congestion window sizes under steady state
-when they operate outside the AIMD-friendly region.<a href="#section-3.3-2" class="pilcrow">¶</a></p>
-<p id="section-3.3-3">This notion of a linear throughput ratio is similar to that of AIMD
-TCP under high statistical multiplexing where packet loss is
+when they operate outside the Reno-friendly region.<a href="#section-3.3-2" class="pilcrow">¶</a></p>
+<p id="section-3.3-3">This notion of a linear throughput ratio is similar to that of Reno
+under high statistical multiplexing where packet loss is
 independent of individual flow rates. However, under low statistical
-multiplexing, the throughput ratio of AIMD TCP flows with different
+multiplexing, the throughput ratio of Reno flows with different
 RTTs is quadratically proportional to the inverse of their RTT ratio
 <span>[<a href="#XHR04" class="xref">XHR04</a>]</span>.<a href="#section-3.3-3" class="pilcrow">¶</a></p>
 <p id="section-3.3-4">CUBIC always ensures a linear throughput ratio independent of the
-amount of statistical multiplexing. This is an improvement over AIMD
-TCP. While there is no consensus on particular throughput ratios for
+amount of statistical multiplexing. This is an improvement over Reno.
+While there is no consensus on particular throughput ratios for
 different RTT flows, we believe that over wired Internet paths, use of
 a linear throughput ratio seems more reasonable than equal throughputs
 (i.e., the same throughput for flows with different RTTs) or a
 higher-order throughput ratio (e.g., a quadratical throughput ratio of
-AIMD TCP under low statistical multiplexing environments).<a href="#section-3.3-4" class="pilcrow">¶</a></p>
+Reno under low statistical multiplexing environments).<a href="#section-3.3-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="principle-4-for-the-cubic-decrease-factor">
@@ -1520,7 +1543,7 @@ AIMD TCP under low statistical multiplexing environments).<a href="#section-3.3-
 <a href="#section-3.4" class="section-number selfRef">3.4. </a><a href="#name-principle-4-for-the-cubic-d" class="section-name selfRef">Principle 4 for the CUBIC Decrease Factor</a>
         </h3>
 <p id="section-3.4-1">To balance between scalability and convergence speed, CUBIC sets the
-multiplicative window decrease factor to 0.7, whereas AIMD TCP uses
+multiplicative window decrease factor to 0.7, whereas Reno uses
 0.5.<a href="#section-3.4-1" class="pilcrow">¶</a></p>
 <p id="section-3.4-2">While this improves the scalability of CUBIC, a side effect of this
 decision is slower convergence, especially under low statistical
@@ -1565,15 +1588,15 @@ acknowledged in <a href="#eq4" class="xref">Figure 4</a>.<a href="#section-4.1-1
 <p id="section-4.1.1-1"><span class="contact-name">β</span><em><sub>cubic</sub></em>:
 CUBIC multiplication decrease factor as described in <a href="#mult-dec" class="xref">Section 4.6</a>.<a href="#section-4.1.1-1" class="pilcrow">¶</a></p>
 <p id="section-4.1.1-2"><span class="contact-name">α</span><em><sub>cubic</sub></em>:
-CUBIC additive increase factor used in AIMD-friendly region
-as described in <a href="#aimd-friendly" class="xref">Section 4.3</a>.<a href="#section-4.1.1-2" class="pilcrow">¶</a></p>
+CUBIC additive increase factor used in Reno-friendly region
+as described in <a href="#Reno-friendly" class="xref">Section 4.3</a>.<a href="#section-4.1.1-2" class="pilcrow">¶</a></p>
 <p id="section-4.1.1-3"><em>C</em>:
 constant that determines the aggressiveness of CUBIC in competing with
 other congestion control algorithms in high BDP networks. Please see
 <a href="#discussion" class="xref">Section 5</a> for more explanation on how it is set. The unit for <em>C</em>
 is<a href="#section-4.1.1-3" class="pilcrow">¶</a></p>
 <div id="section-4.1.1-4">
-            <div class="artwork art-svg alignCenter" id="section-4.1.1-4.1">
+            <div class="alignCenter art-svg artwork" id="section-4.1.1-4.1">
 <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="5.343ex" role="img" viewBox="0 -1365.4 3705.5 2300.3" width="8.606ex">
                 <defs>
                   <path d="M390 441l-24 -146h-15c0 64 -36 120 -92 120c-25 0 -51 -17 -51 -58c0 -55 134 -147 134 -242c0 -62 -48 -125 -135 -125c-34 0 -98 20 -110 20c-9 0 -18 -4 -30 -21h-17l25 156h16c0 -63 41 -130 104 -130c59 0 73 50 73 89c0 82 -130 132 -130 230c0 79 59 107 114 107 c43 0 63 -20 92 -20c11 0 22 10 30 20h16Z" id="E1-STIXWEBNORMALI-1D460" stroke-width="1"></path>
@@ -1654,13 +1677,14 @@ based on the cubic increase function, as described in <a href="#win-inc" class="
 Target value of congestion window in segments after the next RTT,
 that is, W<sub>cubic</sub>(<em>t</em> + <em>RTT</em>), as described in <a href="#win-inc" class="xref">Section 4.2</a>.<a href="#section-4.1.2-11" class="pilcrow">¶</a></p>
 <p id="section-4.1.2-12"><em>W<sub>est</sub></em>:
-An estimate for the congestion window in segments in the AIMD-friendly
-region, that is, an estimate for the congestion window of AIMD TCP.<a href="#section-4.1.2-12" class="pilcrow">¶</a></p>
+An estimate for the congestion window in segments in the Reno-friendly
+region, that is, an estimate for the congestion window of Reno.<a href="#section-4.1.2-12" class="pilcrow">¶</a></p>
 <p id="section-4.1.2-13"><em>segments_acked</em>:
-Number of MSS-sized segments acked when an ACK is received. This
-number will be a decimal value when an ACK acknowledges an amount of data
-that is not MSS-sized. Specifically, it can be less than 1 when
-an ACK acknowledges a segment smaller than the MSS.<a href="#section-4.1.2-13" class="pilcrow">¶</a></p>
+Number of MSS-sized segments acked when a "new ACK" is received, i.e., an
+ACK that cumulatively acknowledges the delivery of new data. This
+number will be a decimal value when a new ACK acknowledges an amount of
+data that is not MSS-sized. Specifically, it can be less than 1 when a
+new ACK acknowledges a segment smaller than the MSS.<a href="#section-4.1.2-13" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1670,18 +1694,18 @@ an ACK acknowledges a segment smaller than the MSS.<a href="#section-4.1.2-13" c
         <h3 id="name-window-increase-function">
 <a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-window-increase-function" class="section-name selfRef">Window Increase Function</a>
         </h3>
-<p id="section-4.2-1">CUBIC maintains the acknowledgment (ACK) clocking of AIMD TCP by
-increasing the congestion window only at the reception of an ACK. It
+<p id="section-4.2-1">CUBIC maintains the acknowledgment (ACK) clocking of Reno by
+increasing the congestion window only at the reception of a new ACK. It
 does not make any changes to the TCP Fast Recovery and Fast Retransmit
 algorithms <span>[<a href="#RFC6582" class="xref">RFC6582</a>]</span><span>[<a href="#RFC6675" class="xref">RFC6675</a>]</span>.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
 <p id="section-4.2-2">During congestion avoidance, after a congestion event is detected
 by mechanisms described in <a href="#cubic-inc" class="xref">Section 3.1</a>, CUBIC changes the window
-increase function of AIMD TCP.<a href="#section-4.2-2" class="pilcrow">¶</a></p>
+increase function of Reno.<a href="#section-4.2-2" class="pilcrow">¶</a></p>
 <p id="section-4.2-3">CUBIC uses the following window increase function:<a href="#section-4.2-3" class="pilcrow">¶</a></p>
 <div id="eq1">
 <figure id="figure-1">
           <div id="section-4.2-4.1">
-            <div class="artwork art-svg alignCenter" id="section-4.2-4.1.1">
+            <div class="alignCenter art-svg artwork" id="section-4.2-4.1.1">
 <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="3.009ex" role="img" viewBox="0 -1006.6 13239.1 1295.7" width="30.749ex">
                 <defs>
                   <path d="M932 662v-19c-53 -10 -64 -18 -83 -70c-109 -294 -119 -323 -204 -584h-15c-51 142 -108 290 -160 423l-154 -423h-15c-61 180 -133 366 -192 534c-33 95 -53 119 -104 120v19h244v-19c-51 -1 -64 -10 -64 -31c0 -12 4 -28 11 -47l144 -376l104 283l-28 75 c-33 88 -45 95 -102 96v19h265v-19c-50 -1 -77 -14 -77 -35c0 -11 8 -34 17 -58l143 -364l126 339c11 31 17 56 17 77c0 27 -19 40 -70 41v19h197Z" id="E1-STIXWEBMAIN-57" stroke-width="1"></path>
@@ -1745,7 +1769,7 @@ increase function of AIMD TCP.<a href="#section-4.2-2" class="pilcrow">¶</a></p
 <p id="section-4.2-5">where <em>t</em> is the elapsed time in seconds from the beginning of the
 current congestion avoidance stage, that is,<a href="#section-4.2-5" class="pilcrow">¶</a></p>
 <div id="section-4.2-6">
-          <div class="artwork art-svg alignCenter" id="section-4.2-6.1">
+          <div class="alignCenter art-svg artwork" id="section-4.2-6.1">
 <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="2.509ex" role="img" viewBox="0 -791.3 11751 1080.4" width="27.293ex">
               <defs>
                 <path d="M283 438l-10 -38h-70l-78 -320c-1 -3 -2 -8 -2 -11c0 -6 3 -12 16 -12c0 0 23 2 60 52l13 -11c-24 -31 -74 -107 -133 -107c-31 0 -39 25 -39 52c0 13 2 26 5 37l81 320h-77l5 29c75 14 136 51 177 138h13l-31 -129h70Z" id="E1-STIXWEBNORMALI-1D461" stroke-width="1"></path>
@@ -1808,7 +1832,7 @@ calculated using the following equation:<a href="#section-4.2-7" class="pilcrow"
 <div id="eq2">
 <figure id="figure-2">
           <div id="section-4.2-8.1">
-            <div class="artwork art-svg alignCenter" id="section-4.2-8.1.1">
+            <div class="alignCenter art-svg artwork" id="section-4.2-8.1.1">
 <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="6.343ex" role="img" viewBox="0 -1724.2 10641.5 2730.8" width="24.716ex">
                 <defs>
                   <path d="M802 653l-4 -16c-51 0 -78 -20 -120 -53l-271 -211l187 -278c29 -43 62 -79 127 -79l-4 -16h-287l4 16h11c28 0 47 5 47 33c0 16 -8 22 -16 35l-156 237h-4l-62 -243c-2 -8 -3 -15 -3 -22c0 -24 19 -40 78 -40h17l-4 -16h-304l4 16h18c60 0 77 35 84 62l117 472 c7 27 10 28 10 49c0 22 -16 38 -76 38h-18l4 16h312l-4 -16h-11c-75 0 -88 -27 -97 -62l-53 -209h5l282 221c10 8 18 16 18 29c-1 14 -9 21 -51 21l4 16h216Z" id="E1-STIXWEBNORMALI-1D43E" stroke-width="1"></path>
@@ -1872,16 +1896,14 @@ calculated using the following equation:<a href="#section-4.2-7" class="pilcrow"
 <figcaption><a href="#figure-2" class="selfRef">Figure 2</a></figcaption></figure>
 </div>
 <p id="section-4.2-9">where <em>cwnd<sub>start</sub></em> is the congestion window at the beginning
-of the current congestion avoidance stage. For example, right after a
-congestion event, <em>cwnd<sub>start</sub></em> is equal to the new cwnd
-calculated as described in <a href="#mult-dec" class="xref">Section 4.6</a>.<a href="#section-4.2-9" class="pilcrow">¶</a></p>
+of the current congestion avoidance stage.<a href="#section-4.2-9" class="pilcrow">¶</a></p>
 <p id="section-4.2-10">Upon receiving a new ACK during congestion avoidance, CUBIC computes the
 <em>target</em> congestion window size after the next <em>RTT</em> using <a href="#eq1" class="xref">Figure 1</a> as
 follows, where <em>RTT</em> is the smoothed round-trip time. The lower and
 upper bounds below ensure that CUBIC's congestion window increase rate
 is non-decreasing and is less than the increase rate of slow start.<a href="#section-4.2-10" class="pilcrow">¶</a></p>
 <div id="section-4.2-11">
-          <div class="artwork art-svg alignCenter" id="section-4.2-11.1">
+          <div class="alignCenter art-svg artwork" id="section-4.2-11.1">
 <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="9.176ex" role="img" viewBox="0 -2226.5 25764.2 3950.7" width="59.84ex">
               <defs>
                 <path d="M283 438l-10 -38h-70l-78 -320c-1 -3 -2 -8 -2 -11c0 -6 3 -12 16 -12c0 0 23 2 60 52l13 -11c-24 -31 -74 -107 -133 -107c-31 0 -39 25 -39 52c0 13 2 26 5 37l81 320h-77l5 29c75 14 136 51 177 138h13l-31 -129h70Z" id="E1-STIXWEBNORMALI-1D461" stroke-width="1"></path>
@@ -2057,32 +2079,35 @@ is non-decreasing and is less than the increase rate of slow start.<a href="#sec
             </svg><a href="#section-4.2-11.1" class="pilcrow">¶</a>
 </div>
 </div>
-<p id="section-4.2-12">Depending on the value of the current congestion window size <em>cwnd</em>,
-CUBIC runs in three different regions:<a href="#section-4.2-12" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-4.2-13">
-<li id="section-4.2-13.1">The AIMD-friendly region, which ensures that CUBIC achieves at
-least the same throughput as AIMD TCP.<a href="#section-4.2-13.1" class="pilcrow">¶</a>
+<p id="section-4.2-12">The elapsed time <em>t</em> in <a href="#eq1" class="xref">Figure 1</a> MUST NOT include periods during
+which <em>cwnd</em> has not been updated due to an application limit (see
+<a href="#app-limited" class="xref">Section 5.8</a>).<a href="#section-4.2-12" class="pilcrow">¶</a></p>
+<p id="section-4.2-13">Depending on the value of the current congestion window size <em>cwnd</em>,
+CUBIC runs in three different regions:<a href="#section-4.2-13" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-4.2-14">
+<li id="section-4.2-14.1">The Reno-friendly region, which ensures that CUBIC achieves at
+least the same throughput as Reno.<a href="#section-4.2-14.1" class="pilcrow">¶</a>
 </li>
-          <li id="section-4.2-13.2">The concave region, if CUBIC is not in the AIMD-friendly region
-and <em>cwnd</em> is less than <em>W<sub>max</sub></em>.<a href="#section-4.2-13.2" class="pilcrow">¶</a>
+          <li id="section-4.2-14.2">The concave region, if CUBIC is not in the Reno-friendly region
+and <em>cwnd</em> is less than <em>W<sub>max</sub></em>.<a href="#section-4.2-14.2" class="pilcrow">¶</a>
 </li>
-          <li id="section-4.2-13.3">The convex region, if CUBIC is not in the AIMD-friendly region and
-<em>cwnd</em> is greater than <em>W<sub>max</sub></em>.<a href="#section-4.2-13.3" class="pilcrow">¶</a>
+          <li id="section-4.2-14.3">The convex region, if CUBIC is not in the Reno-friendly region and
+<em>cwnd</em> is greater than <em>W<sub>max</sub></em>.<a href="#section-4.2-14.3" class="pilcrow">¶</a>
 </li>
         </ol>
-<p id="section-4.2-14">Below, we describe the exact actions taken by CUBIC in each region.<a href="#section-4.2-14" class="pilcrow">¶</a></p>
+<p id="section-4.2-15">Below, we describe the exact actions taken by CUBIC in each region.<a href="#section-4.2-15" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="aimd-friendly">
+<div id="Reno-friendly">
 <section id="section-4.3">
-        <h3 id="name-aimd-friendly-region">
-<a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-aimd-friendly-region" class="section-name selfRef">AIMD-Friendly Region</a>
+        <h3 id="name-reno-friendly-region">
+<a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-reno-friendly-region" class="section-name selfRef">Reno-Friendly Region</a>
         </h3>
-<p id="section-4.3-1">AIMD TCP performs well in certain types of networks, for example,
+<p id="section-4.3-1">Reno performs well in certain types of networks, for example,
 under short RTTs and small bandwidths (or small BDPs). In these
-networks, CUBIC remains in the AIMD-friendly region to achieve at
-least the same throughput as AIMD TCP.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
-<p id="section-4.3-2">The AIMD-friendly region is designed according to the analysis in
+networks, CUBIC remains in the Reno-friendly region to achieve at
+least the same throughput as Reno.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
+<p id="section-4.3-2">The Reno-friendly region is designed according to the analysis in
 <span>[<a href="#FHP00" class="xref">FHP00</a>]</span>, which studies the performance of an AIMD algorithm with an
 additive factor of <span class="contact-name">α</span> (segments per <em>RTT</em>) and
 a multiplicative factor of <span class="contact-name">β</span>, denoted by
@@ -2093,7 +2118,7 @@ calculated using <a href="#eq3" class="xref">Figure 3</a>.<a href="#section-4.3-
 <div id="eq3">
 <figure id="figure-3">
           <div id="section-4.3-3.1">
-            <div class="artwork art-svg alignCenter" id="section-4.3-3.1.1">
+            <div class="alignCenter art-svg artwork" id="section-4.3-3.1.1">
 <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="7.843ex" role="img" viewBox="0 -1939.5 15857.6 3376.7" width="36.831ex">
                 <defs>
                   <path d="M707 0h-255v19c36 0 43 2 55 9c8 4 14 15 14 24c0 15 -7 42 -19 70l-41 94h-262l-46 -114c-5 -13 -9 -30 -9 -42c0 -31 22 -41 70 -41v-19h-199v19c58 6 67 27 126 167l206 488h20l246 -563c28 -65 42 -86 94 -92v-19zM447 257l-116 275l-115 -275h231Z" id="E1-STIXWEBMAIN-41" stroke-width="1"></path>
@@ -2167,10 +2192,10 @@ calculated using <a href="#eq3" class="xref">Figure 3</a>.<a href="#section-4.3-
 </div>
 <figcaption><a href="#figure-3" class="selfRef">Figure 3</a></figcaption></figure>
 </div>
-<p id="section-4.3-4">By the same analysis, to achieve the same average window size as AIMD TCP
+<p id="section-4.3-4">By the same analysis, to achieve the same average window size as Reno
 that uses AIMD(1, 0.5), <span class="contact-name">α</span> must be equal to,<a href="#section-4.3-4" class="pilcrow">¶</a></p>
 <div id="section-4.3-5">
-          <div class="artwork art-svg alignCenter" id="section-4.3-5.1">
+          <div class="alignCenter art-svg artwork" id="section-4.3-5.1">
 <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="5.843ex" role="img" viewBox="0 -1508.9 3955.4 2515.6" width="9.187ex">
               <defs>
                 <path d="M61 510l-16 4c29 95 92 162 196 162c93 0 156 -55 156 -137c0 -48 -26 -98 -93 -138c44 -19 62 -31 83 -53c28 -31 44 -77 44 -129c0 -53 -17 -102 -46 -140c-48 -64 -143 -93 -232 -93c-73 0 -112 21 -112 57c0 21 18 36 41 36c17 0 33 -6 61 -26c37 -26 58 -31 86 -31 c74 0 130 68 130 153c0 76 -35 125 -104 145c-22 7 -45 10 -102 10v14c38 13 64 24 84 36c49 28 81 73 81 134c0 68 -42 102 -108 102c-62 0 -108 -32 -149 -106Z" id="E1-STIXWEBMAIN-33" stroke-width="1"></path>
@@ -2203,9 +2228,9 @@ that uses AIMD(1, 0.5), <span class="contact-name">α</span> must be equal to,<a
 </div>
 </div>
 <p id="section-4.3-6">Thus, CUBIC uses <a href="#eq4" class="xref">Figure 4</a> to estimate the window
-size <em>W<sub>est</sub></em> in the AIMD-friendly region with<a href="#section-4.3-6" class="pilcrow">¶</a></p>
+size <em>W<sub>est</sub></em> in the Reno-friendly region with<a href="#section-4.3-6" class="pilcrow">¶</a></p>
 <div id="section-4.3-7">
-          <div class="artwork art-svg alignCenter" id="section-4.3-7.1">
+          <div class="alignCenter art-svg artwork" id="section-4.3-7.1">
 <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="7.176ex" role="img" viewBox="0 -1580.7 43055.4 3089.6" width="100ex">
               <defs>
                 <path d="M514 129h15c0 -76 -29 -139 -79 -139c-41 0 -66 45 -80 110c-35 -63 -76 -110 -154 -110c-108 0 -187 97 -187 233c0 127 74 237 196 237c87 0 136 -74 154 -146l45 136h97l-109 -263c10 -46 39 -135 69 -135c14 0 26 20 33 77zM331 208c-11 74 -37 224 -111 224 c-50 0 -101 -45 -101 -159c0 -74 17 -255 106 -255c69 0 96 137 106 190Z" id="E1-STIXWEBMAIN-3B1" stroke-width="1"></path>
@@ -2272,14 +2297,14 @@ size <em>W<sub>est</sub></em> in the AIMD-friendly region with<a href="#section-
             </svg><a href="#section-4.3-7.1" class="pilcrow">¶</a>
 </div>
 </div>
-<p id="section-4.3-8">which achieves the same average window size as AIMD TCP. When
+<p id="section-4.3-8">which achieves the same average window size as Reno. When
 receiving a new ACK in congestion avoidance (where <em>cwnd</em> could be
 greater than or less than <em>W<sub>max</sub></em>), CUBIC checks whether
 W<sub>cubic</sub>(<em>t</em>) is less than <em>W<sub>est</sub></em>. If so, CUBIC is
-in the AIMD-friendly region and <em>cwnd</em> SHOULD be set to
-<em>W<sub>est</sub></em> at each reception of an ACK.<a href="#section-4.3-8" class="pilcrow">¶</a></p>
+in the Reno-friendly region and <em>cwnd</em> SHOULD be set to
+<em>W<sub>est</sub></em> at each reception of a new ACK.<a href="#section-4.3-8" class="pilcrow">¶</a></p>
 <p id="section-4.3-9"><em>W<sub>est</sub></em> is set equal to <em>cwnd<sub>start</sub></em> at the start
-of the congestion avoidance stage. After that, on every ACK,
+of the congestion avoidance stage. After that, on every new ACK,
 <em>W<sub>est</sub></em> is updated using <a href="#eq4" class="xref">Figure 4</a>. Note that this equation
 is for a connection where Appropriate Byte Counting (ABC) <span>[<a href="#RFC3465" class="xref">RFC3465</a>]</span>
 is disabled. For a connection with ABC enabled, this equation SHOULD be
@@ -2287,11 +2312,11 @@ adjusted by using the number of acknowledged bytes instead of acknowledged
 segments. Also note that this equation works for connections with
 enabled or disabled Delayed ACKs <span>[<a href="#RFC5681" class="xref">RFC5681</a>]</span>, as
 <em>segments_acked</em> will be different based on
-the segments actually acknowledged by an ACK.<a href="#section-4.3-9" class="pilcrow">¶</a></p>
+the segments actually acknowledged by a new ACK.<a href="#section-4.3-9" class="pilcrow">¶</a></p>
 <div id="eq4">
 <figure id="figure-4">
           <div id="section-4.3-10.1">
-            <div class="artwork art-svg alignCenter" id="section-4.3-10.1.1">
+            <div class="alignCenter art-svg artwork" id="section-4.3-10.1.1">
 <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="5.343ex" role="img" viewBox="0 -1508.9 16272.9 2300.3" width="37.795ex">
                 <defs>
                   <path d="M1101 653l-4 -16c-66 -3 -109 -44 -134 -77l-438 -576h-29v442h-11l-297 -442h-29v569c0 55 -33 84 -89 84h-10l4 16h288l-4 -16h-7c-39 0 -76 0 -76 -71v-377h5l226 332v61c0 31 -19 55 -82 55h-8l4 16h285l-4 -16h-18c-62 0 -71 -37 -71 -72v-395h6l278 370 c17 22 40 53 40 72c0 16 -13 25 -54 25h-17l4 16h242Z" id="E1-STIXWEBNORMALI-1D44A" stroke-width="1"></path>
@@ -2380,8 +2405,8 @@ the segments actually acknowledged by an ACK.<a href="#section-4.3-9" class="pil
 <em>W<sub>est</sub></em> &gt;= <em>W<sub>max</sub></em>, CUBIC needs to start probing to
 determine the new value of <em>W<sub>max</sub></em>. At this point,
 <span class="contact-name">α</span><em><sub>cubic</sub></em> SHOULD be set to 1 to ensure that
-CUBIC can achieve the same congestion window increment as AIMD
-TCP, which uses AIMD(1, 0.5).<a href="#section-4.3-11" class="pilcrow">¶</a></p>
+CUBIC can achieve the same congestion window increment as Reno,
+which uses AIMD(1, 0.5).<a href="#section-4.3-11" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="concave-region">
@@ -2390,11 +2415,11 @@ TCP, which uses AIMD(1, 0.5).<a href="#section-4.3-11" class="pilcrow">¶</a></p
 <a href="#section-4.4" class="section-number selfRef">4.4. </a><a href="#name-concave-region" class="section-name selfRef">Concave Region</a>
         </h3>
 <p id="section-4.4-1">When receiving a new ACK in congestion avoidance, if CUBIC is not in the
-AIMD-friendly region and <em>cwnd</em> is less than <em>W<sub>max</sub></em>, then
+Reno-friendly region and <em>cwnd</em> is less than <em>W<sub>max</sub></em>, then
 CUBIC is in the concave region. In this region, <em>cwnd</em> MUST be
 incremented by<a href="#section-4.4-1" class="pilcrow">¶</a></p>
 <div id="section-4.4-2">
-          <div class="artwork art-svg alignCenter" id="section-4.4-2.1">
+          <div class="alignCenter art-svg artwork" id="section-4.4-2.1">
 <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="5.343ex" role="img" viewBox="0 -1508.9 6186.9 2300.3" width="14.37ex">
               <defs>
                 <path d="M283 438l-10 -38h-70l-78 -320c-1 -3 -2 -8 -2 -11c0 -6 3 -12 16 -12c0 0 23 2 60 52l13 -11c-24 -31 -74 -107 -133 -107c-31 0 -39 25 -39 52c0 13 2 26 5 37l81 320h-77l5 29c75 14 136 51 177 138h13l-31 -129h70Z" id="E1-STIXWEBNORMALI-1D461" stroke-width="1"></path>
@@ -2435,7 +2460,7 @@ incremented by<a href="#section-4.4-1" class="pilcrow">¶</a></p>
             </svg><a href="#section-4.4-2.1" class="pilcrow">¶</a>
 </div>
 </div>
-<p id="section-4.4-3">for each received ACK, where <em>target</em> is calculated as described in
+<p id="section-4.4-3">for each received new ACK, where <em>target</em> is calculated as described in
 <a href="#win-inc" class="xref">Section 4.2</a>.<a href="#section-4.4-3" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -2445,7 +2470,7 @@ incremented by<a href="#section-4.4-1" class="pilcrow">¶</a></p>
 <a href="#section-4.5" class="section-number selfRef">4.5. </a><a href="#name-convex-region" class="section-name selfRef">Convex Region</a>
         </h3>
 <p id="section-4.5-1">When receiving a new ACK in congestion avoidance, if CUBIC is not in the
-AIMD-friendly region and <em>cwnd</em> is larger than or equal to
+Reno-friendly region and <em>cwnd</em> is larger than or equal to
 <em>W<sub>max</sub></em>, then CUBIC is in the convex region.<a href="#section-4.5-1" class="pilcrow">¶</a></p>
 <p id="section-4.5-2">The convex region indicates that the network conditions might have
 changed since the last congestion event, possibly implying more
@@ -2460,7 +2485,7 @@ We also call this region the "maximum probing phase", since CUBIC is
 searching for a new <em>W<sub>max</sub></em>. In this region, <em>cwnd</em> MUST be
 incremented by<a href="#section-4.5-3" class="pilcrow">¶</a></p>
 <div id="section-4.5-4">
-          <div class="artwork art-svg alignCenter" id="section-4.5-4.1">
+          <div class="alignCenter art-svg artwork" id="section-4.5-4.1">
 <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="5.343ex" role="img" viewBox="0 -1508.9 6186.9 2300.3" width="14.37ex">
               <defs>
                 <path d="M283 438l-10 -38h-70l-78 -320c-1 -3 -2 -8 -2 -11c0 -6 3 -12 16 -12c0 0 23 2 60 52l13 -11c-24 -31 -74 -107 -133 -107c-31 0 -39 25 -39 52c0 13 2 26 5 37l81 320h-77l5 29c75 14 136 51 177 138h13l-31 -129h70Z" id="E1-STIXWEBNORMALI-1D461" stroke-width="1"></path>
@@ -2501,7 +2526,7 @@ incremented by<a href="#section-4.5-3" class="pilcrow">¶</a></p>
             </svg><a href="#section-4.5-4.1" class="pilcrow">¶</a>
 </div>
 </div>
-<p id="section-4.5-5">for each received ACK, where <em>target</em> is calculated as described in
+<p id="section-4.5-5">for each received new ACK, where <em>target</em> is calculated as described in
 <a href="#win-inc" class="xref">Section 4.2</a>.<a href="#section-4.5-5" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -2520,7 +2545,7 @@ MAY employ a Fast Recovery algorithm to gradually adjust the
 congestion window to its new reduced <em>ssthresh</em> value. The parameter
 <span class="contact-name">β</span><em><sub>cubic</sub></em> SHOULD be set to 0.7.<a href="#section-4.6-1" class="pilcrow">¶</a></p>
 <div id="section-4.6-2">
-          <div class="artwork art-svg alignCenter" id="section-4.6-2.1">
+          <div class="alignCenter art-svg artwork" id="section-4.6-2.1">
 <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="9.509ex" role="img" viewBox="0 -2298.3 24417.8 4094.3" width="56.712ex">
               <defs>
                 <path d="M390 441l-24 -146h-15c0 64 -36 120 -92 120c-25 0 -51 -17 -51 -58c0 -55 134 -147 134 -242c0 -62 -48 -125 -135 -125c-34 0 -98 20 -110 20c-9 0 -18 -4 -30 -21h-17l25 156h16c0 -63 41 -130 104 -130c59 0 73 50 73 89c0 82 -130 132 -130 230c0 79 59 107 114 107 c43 0 63 -20 92 -20c11 0 22 10 30 20h16Z" id="E1-STIXWEBNORMALI-1D460" stroke-width="1"></path>
@@ -2735,7 +2760,7 @@ mechanism SHOULD be implemented.<a href="#section-4.7-1" class="pilcrow">¶</a><
 <em>W<sub>max</sub></em> as follows, before the window reduction as described
 in <a href="#mult-dec" class="xref">Section 4.6</a>.<a href="#section-4.7-2" class="pilcrow">¶</a></p>
 <div id="section-4.7-3">
-          <div class="artwork art-svg alignCenter" id="section-4.7-3.1">
+          <div class="alignCenter art-svg artwork" id="section-4.7-3.1">
 <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="10.509ex" role="img" viewBox="0 -2513.6 31295.9 4524.8" width="72.687ex">
               <defs>
                 <path d="M1101 653l-4 -16c-66 -3 -109 -44 -134 -77l-438 -576h-29v442h-11l-297 -442h-29v569c0 55 -33 84 -89 84h-10l4 16h288l-4 -16h-7c-39 0 -76 0 -76 -71v-377h5l226 332v61c0 31 -19 55 -82 55h-8l4 16h285l-4 -16h-18c-62 0 -71 -37 -71 -72v-395h6l278 370 c17 22 40 53 40 72c0 16 -13 25 -54 25h-17l4 16h242Z" id="E1-STIXWEBNORMALI-1D44A" stroke-width="1"></path>
@@ -2974,16 +2999,16 @@ without any other traffic, Fast Convergence SHOULD be disabled.<a href="#section
         <h3 id="name-timeout">
 <a href="#section-4.8" class="section-number selfRef">4.8. </a><a href="#name-timeout" class="section-name selfRef">Timeout</a>
         </h3>
-<p id="section-4.8-1">In case of a timeout, CUBIC follows AIMD TCP to reduce <em>cwnd</em>
+<p id="section-4.8-1">In case of a timeout, CUBIC follows Reno to reduce <em>cwnd</em>
           <span>[<a href="#RFC5681" class="xref">RFC5681</a>]</span>, but sets <em>ssthresh</em> using <span class="contact-name">β</span><em><sub>cubic</sub></em>
-(same as in <a href="#mult-dec" class="xref">Section 4.6</a>) in a way that is different from AIMD TCP
+(same as in <a href="#mult-dec" class="xref">Section 4.6</a>) in a way that is different from Reno TCP
 <span>[<a href="#RFC5681" class="xref">RFC5681</a>]</span>.<a href="#section-4.8-1" class="pilcrow">¶</a></p>
 <p id="section-4.8-2">During the first congestion avoidance stage after a timeout, CUBIC
 increases its congestion window size using <a href="#eq1" class="xref">Figure 1</a>, where <em>t</em> is the
 elapsed time since the beginning of the current congestion avoidance,
 <em>K</em> is set to 0, and <em>W<sub>max</sub></em> is set to the congestion window
 size at the beginning of the current congestion avoidance stage. In
-addition, for the AIMD-friendly region, <em>W<sub>est</sub></em> SHOULD be
+addition, for the Reno-friendly region, <em>W<sub>est</sub></em> SHOULD be
 set to the congestion window size at the beginning of the current
 congestion avoidance.<a href="#section-4.8-2" class="pilcrow">¶</a></p>
 </section>
@@ -3005,7 +3030,7 @@ congestion signals, thus degrading CUBIC's performance significantly.<a href="#s
 the current value of the following variables before the congestion
 window reduction.<a href="#section-4.9-2" class="pilcrow">¶</a></p>
 <div id="section-4.9-3">
-          <div class="artwork art-svg alignCenter" id="section-4.9-3.1">
+          <div class="alignCenter art-svg artwork" id="section-4.9-3.1">
 <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="19.176ex" role="img" viewBox="0 -4379.3 11784.6 8256.3" width="27.371ex">
               <defs>
                 <path d="M253 370l14 13c39 37 78 58 113 58c61 0 94 -54 94 -155c0 -129 -110 -298 -254 -298c-24 0 -42 4 -61 19l-24 -100c-3 -13 -5 -24 -5 -35c0 -22 11 -43 61 -43h16l-3 -12h-234l3 12c62 3 69 33 81 79l117 464c0 19 -1 33 -31 33c-8 0 -20 -2 -28 -4l-2 16l158 24 l-18 -69zM214 238l-46 -200c14 -16 34 -21 46 -21c101 0 176 173 176 285c0 63 -28 83 -51 83c-53 0 -105 -61 -125 -147Z" id="E1-STIXWEBNORMALI-1D45D" stroke-width="1"></path>
@@ -3184,7 +3209,7 @@ follows if the current <em>cwnd</em> is lower than <em>prior_cwnd</em>. Restorin
 the original values ensures that CUBIC's performance is similar to
 what it would be without spurious losses.<a href="#section-4.9-4" class="pilcrow">¶</a></p>
 <div id="section-4.9-5">
-          <div class="artwork art-svg alignCenter" id="section-4.9-5.1">
+          <div class="alignCenter art-svg artwork" id="section-4.9-5.1">
 <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="19.176ex" role="img" viewBox="0 -4379.3 21713.8 8256.3" width="50.432ex">
               <defs>
                 <path d="M363 111l12 -13c-51 -60 -113 -109 -198 -109c-97 0 -137 78 -137 155c0 140 121 297 263 297c50 0 97 -27 97 -76c0 -38 -16 -70 -54 -70c-26 0 -38 21 -38 38c0 24 29 36 29 58c0 12 -10 21 -34 21c-119 0 -176 -179 -176 -259c0 -87 49 -109 94 -109 c61 0 107 33 142 67Z" id="E1-STIXWEBNORMALI-1D450" stroke-width="1"></path>
@@ -3402,7 +3427,7 @@ these variables.<a href="#section-4.9-6" class="pilcrow">¶</a></p>
 <a href="#section-4.10" class="section-number selfRef">4.10. </a><a href="#name-slow-start" class="section-name selfRef">Slow Start</a>
         </h3>
 <p id="section-4.10-1">CUBIC MUST employ a slow-start algorithm, when <em>cwnd</em> is no more than
-<em>ssthresh</em>. Among the slow-start algorithms, CUBIC MAY choose the AIMD
+<em>ssthresh</em>. Among the slow-start algorithms, CUBIC MAY choose the Reno
 TCP slow start <span>[<a href="#RFC5681" class="xref">RFC5681</a>]</span> in general networks, or the limited slow
 start <span>[<a href="#RFC3742" class="xref">RFC3742</a>]</span> or hybrid slow start <span>[<a href="#HR08" class="xref">HR08</a>]</span> for fast and
 long-distance networks.<a href="#section-4.10-1" class="pilcrow">¶</a></p>
@@ -3433,7 +3458,7 @@ obtained by the following function:<a href="#section-5-2" class="pilcrow">¶</a>
 <div id="eq5">
 <figure id="figure-5">
         <div id="section-5-3.1">
-          <div class="artwork art-svg alignCenter" id="section-5-3.1.1">
+          <div class="alignCenter art-svg artwork" id="section-5-3.1.1">
 <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="7.843ex" role="img" viewBox="0 -1939.5 18760.5 3376.7" width="43.573ex">
               <defs>
                 <path d="M685 0h-285v16h16c56 0 72 21 72 61c0 6 -1 14 -2 21l-13 113h-198l-84 -140c-7 -8 -10 -19 -10 -26c1 -18 17 -29 43 -29h29v-16h-218v16c35 4 72 16 108 74l356 577h18l78 -581c7 -49 32 -70 74 -70h16v-16zM466 248l-25 227h-6l-139 -227h170Z" id="E1-STIXWEBNORMALI-1D434" stroke-width="1"></path>
@@ -3529,7 +3554,7 @@ obtained by the following function:<a href="#section-5-2" class="pilcrow">¶</a>
                   <g transform="translate(342,0)">
                     <rect height="60" width="3619" x="0" y="220"></rect>
                     <g transform="translate(60,746)">
-                      <use xlink:href="#E1-STIXWEBMAIN-33" transform="scale(0.574)" x="619" y="910"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-34" transform="scale(0.574)" x="577" y="910"></use>
                       <use xlink:href="#E1-STIXWEBMAIN-221A" x="0" y="32"></use>
                       <rect height="60" width="2571" x="928" y="946"></rect>
                       <g transform="translate(928,0)">
@@ -3537,17 +3562,17 @@ obtained by the following function:<a href="#section-5-2" class="pilcrow">¶</a>
                         <use xlink:href="#E1-STIXWEBNORMALI-1D447" x="740" y="0"></use>
                         <g transform="translate(1411,0)">
                           <use xlink:href="#E1-STIXWEBNORMALI-1D447" x="0" y="0"></use>
-                          <use xlink:href="#E1-STIXWEBMAIN-34" transform="scale(0.707)" x="999" y="408"></use>
+                          <use xlink:href="#E1-STIXWEBMAIN-33" transform="scale(0.707)" x="999" y="408"></use>
                         </g>
                       </g>
                     </g>
                     <g transform="translate(874,-995)">
-                      <use xlink:href="#E1-STIXWEBMAIN-33" transform="scale(0.574)" x="619" y="751"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-34" transform="scale(0.574)" x="577" y="751"></use>
                       <use xlink:href="#E1-STIXWEBMAIN-221A" x="0" y="-60"></use>
                       <rect height="60" width="943" x="928" y="854"></rect>
                       <g transform="translate(928,0)">
                         <use xlink:href="#E1-STIXWEBNORMALI-1D45D" x="0" y="0"></use>
-                        <use xlink:href="#E1-STIXWEBMAIN-34" transform="scale(0.707)" x="692" y="408"></use>
+                        <use xlink:href="#E1-STIXWEBMAIN-33" transform="scale(0.707)" x="692" y="408"></use>
                       </g>
                     </g>
                   </g>
@@ -3563,7 +3588,7 @@ to:<a href="#section-5-4" class="pilcrow">¶</a></p>
 <div id="eq6">
 <figure id="figure-6">
         <div id="section-5-5.1">
-          <div class="artwork art-svg alignCenter" id="section-5-5.1.1">
+          <div class="alignCenter art-svg artwork" id="section-5-5.1.1">
 <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="7.843ex" role="img" viewBox="0 -1939.5 15690 3376.7" width="36.441ex">
               <defs>
                 <path d="M685 0h-285v16h16c56 0 72 21 72 61c0 6 -1 14 -2 21l-13 113h-198l-84 -140c-7 -8 -10 -19 -10 -26c1 -18 17 -29 43 -29h29v-16h-218v16c35 4 72 16 108 74l356 577h18l78 -581c7 -49 32 -70 74 -70h16v-16zM466 248l-25 227h-6l-139 -227h170Z" id="E1-STIXWEBNORMALI-1D434" stroke-width="1"></path>
@@ -3635,7 +3660,7 @@ to:<a href="#section-5-4" class="pilcrow">¶</a></p>
                   <g transform="translate(342,0)">
                     <rect height="60" width="3619" x="0" y="220"></rect>
                     <g transform="translate(60,746)">
-                      <use xlink:href="#E1-STIXWEBMAIN-33" transform="scale(0.574)" x="619" y="910"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-34" transform="scale(0.574)" x="577" y="910"></use>
                       <use xlink:href="#E1-STIXWEBMAIN-221A" x="0" y="32"></use>
                       <rect height="60" width="2571" x="928" y="946"></rect>
                       <g transform="translate(928,0)">
@@ -3643,17 +3668,17 @@ to:<a href="#section-5-4" class="pilcrow">¶</a></p>
                         <use xlink:href="#E1-STIXWEBNORMALI-1D447" x="740" y="0"></use>
                         <g transform="translate(1411,0)">
                           <use xlink:href="#E1-STIXWEBNORMALI-1D447" x="0" y="0"></use>
-                          <use xlink:href="#E1-STIXWEBMAIN-34" transform="scale(0.707)" x="999" y="408"></use>
+                          <use xlink:href="#E1-STIXWEBMAIN-33" transform="scale(0.707)" x="999" y="408"></use>
                         </g>
                       </g>
                     </g>
                     <g transform="translate(874,-995)">
-                      <use xlink:href="#E1-STIXWEBMAIN-33" transform="scale(0.574)" x="619" y="751"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-34" transform="scale(0.574)" x="577" y="751"></use>
                       <use xlink:href="#E1-STIXWEBMAIN-221A" x="0" y="-60"></use>
                       <rect height="60" width="943" x="928" y="854"></rect>
                       <g transform="translate(928,0)">
                         <use xlink:href="#E1-STIXWEBNORMALI-1D45D" x="0" y="0"></use>
-                        <use xlink:href="#E1-STIXWEBMAIN-34" transform="scale(0.707)" x="692" y="408"></use>
+                        <use xlink:href="#E1-STIXWEBMAIN-33" transform="scale(0.707)" x="692" y="408"></use>
                       </g>
                     </g>
                   </g>
@@ -3666,36 +3691,36 @@ to:<a href="#section-5-4" class="pilcrow">¶</a></p>
 </div>
 <p id="section-5-6">We will determine the value of <em>C</em> in the following subsection using
 <a href="#eq6" class="xref">Figure 6</a>.<a href="#section-5-6" class="pilcrow">¶</a></p>
-<div id="fairness-to-aimd-tcp">
+<div id="fairness-to-reno">
 <section id="section-5.1">
-        <h3 id="name-fairness-to-aimd-tcp">
-<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-fairness-to-aimd-tcp" class="section-name selfRef">Fairness to AIMD TCP</a>
+        <h3 id="name-fairness-to-reno">
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-fairness-to-reno" class="section-name selfRef">Fairness to Reno</a>
         </h3>
-<p id="section-5.1-1">In environments where AIMD TCP is able to make reasonable use of the
+<p id="section-5.1-1">In environments where Reno is able to make reasonable use of the
 available bandwidth, CUBIC does not significantly change this state.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
-<p id="section-5.1-2">AIMD TCP performs well in the following two types of networks:<a href="#section-5.1-2" class="pilcrow">¶</a></p>
+<p id="section-5.1-2">Reno performs well in the following two types of networks:<a href="#section-5.1-2" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-5.1-3">
 <li id="section-5.1-3.1">networks with a small bandwidth-delay product (BDP)<a href="#section-5.1-3.1" class="pilcrow">¶</a>
 </li>
           <li id="section-5.1-3.2">networks with a short RTTs, but not necessarily a small BDP<a href="#section-5.1-3.2" class="pilcrow">¶</a>
 </li>
         </ol>
-<p id="section-5.1-4">CUBIC is designed to behave very similarly to AIMD TCP in the above
+<p id="section-5.1-4">CUBIC is designed to behave very similarly to Reno in the above
 two types of networks. The following two tables show the average
-window sizes of AIMD TCP, HSTCP, and CUBIC. The average window sizes
-of AIMD TCP and HSTCP are from <span>[<a href="#RFC3649" class="xref">RFC3649</a>]</span>. The average window size
-of CUBIC is calculated using <a href="#eq6" class="xref">Figure 6</a> and the CUBIC AIMD-friendly
+window sizes of Reno TCP, HSTCP, and CUBIC TCP. The average window sizes
+of Reno TCP and HSTCP are from <span>[<a href="#RFC3649" class="xref">RFC3649</a>]</span>. The average window size
+of CUBIC is calculated using <a href="#eq6" class="xref">Figure 6</a> and the CUBIC Reno-friendly
 region for three different values of <em>C</em>.<a href="#section-5.1-4" class="pilcrow">¶</a></p>
-<span id="name-aimd-tcp-hstcp-and-cubic-wi"></span><div id="tab1">
+<span id="name-reno-tcp-hstcp-and-cubic-wi"></span><div id="tab1">
 <table class="center" id="table-1">
           <caption>
 <a href="#table-1" class="selfRef">Table 1</a>:
-<a href="#name-aimd-tcp-hstcp-and-cubic-wi" class="selfRef">AIMD TCP, HSTCP, and CUBIC with RTT = 0.1 seconds</a>
+<a href="#name-reno-tcp-hstcp-and-cubic-wi" class="selfRef">Reno TCP, HSTCP, and CUBIC with RTT = 0.1 seconds</a>
           </caption>
 <thead>
             <tr>
               <th class="text-right" rowspan="1" colspan="1">Loss Rate P</th>
-              <th class="text-right" rowspan="1" colspan="1">AIMD</th>
+              <th class="text-right" rowspan="1" colspan="1">Reno</th>
               <th class="text-right" rowspan="1" colspan="1">HSTCP</th>
               <th class="text-right" rowspan="1" colspan="1">CUBIC (C=0.04)</th>
               <th class="text-right" rowspan="1" colspan="1">CUBIC (C=0.4)</th>
@@ -3762,19 +3787,19 @@ region for three different values of <em>C</em>.<a href="#section-5.1-4" class="
           </tbody>
         </table>
 </div>
-<p id="section-5.1-6"><a href="#tab1" class="xref">Table 1</a> describes the response function of AIMD TCP, HSTCP, and CUBIC
+<p id="section-5.1-6"><a href="#tab1" class="xref">Table 1</a> describes the response function of Reno TCP, HSTCP, and CUBIC
 in networks with <em>RTT</em> = 0.1 seconds. The average window size is in
 MSS-sized segments.<a href="#section-5.1-6" class="pilcrow">¶</a></p>
-<span id="name-aimd-tcp-hstcp-and-cubic-wit"></span><div id="tab2">
+<span id="name-reno-tcp-hstcp-and-cubic-wit"></span><div id="tab2">
 <table class="center" id="table-2">
           <caption>
 <a href="#table-2" class="selfRef">Table 2</a>:
-<a href="#name-aimd-tcp-hstcp-and-cubic-wit" class="selfRef">AIMD TCP, HSTCP, and CUBIC with RTT = 0.01 seconds</a>
+<a href="#name-reno-tcp-hstcp-and-cubic-wit" class="selfRef">Reno TCP, HSTCP, and CUBIC with RTT = 0.01 seconds</a>
           </caption>
 <thead>
             <tr>
               <th class="text-right" rowspan="1" colspan="1">Loss Rate P</th>
-              <th class="text-right" rowspan="1" colspan="1">AIMD</th>
+              <th class="text-right" rowspan="1" colspan="1">Reno</th>
               <th class="text-right" rowspan="1" colspan="1">HSTCP</th>
               <th class="text-right" rowspan="1" colspan="1">CUBIC (C=0.04)</th>
               <th class="text-right" rowspan="1" colspan="1">CUBIC (C=0.4)</th>
@@ -3841,31 +3866,31 @@ MSS-sized segments.<a href="#section-5.1-6" class="pilcrow">¶</a></p>
           </tbody>
         </table>
 </div>
-<p id="section-5.1-8"><a href="#tab2" class="xref">Table 2</a> describes the response function of AIMD TCP, HSTCP, and CUBIC
+<p id="section-5.1-8"><a href="#tab2" class="xref">Table 2</a> describes the response function of Reno TCP, HSTCP, and CUBIC
 in networks with <em>RTT</em> = 0.01 seconds. The average window size is in
 MSS-sized segments.<a href="#section-5.1-8" class="pilcrow">¶</a></p>
 <p id="section-5.1-9">Both tables show that CUBIC with any of these three <em>C</em> values is more
-friendly to AIMD TCP than HSTCP, especially in networks with a short
-<em>RTT</em> where AIMD TCP performs reasonably well. For example, in a
-network with <em>RTT</em> = 0.01 seconds and p=10^-6, AIMD TCP has an average
-window of 1200 packets. If the packet size is 1500 bytes, then AIMD
+friendly to Reno TCP than HSTCP, especially in networks with a short
+<em>RTT</em> where Reno TCP performs reasonably well. For example, in a
+network with <em>RTT</em> = 0.01 seconds and p=10^-6, Reno TCP has an average
+window of 1200 packets. If the packet size is 1500 bytes, then Reno
 TCP can achieve an average rate of 1.44 Gbps. In this case, CUBIC with
-<em>C</em>=0.04 or <em>C</em>=0.4 achieves exactly the same rate as AIMD TCP,
-whereas HSTCP is about ten times more aggressive than AIMD TCP.<a href="#section-5.1-9" class="pilcrow">¶</a></p>
+<em>C</em>=0.04 or <em>C</em>=0.4 achieves exactly the same rate as Reno TCP,
+whereas HSTCP is about ten times more aggressive than Reno TCP.<a href="#section-5.1-9" class="pilcrow">¶</a></p>
 <p id="section-5.1-10">We can see that <em>C</em> determines the aggressiveness of CUBIC in
 competing with other congestion control algorithms for bandwidth.
-CUBIC is more friendly to AIMD TCP, if the value of <em>C</em> is lower.
+CUBIC is more friendly to Reno TCP, if the value of <em>C</em> is lower.
 However, we do not recommend setting <em>C</em> to a very low value like
 0.04, since CUBIC with a low <em>C</em> cannot efficiently use the bandwidth
 in fast and long-distance networks. Based on these observations and
 extensive deployment experience, we find <em>C</em>=0.4 gives a good balance
-between AIMD- friendliness and aggressiveness of window increase.
+between Reno-friendliness and aggressiveness of window increase.
 Therefore, <em>C</em> SHOULD be set to 0.4. With <em>C</em> set to 0.4, <a href="#eq6" class="xref">Figure 6</a> is
 reduced to:<a href="#section-5.1-10" class="pilcrow">¶</a></p>
 <div id="eq7">
 <figure id="figure-7">
           <div id="section-5.1-11.1">
-            <div class="artwork art-svg alignCenter" id="section-5.1-11.1.1">
+            <div class="alignCenter art-svg artwork" id="section-5.1-11.1.1">
 <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="7.843ex" role="img" viewBox="0 -1939.5 13527 3376.7" width="31.418ex">
                 <defs>
                   <path d="M685 0h-285v16h16c56 0 72 21 72 61c0 6 -1 14 -2 21l-13 113h-198l-84 -140c-7 -8 -10 -19 -10 -26c1 -18 17 -29 43 -29h29v-16h-218v16c35 4 72 16 108 74l356 577h18l78 -581c7 -49 32 -70 74 -70h16v-16zM466 248l-25 227h-6l-139 -227h170Z" id="E1-STIXWEBNORMALI-1D434" stroke-width="1"></path>
@@ -3886,8 +3911,8 @@ reduced to:<a href="#section-5.1-10" class="pilcrow">¶</a></p>
                   <path d="M457 337c0 -11 -8 -23 -22 -31c-25 -15 -83 -15 -155 -56c63 -37 127 -40 154 -56c14 -8 21 -20 21 -32c0 -20 -14 -39 -39 -39c-41 0 -66 70 -143 114c0 -69 29 -131 29 -162c0 -21 -20 -42 -38 -42c-19 0 -38 21 -38 42c0 31 29 93 29 162c-52 -30 -99 -93 -121 -105 c-9 -5 -18 -8 -27 -8c-24 0 -37 15 -37 32c0 14 6 30 21 39c27 15 101 25 153 55c-52 30 -129 40 -157 57c-13 8 -20 19 -20 30c0 21 15 42 36 42c7 0 14 -2 22 -6c29 -17 73 -78 130 -108c0 69 -29 135 -29 166c0 21 19 40 38 40c18 0 38 -19 38 -40 c0 -31 -29 -96 -29 -165c72 38 99 91 126 107c8 4 15 6 22 6c21 0 36 -21 36 -42Z" id="E1-STIXWEBMAIN-2217" stroke-width="1"></path>
                   <path d="M725 16l-2 -16h-169l-150 315c-10 -1 -21 -2 -29 -2c-14 0 -24 2 -38 4l-62 -239c-2 -8 -3 -15 -3 -23c0 -24 18 -39 76 -39h19l-4 -16h-325l4 16h16c76 0 96 28 105 62l124 497c2 8 5 17 5 25c0 21 -17 37 -77 37h-20l4 16h271c160 0 216 -66 216 -151 c0 -83 -71 -150 -178 -171l115 -229c19 -39 45 -81 102 -86zM410 613l-64 -260c13 -3 23 -4 32 -4c133 0 191 58 191 142c0 108 -62 125 -125 125c-14 0 -23 -1 -34 -3Z" id="E1-STIXWEBNORMALI-1D445" stroke-width="1"></path>
                   <path d="M670 653l-46 -179h-16c2 17 5 44 5 71c0 66 -58 71 -99 71h-98l-133 -538c-2 -9 -5 -16 -5 -25c0 -21 16 -37 76 -37h21l-4 -16h-329l4 16h18c78 0 98 28 106 62l133 538h-91c-83 0 -153 -61 -171 -142h-16l46 179h599Z" id="E1-STIXWEBNORMALI-1D447" stroke-width="1"></path>
-                  <path d="M963 973l-478 -1232h-32l-202 530c-17 45 -37 59 -62 59c-17 0 -43 -11 -65 -31l-12 20l156 124h19l204 -536h4l414 1066h54Z" id="E1-STIXWEBMAIN-221A" stroke-width="1"></path>
                   <path d="M61 510l-16 4c29 95 92 162 196 162c93 0 156 -55 156 -137c0 -48 -26 -98 -93 -138c44 -19 62 -31 83 -53c28 -31 44 -77 44 -129c0 -53 -17 -102 -46 -140c-48 -64 -143 -93 -232 -93c-73 0 -112 21 -112 57c0 21 18 36 41 36c17 0 33 -6 61 -26c37 -26 58 -31 86 -31 c74 0 130 68 130 153c0 76 -35 125 -104 145c-22 7 -45 10 -102 10v14c38 13 64 24 84 36c49 28 81 73 81 134c0 68 -42 102 -108 102c-62 0 -108 -32 -149 -106Z" id="E1-STIXWEBMAIN-33" stroke-width="1"></path>
+                  <path d="M963 973l-478 -1232h-32l-202 530c-17 45 -37 59 -62 59c-17 0 -43 -11 -65 -31l-12 20l156 124h19l204 -536h4l414 1066h54Z" id="E1-STIXWEBMAIN-221A" stroke-width="1"></path>
                   <path d="M253 370l14 13c39 37 78 58 113 58c61 0 94 -54 94 -155c0 -129 -110 -298 -254 -298c-24 0 -42 4 -61 19l-24 -100c-3 -13 -5 -24 -5 -35c0 -22 11 -43 61 -43h16l-3 -12h-234l3 12c62 3 69 33 81 79l117 464c0 19 -1 33 -31 33c-8 0 -20 -2 -28 -4l-2 16l158 24 l-18 -69zM214 238l-46 -200c14 -16 34 -21 46 -21c101 0 176 173 176 285c0 63 -28 83 -51 83c-53 0 -105 -61 -125 -147Z" id="E1-STIXWEBNORMALI-1D45D" stroke-width="1"></path>
                 </defs>
                 <g fill="black" stroke="currentColor" stroke-width="0" transform="matrix(1 0 0 -1 0 0)">
@@ -3918,7 +3943,7 @@ reduced to:<a href="#section-5.1-10" class="pilcrow">¶</a></p>
                     <g transform="translate(342,0)">
                       <rect height="60" width="3619" x="0" y="220"></rect>
                       <g transform="translate(60,746)">
-                        <use xlink:href="#E1-STIXWEBMAIN-33" transform="scale(0.574)" x="619" y="910"></use>
+                        <use xlink:href="#E1-STIXWEBMAIN-34" transform="scale(0.574)" x="577" y="910"></use>
                         <use xlink:href="#E1-STIXWEBMAIN-221A" x="0" y="32"></use>
                         <rect height="60" width="2571" x="928" y="946"></rect>
                         <g transform="translate(928,0)">
@@ -3926,17 +3951,17 @@ reduced to:<a href="#section-5.1-10" class="pilcrow">¶</a></p>
                           <use xlink:href="#E1-STIXWEBNORMALI-1D447" x="740" y="0"></use>
                           <g transform="translate(1411,0)">
                             <use xlink:href="#E1-STIXWEBNORMALI-1D447" x="0" y="0"></use>
-                            <use xlink:href="#E1-STIXWEBMAIN-34" transform="scale(0.707)" x="999" y="408"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-33" transform="scale(0.707)" x="999" y="408"></use>
                           </g>
                         </g>
                       </g>
                       <g transform="translate(874,-995)">
-                        <use xlink:href="#E1-STIXWEBMAIN-33" transform="scale(0.574)" x="619" y="751"></use>
+                        <use xlink:href="#E1-STIXWEBMAIN-34" transform="scale(0.574)" x="577" y="751"></use>
                         <use xlink:href="#E1-STIXWEBMAIN-221A" x="0" y="-60"></use>
                         <rect height="60" width="943" x="928" y="854"></rect>
                         <g transform="translate(928,0)">
                           <use xlink:href="#E1-STIXWEBNORMALI-1D45D" x="0" y="0"></use>
-                          <use xlink:href="#E1-STIXWEBMAIN-34" transform="scale(0.707)" x="692" y="408"></use>
+                          <use xlink:href="#E1-STIXWEBMAIN-33" transform="scale(0.707)" x="692" y="408"></use>
                         </g>
                       </g>
                     </g>
@@ -3956,22 +3981,22 @@ CUBIC.<a href="#section-5.1-12" class="pilcrow">¶</a></p>
         <h3 id="name-using-spare-capacity">
 <a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-using-spare-capacity" class="section-name selfRef">Using Spare Capacity</a>
         </h3>
-<p id="section-5.2-1">CUBIC uses a more aggressive window increase function than AIMD TCP
+<p id="section-5.2-1">CUBIC uses a more aggressive window increase function than Reno
 for fast and long-distance networks.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
-<p id="section-5.2-2">The following table shows that to achieve the 10 Gbps rate, AIMD TCP
-requires a packet loss rate of 2.0e-10, while CUBIC requires a packet
+<p id="section-5.2-2">The following table shows that to achieve the 10 Gbps rate, Reno TCP
+requires a packet loss rate of 2.0e-10, while CUBIC TCP requires a packet
 loss rate of 2.9e-8.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
 <span id="name-required-packet-loss-rate-f"></span><div id="tab3">
 <table class="center" id="table-3">
           <caption>
 <a href="#table-3" class="selfRef">Table 3</a>:
-<a href="#name-required-packet-loss-rate-f" class="selfRef">Required packet loss rate for AIMD TCP, HSTCP, and CUBIC to achieve a certain throughput</a>
+<a href="#name-required-packet-loss-rate-f" class="selfRef">Required packet loss rate for Reno TCP, HSTCP, and CUBIC to achieve a certain throughput</a>
           </caption>
 <thead>
             <tr>
               <th class="text-right" rowspan="1" colspan="1">Throughput (Mbps)</th>
               <th class="text-right" rowspan="1" colspan="1">Average W</th>
-              <th class="text-right" rowspan="1" colspan="1">AIMD P</th>
+              <th class="text-right" rowspan="1" colspan="1">Reno P</th>
               <th class="text-right" rowspan="1" colspan="1">HSTCP P</th>
               <th class="text-right" rowspan="1" colspan="1">CUBIC P</th>
             </tr>
@@ -4015,11 +4040,11 @@ loss rate of 2.9e-8.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
           </tbody>
         </table>
 </div>
-<p id="section-5.2-4"><a href="#tab3" class="xref">Table 3</a> describes the required packet loss rate for AIMD TCP, HSTCP,
+<p id="section-5.2-4"><a href="#tab3" class="xref">Table 3</a> describes the required packet loss rate for Reno TCP, HSTCP,
 and CUBIC to achieve a certain throughput. We use 1500-byte packets
 and an <em>RTT</em> of 0.1 seconds.<a href="#section-5.2-4" class="pilcrow">¶</a></p>
 <p id="section-5.2-5">Our test results in <span>[<a href="#HKLRX06" class="xref">HKLRX06</a>]</span> indicate that CUBIC uses the spare
-bandwidth left unused by existing AIMD TCP flows in the same
+bandwidth left unused by existing Reno TCP flows in the same
 bottleneck link without taking away much bandwidth from the existing
 flows.<a href="#section-5.2-5" class="pilcrow">¶</a></p>
 </section>
@@ -4029,7 +4054,7 @@ flows.<a href="#section-5.2-5" class="pilcrow">¶</a></p>
         <h3 id="name-difficult-environments">
 <a href="#section-5.3" class="section-number selfRef">5.3. </a><a href="#name-difficult-environments" class="section-name selfRef">Difficult Environments</a>
         </h3>
-<p id="section-5.3-1">CUBIC is designed to remedy the poor performance of AIMD TCP in fast
+<p id="section-5.3-1">CUBIC is designed to remedy the poor performance of Reno in fast
 and long-distance networks.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -4042,11 +4067,11 @@ and long-distance networks.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
 CUBIC has also been extensively studied by using both NS-2 simulation
 and testbed experiments, covering a wide range of network
 environments. More information can be found in <span>[<a href="#HKLRX06" class="xref">HKLRX06</a>]</span>.<a href="#section-5.4-1" class="pilcrow">¶</a></p>
-<p id="section-5.4-2">Same as AIMD TCP, CUBIC is a loss-based congestion control algorithm.
+<p id="section-5.4-2">Same as Reno, CUBIC is a loss-based congestion control algorithm.
 Because CUBIC is designed to be more aggressive (due to a faster
 window increase function and bigger multiplicative decrease factor)
-than AIMD TCP in fast and long-distance networks, it can fill large
-drop-tail buffers more quickly than AIMD TCP and increases the risk of
+than Reno in fast and long-distance networks, it can fill large
+drop-tail buffers more quickly than Reno and increases the risk of
 a standing queue <span>[<a href="#RFC8511" class="xref">RFC8511</a>]</span>. In this case, proper queue sizing and
 management <span>[<a href="#RFC7567" class="xref">RFC7567</a>]</span> could be used to reduce the packet queuing
 delay.<a href="#section-5.4-2" class="pilcrow">¶</a></p>
@@ -4058,9 +4083,9 @@ delay.<a href="#section-5.4-2" class="pilcrow">¶</a></p>
 <a href="#section-5.5" class="section-number selfRef">5.5. </a><a href="#name-protection-against-congesti" class="section-name selfRef">Protection against Congestion Collapse</a>
         </h3>
 <p id="section-5.5-1">With regard to the potential of causing congestion collapse, CUBIC
-behaves like AIMD TCP, since CUBIC modifies only the window adjustment
-algorithm of AIMD TCP. Thus, it does not modify the ACK clocking and
-timeout behaviors of AIMD TCP.<a href="#section-5.5-1" class="pilcrow">¶</a></p>
+behaves like Reno, since CUBIC modifies only the window adjustment
+algorithm of Reno. Thus, it does not modify the ACK clocking and
+timeout behaviors of Reno.<a href="#section-5.5-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="fairness-within-the-alternative-congestion-control-algorithm">
@@ -4083,17 +4108,17 @@ independently of the level of statistical multiplexing on the link.<a href="#sec
 <p id="section-5.7-1">This is not considered in the current CUBIC design.<a href="#section-5.7-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="behavior-for-application-limited-flows">
+<div id="app-limited">
 <section id="section-5.8">
         <h3 id="name-behavior-for-application-li">
 <a href="#section-5.8" class="section-number selfRef">5.8. </a><a href="#name-behavior-for-application-li" class="section-name selfRef">Behavior for Application-Limited Flows</a>
         </h3>
 <p id="section-5.8-1">CUBIC does not increase its congestion window size if a flow is
 currently limited by the application instead of the congestion window.
-In case of long periods during which <em>cwnd</em> has not been updated due
-to such an application limit, such as idle periods, <em>t</em> in <a href="#eq1" class="xref">Figure 1</a>
-MUST NOT include these periods; otherwise, W<sub>cubic</sub>(<em>t</em>)
-might be very high after restarting from these periods.<a href="#section-5.8-1" class="pilcrow">¶</a></p>
+<a href="#win-inc" class="xref">Section 4.2</a> requires that <em>t</em> in <a href="#eq1" class="xref">Figure 1</a> does not include
+application-limited periods, such as idle periods, otherwise
+W<sub>cubic</sub>(<em>t</em>) might be very high after restarting from these
+periods.<a href="#section-5.8-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="responses-to-sudden-or-transient-events">
@@ -4101,8 +4126,13 @@ might be very high after restarting from these periods.<a href="#section-5.8-1" 
         <h3 id="name-responses-to-sudden-or-tran">
 <a href="#section-5.9" class="section-number selfRef">5.9. </a><a href="#name-responses-to-sudden-or-tran" class="section-name selfRef">Responses to Sudden or Transient Events</a>
         </h3>
-<p id="section-5.9-1">If there is a sudden congestion, a routing change, or a mobility
-event, CUBIC behaves the same as AIMD TCP.<a href="#section-5.9-1" class="pilcrow">¶</a></p>
+<p id="section-5.9-1">If there is a sudden increase in capacity, e.g., due to variable radio
+capacity, a routing change, or a mobility event, CUBIC is designed to
+utilize the newly available capacity faster than Reno.<a href="#section-5.9-1" class="pilcrow">¶</a></p>
+<p id="section-5.9-2">On the other hand, if there is a sudden decrease in capacity, CUBIC
+reduces more slowly than Reno. This remains true whether or not CUBIC
+is in Reno-friendly mode and whether or not fast convergence is
+enabled.<a href="#section-5.9-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="incremental-deployment">
@@ -4110,9 +4140,9 @@ event, CUBIC behaves the same as AIMD TCP.<a href="#section-5.9-1" class="pilcro
         <h3 id="name-incremental-deployment">
 <a href="#section-5.10" class="section-number selfRef">5.10. </a><a href="#name-incremental-deployment" class="section-name selfRef">Incremental Deployment</a>
         </h3>
-<p id="section-5.10-1">CUBIC requires only changes to TCP senders, and it does not require
-any changes at TCP receivers. That is, a CUBIC sender works correctly
-with the AIMD TCP receivers. In addition, CUBIC does not require any
+<p id="section-5.10-1">CUBIC requires only changes to the congestion control at the sender, and it does
+not require any changes at receivers. That is, a CUBIC sender works correctly
+with Reno receivers. In addition, CUBIC does not require any
 changes to routers and does not require any assistance from routers.<a href="#section-5.10-1" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -4289,6 +4319,51 @@ information about TCP security concerns can be found in <span>[<a href="#RFC5681
       </h2>
 <p id="appendix-A-1">Richard Scheffenegger and Alexander Zimmermann originally co-authored
 <span>[<a href="#RFC8312" class="xref">RFC8312</a>]</span>.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<p id="appendix-A-2">These individuals suggested improvements to this document:<a href="#appendix-A-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-A-3.1">Bob Briscoe<a href="#appendix-A-3.1" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-3.2">Christian Huitema<a href="#appendix-A-3.2" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-3.3">Gorry Fairhurst<a href="#appendix-A-3.3" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-3.4">Jonathan Morton<a href="#appendix-A-3.4" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-3.5">Juhamatti Kuusisaari<a href="#appendix-A-3.5" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-3.6">Junho Choi<a href="#appendix-A-3.6" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-3.7">Markku Kojo<a href="#appendix-A-3.7" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-3.8">Martin Thomson<a href="#appendix-A-3.8" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-3.9">Matt Olson<a href="#appendix-A-3.9" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-3.10">Michael Welzl<a href="#appendix-A-3.10" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-3.11">Mirja Kuehlewind<a href="#appendix-A-3.11" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-3.12">Mohit P. Tahiliani<a href="#appendix-A-3.12" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-3.13">Neal Cardwell<a href="#appendix-A-3.13" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-3.14">Praveen Balasubramanian<a href="#appendix-A-3.14" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-3.15">Richard Scheffenegger<a href="#appendix-A-3.15" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-3.16">Rod Grimes<a href="#appendix-A-3.16" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-3.17">Tom Henderson<a href="#appendix-A-3.17" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-3.18">Tom Petch<a href="#appendix-A-3.18" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-3.19">Wesley Rosenblum<a href="#appendix-A-3.19" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-3.20">Yoshifumi Nishida<a href="#appendix-A-3.20" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-3.21">Yuchung Cheng<a href="#appendix-A-3.21" class="pilcrow">¶</a>
+</li>
+      </ul>
 </section>
 </div>
 <div id="evolution-of-cubic">
@@ -4296,215 +4371,245 @@ information about TCP security concerns can be found in <span>[<a href="#RFC5681
       <h2 id="name-evolution-of-cubic">
 <a href="#appendix-B" class="section-number selfRef">Appendix B. </a><a href="#name-evolution-of-cubic" class="section-name selfRef">Evolution of CUBIC</a>
       </h2>
-<div id="since-draft-ietf-tcpm-rfc8312bis-03">
+<div id="since-draft-ietf-tcpm-rfc8312bis-04">
 <section id="appendix-B.1">
         <h3 id="name-since-draft-ietf-tcpm-rfc83">
-<a href="#appendix-B.1" class="section-number selfRef">B.1. </a><a href="#name-since-draft-ietf-tcpm-rfc83" class="section-name selfRef">Since draft-ietf-tcpm-rfc8312bis-03</a>
+<a href="#appendix-B.1" class="section-number selfRef">B.1. </a><a href="#name-since-draft-ietf-tcpm-rfc83" class="section-name selfRef">Since draft-ietf-tcpm-rfc8312bis-04</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="appendix-B.1-1.1">Remove reference from abstract
-(<a href="https://github.com/NTAP/rfc8312bis/pull/82">#82</a>)<a href="#appendix-B.1-1.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-B.1-1.1">Fix incorrect math
+(<a href="https://github.com/NTAP/rfc8312bis/issues/106">#106</a>)<a href="#appendix-B.1-1.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="appendix-B.1-1.2">Update RFC5681
+(<a href="https://github.com/NTAP/rfc8312bis/issues/99">#99</a>)<a href="#appendix-B.1-1.2" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="appendix-B.1-1.3">Clarify what we mean by "new ACK" and use it in the text in more places.
+(<a href="https://github.com/NTAP/rfc8312bis/issues/101">#101</a>)<a href="#appendix-B.1-1.3" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="appendix-B.1-1.4">Rewrite the Responses to Sudden or Transient Events section
+(<a href="https://github.com/NTAP/rfc8312bis/issues/98">#98</a>)<a href="#appendix-B.1-1.4" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="appendix-B.1-1.5">Remove confusing text about <em>cwnd<sub>start</sub></em> in Section 4.2
+(<a href="https://github.com/NTAP/rfc8312bis/issues/100">#100</a>)<a href="#appendix-B.1-1.5" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="appendix-B.1-1.6">Change terminology from "AIMD" to "Reno"
+(<a href="https://github.com/NTAP/rfc8312bis/issues/108">#108</a>)<a href="#appendix-B.1-1.6" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="appendix-B.1-1.7">Moved MUST NOT from app-limited section to main cubic AI section
+(<a href="https://github.com/NTAP/rfc8312bis/issues/97">#97</a>)<a href="#appendix-B.1-1.7" class="pilcrow">¶</a>
+</li>
+        </ul>
+</section>
+</div>
+<div id="since-draft-ietf-tcpm-rfc8312bis-03">
+<section id="appendix-B.2">
+        <h3 id="name-since-draft-ietf-tcpm-rfc831">
+<a href="#appendix-B.2" class="section-number selfRef">B.2. </a><a href="#name-since-draft-ietf-tcpm-rfc831" class="section-name selfRef">Since draft-ietf-tcpm-rfc8312bis-03</a>
+        </h3>
+<ul class="normal">
+<li class="normal" id="appendix-B.2-1.1">Remove reference from abstract
+(<a href="https://github.com/NTAP/rfc8312bis/pull/82">#82</a>)<a href="#appendix-B.2-1.1" class="pilcrow">¶</a>
 </li>
         </ul>
 </section>
 </div>
 <div id="since-draft-ietf-tcpm-rfc8312bis-02">
-<section id="appendix-B.2">
-        <h3 id="name-since-draft-ietf-tcpm-rfc831">
-<a href="#appendix-B.2" class="section-number selfRef">B.2. </a><a href="#name-since-draft-ietf-tcpm-rfc831" class="section-name selfRef">Since draft-ietf-tcpm-rfc8312bis-02</a>
+<section id="appendix-B.3">
+        <h3 id="name-since-draft-ietf-tcpm-rfc8312">
+<a href="#appendix-B.3" class="section-number selfRef">B.3. </a><a href="#name-since-draft-ietf-tcpm-rfc8312" class="section-name selfRef">Since draft-ietf-tcpm-rfc8312bis-02</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="appendix-B.2-1.1">Decription of packet loss rate <em>p</em>
-(<a href="https://github.com/NTAP/rfc8312bis/issues/65">#65</a>)<a href="#appendix-B.2-1.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-B.3-1.1">Decription of packet loss rate <em>p</em>
+(<a href="https://github.com/NTAP/rfc8312bis/issues/65">#65</a>)<a href="#appendix-B.3-1.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.2-1.2">Clarification of TCP Friendly Equation for ABC and Delayed ACK
-(<a href="https://github.com/NTAP/rfc8312bis/issues/66">#66</a>)<a href="#appendix-B.2-1.2" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.3-1.2">Clarification of TCP Friendly Equation for ABC and Delayed ACK
+(<a href="https://github.com/NTAP/rfc8312bis/issues/66">#66</a>)<a href="#appendix-B.3-1.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.2-1.3">add applicability to QUIC and SCTP
-(<a href="https://github.com/NTAP/rfc8312bis/issues/61">#61</a>)<a href="#appendix-B.2-1.3" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.3-1.3">add applicability to QUIC and SCTP
+(<a href="https://github.com/NTAP/rfc8312bis/issues/61">#61</a>)<a href="#appendix-B.3-1.3" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.2-1.4">clarity on setting alpha<em><sub>aimd</sub></em> to 1
-(<a href="https://github.com/NTAP/rfc8312bis/issues/68">#68</a>)<a href="#appendix-B.2-1.4" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.3-1.4">clarity on setting alpha<em><sub>aimd</sub></em> to 1
+(<a href="https://github.com/NTAP/rfc8312bis/issues/68">#68</a>)<a href="#appendix-B.3-1.4" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.2-1.5">introduce alpha<em><sub>cubic</sub></em>
-(<a href="https://github.com/NTAP/rfc8312bis/issues/64">#64</a>)<a href="#appendix-B.2-1.5" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.3-1.5">introduce alpha<em><sub>cubic</sub></em>
+(<a href="https://github.com/NTAP/rfc8312bis/issues/64">#64</a>)<a href="#appendix-B.3-1.5" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.2-1.6">clarify <em>cwnd</em> growth in convex region
-(<a href="https://github.com/NTAP/rfc8312bis/issues/69">#69</a>)<a href="#appendix-B.2-1.6" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.3-1.6">clarify <em>cwnd</em> growth in convex region
+(<a href="https://github.com/NTAP/rfc8312bis/issues/69">#69</a>)<a href="#appendix-B.3-1.6" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.2-1.7">add guidance for using bytes and mention that segments count is decimal
-(<a href="https://github.com/NTAP/rfc8312bis/issues/67">#67</a>)<a href="#appendix-B.2-1.7" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.3-1.7">add guidance for using bytes and mention that segments count is decimal
+(<a href="https://github.com/NTAP/rfc8312bis/issues/67">#67</a>)<a href="#appendix-B.3-1.7" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.2-1.8">add loss events detected by RACK and QUIC loss detection
-(<a href="https://github.com/NTAP/rfc8312bis/issues/62">#62</a>)<a href="#appendix-B.2-1.8" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.3-1.8">add loss events detected by RACK and QUIC loss detection
+(<a href="https://github.com/NTAP/rfc8312bis/issues/62">#62</a>)<a href="#appendix-B.3-1.8" class="pilcrow">¶</a>
 </li>
         </ul>
 </section>
 </div>
 <div id="since-draft-ietf-tcpm-rfc8312bis-01">
-<section id="appendix-B.3">
-        <h3 id="name-since-draft-ietf-tcpm-rfc8312">
-<a href="#appendix-B.3" class="section-number selfRef">B.3. </a><a href="#name-since-draft-ietf-tcpm-rfc8312" class="section-name selfRef">Since draft-ietf-tcpm-rfc8312bis-01</a>
+<section id="appendix-B.4">
+        <h3 id="name-since-draft-ietf-tcpm-rfc8312b">
+<a href="#appendix-B.4" class="section-number selfRef">B.4. </a><a href="#name-since-draft-ietf-tcpm-rfc8312b" class="section-name selfRef">Since draft-ietf-tcpm-rfc8312bis-01</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="appendix-B.3-1.1">address Michael Scharf's editorial suggestions.
-(<a href="https://github.com/NTAP/rfc8312bis/issues/59">#59</a>)<a href="#appendix-B.3-1.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-B.4-1.1">address Michael Scharf's editorial suggestions.
+(<a href="https://github.com/NTAP/rfc8312bis/issues/59">#59</a>)<a href="#appendix-B.4-1.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.3-1.2">add "Note to the RFC Editor" about removing underscores<a href="#appendix-B.3-1.2" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.4-1.2">add "Note to the RFC Editor" about removing underscores<a href="#appendix-B.4-1.2" class="pilcrow">¶</a>
 </li>
         </ul>
 </section>
 </div>
 <div id="since-draft-ietf-tcpm-rfc8312bis-00">
-<section id="appendix-B.4">
-        <h3 id="name-since-draft-ietf-tcpm-rfc8312b">
-<a href="#appendix-B.4" class="section-number selfRef">B.4. </a><a href="#name-since-draft-ietf-tcpm-rfc8312b" class="section-name selfRef">Since draft-ietf-tcpm-rfc8312bis-00</a>
+<section id="appendix-B.5">
+        <h3 id="name-since-draft-ietf-tcpm-rfc8312bi">
+<a href="#appendix-B.5" class="section-number selfRef">B.5. </a><a href="#name-since-draft-ietf-tcpm-rfc8312bi" class="section-name selfRef">Since draft-ietf-tcpm-rfc8312bis-00</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="appendix-B.4-1.1">use updated xml2rfc with better text rendering of subscripts<a href="#appendix-B.4-1.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-B.5-1.1">use updated xml2rfc with better text rendering of subscripts<a href="#appendix-B.5-1.1" class="pilcrow">¶</a>
 </li>
         </ul>
 </section>
 </div>
 <div id="since-draft-eggert-tcpm-rfc8312bis-03">
-<section id="appendix-B.5">
+<section id="appendix-B.6">
         <h3 id="name-since-draft-eggert-tcpm-rfc">
-<a href="#appendix-B.5" class="section-number selfRef">B.5. </a><a href="#name-since-draft-eggert-tcpm-rfc" class="section-name selfRef">Since draft-eggert-tcpm-rfc8312bis-03</a>
+<a href="#appendix-B.6" class="section-number selfRef">B.6. </a><a href="#name-since-draft-eggert-tcpm-rfc" class="section-name selfRef">Since draft-eggert-tcpm-rfc8312bis-03</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="appendix-B.5-1.1">fix spelling nits<a href="#appendix-B.5-1.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-B.6-1.1">fix spelling nits<a href="#appendix-B.6-1.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.5-1.2">rename to draft-ietf<a href="#appendix-B.5-1.2" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.6-1.2">rename to draft-ietf<a href="#appendix-B.6-1.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.5-1.3">define <em>W<sub>max</sub></em> more clearly<a href="#appendix-B.5-1.3" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.6-1.3">define <em>W<sub>max</sub></em> more clearly<a href="#appendix-B.6-1.3" class="pilcrow">¶</a>
 </li>
         </ul>
 </section>
 </div>
 <div id="since-draft-eggert-tcpm-rfc8312bis-02">
-<section id="appendix-B.6">
+<section id="appendix-B.7">
         <h3 id="name-since-draft-eggert-tcpm-rfc8">
-<a href="#appendix-B.6" class="section-number selfRef">B.6. </a><a href="#name-since-draft-eggert-tcpm-rfc8" class="section-name selfRef">Since draft-eggert-tcpm-rfc8312bis-02</a>
+<a href="#appendix-B.7" class="section-number selfRef">B.7. </a><a href="#name-since-draft-eggert-tcpm-rfc8" class="section-name selfRef">Since draft-eggert-tcpm-rfc8312bis-02</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="appendix-B.6-1.1">add definition for segments_acked and alpha<em><sub>aimd</sub></em>.
-(<a href="https://github.com/NTAP/rfc8312bis/issues/47">#47</a>)<a href="#appendix-B.6-1.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-B.7-1.1">add definition for segments_acked and alpha<em><sub>aimd</sub></em>.
+(<a href="https://github.com/NTAP/rfc8312bis/issues/47">#47</a>)<a href="#appendix-B.7-1.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.6-1.2">fix a mistake in <em>W<sub>max</sub></em> calculation in the fast convergence section.
-(<a href="https://github.com/NTAP/rfc8312bis/issues/51">#51</a>)<a href="#appendix-B.6-1.2" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.7-1.2">fix a mistake in <em>W<sub>max</sub></em> calculation in the fast convergence section.
+(<a href="https://github.com/NTAP/rfc8312bis/issues/51">#51</a>)<a href="#appendix-B.7-1.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.6-1.3">clarity on setting <em>ssthresh</em> and <em>cwnd<sub>start</sub></em> during
+          <li class="normal" id="appendix-B.7-1.3">clarity on setting <em>ssthresh</em> and <em>cwnd<sub>start</sub></em> during
 multiplicative decrease.
-(<a href="https://github.com/NTAP/rfc8312bis/issues/53">#53</a>)<a href="#appendix-B.6-1.3" class="pilcrow">¶</a>
+(<a href="https://github.com/NTAP/rfc8312bis/issues/53">#53</a>)<a href="#appendix-B.7-1.3" class="pilcrow">¶</a>
 </li>
         </ul>
 </section>
 </div>
 <div id="since-draft-eggert-tcpm-rfc8312bis-01">
-<section id="appendix-B.7">
+<section id="appendix-B.8">
         <h3 id="name-since-draft-eggert-tcpm-rfc83">
-<a href="#appendix-B.7" class="section-number selfRef">B.7. </a><a href="#name-since-draft-eggert-tcpm-rfc83" class="section-name selfRef">Since draft-eggert-tcpm-rfc8312bis-01</a>
+<a href="#appendix-B.8" class="section-number selfRef">B.8. </a><a href="#name-since-draft-eggert-tcpm-rfc83" class="section-name selfRef">Since draft-eggert-tcpm-rfc8312bis-01</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="appendix-B.7-1.1">rename TCP-Friendly to AIMD-Friendly and rename Standard TCP to AIMD
+<li class="normal" id="appendix-B.8-1.1">rename TCP-Friendly to AIMD-Friendly and rename Standard TCP to AIMD
 TCP to avoid confusion as CUBIC has been widely used on the Internet.
-(<a href="https://github.com/NTAP/rfc8312bis/issues/38">#38</a>)<a href="#appendix-B.7-1.1" class="pilcrow">¶</a>
+(<a href="https://github.com/NTAP/rfc8312bis/issues/38">#38</a>)<a href="#appendix-B.8-1.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.7-1.2">change introductory text to reflect the significant broader
+          <li class="normal" id="appendix-B.8-1.2">change introductory text to reflect the significant broader
 deployment of CUBIC on the Internet.
-(<a href="https://github.com/NTAP/rfc8312bis/issues/39">#39</a>)<a href="#appendix-B.7-1.2" class="pilcrow">¶</a>
+(<a href="https://github.com/NTAP/rfc8312bis/issues/39">#39</a>)<a href="#appendix-B.8-1.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.7-1.3">rephrase introduction to avoid referring to variables that have not
-been defined yet.<a href="#appendix-B.7-1.3" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.8-1.3">rephrase introduction to avoid referring to variables that have not
+been defined yet.<a href="#appendix-B.8-1.3" class="pilcrow">¶</a>
 </li>
         </ul>
 </section>
 </div>
 <div id="since-draft-eggert-tcpm-rfc8312bis-00">
-<section id="appendix-B.8">
+<section id="appendix-B.9">
         <h3 id="name-since-draft-eggert-tcpm-rfc831">
-<a href="#appendix-B.8" class="section-number selfRef">B.8. </a><a href="#name-since-draft-eggert-tcpm-rfc831" class="section-name selfRef">Since draft-eggert-tcpm-rfc8312bis-00</a>
+<a href="#appendix-B.9" class="section-number selfRef">B.9. </a><a href="#name-since-draft-eggert-tcpm-rfc831" class="section-name selfRef">Since draft-eggert-tcpm-rfc8312bis-00</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="appendix-B.8-1.1">acknowledge former co-authors
-(<a href="https://github.com/NTAP/rfc8312bis/issues/15">#15</a>)<a href="#appendix-B.8-1.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-B.9-1.1">acknowledge former co-authors
+(<a href="https://github.com/NTAP/rfc8312bis/issues/15">#15</a>)<a href="#appendix-B.9-1.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.8-1.2">prevent <em>cwnd</em> from becoming less than two
-(<a href="https://github.com/NTAP/rfc8312bis/issues/7">#7</a>)<a href="#appendix-B.8-1.2" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.9-1.2">prevent <em>cwnd</em> from becoming less than two
+(<a href="https://github.com/NTAP/rfc8312bis/issues/7">#7</a>)<a href="#appendix-B.9-1.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.8-1.3">add list of variables and constants
+          <li class="normal" id="appendix-B.9-1.3">add list of variables and constants
 (<a href="https://github.com/NTAP/rfc8312bis/issues/5">#5</a>,
-<a href="https://github.com/NTAP/rfc8312bis/issues/6">#6</a>)<a href="#appendix-B.8-1.3" class="pilcrow">¶</a>
+<a href="https://github.com/NTAP/rfc8312bis/issues/6">#6</a>)<a href="#appendix-B.9-1.3" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.8-1.4">update <em>K</em>'s definition and add bounds for CUBIC <em>target</em> <em>cwnd</em>
+          <li class="normal" id="appendix-B.9-1.4">update <em>K</em>'s definition and add bounds for CUBIC <em>target</em> <em>cwnd</em>
             <span>[<a href="#SXEZ19" class="xref">SXEZ19</a>]</span> (<a href="https://github.com/NTAP/rfc8312bis/issues/1">#1</a>,
-<a href="https://github.com/NTAP/rfc8312bis/issues/14">#14</a>)<a href="#appendix-B.8-1.4" class="pilcrow">¶</a>
+<a href="https://github.com/NTAP/rfc8312bis/issues/14">#14</a>)<a href="#appendix-B.9-1.4" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.8-1.5">update <em>W<sub>est</sub></em> to use AIMD approach
-(<a href="https://github.com/NTAP/rfc8312bis/issues/20">#20</a>)<a href="#appendix-B.8-1.5" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.9-1.5">update <em>W<sub>est</sub></em> to use AIMD approach
+(<a href="https://github.com/NTAP/rfc8312bis/issues/20">#20</a>)<a href="#appendix-B.9-1.5" class="pilcrow">¶</a>
 </li>
         </ul>
 <ul class="normal">
-<li class="normal" id="appendix-B.8-2.1">set alpha<em><sub>aimd</sub></em> to 1 once
+<li class="normal" id="appendix-B.9-2.1">set alpha<em><sub>aimd</sub></em> to 1 once
 <em>W<sub>est</sub></em> reaches <em>W<sub>max</sub></em>
-(<a href="https://github.com/NTAP/rfc8312bis/issues/2">#2</a>)<a href="#appendix-B.8-2.1" class="pilcrow">¶</a>
+(<a href="https://github.com/NTAP/rfc8312bis/issues/2">#2</a>)<a href="#appendix-B.9-2.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.8-2.2">add Vidhi as co-author
-(<a href="https://github.com/NTAP/rfc8312bis/issues/17">#17</a>)<a href="#appendix-B.8-2.2" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.9-2.2">add Vidhi as co-author
+(<a href="https://github.com/NTAP/rfc8312bis/issues/17">#17</a>)<a href="#appendix-B.9-2.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.8-2.3">note for Fast Recovery during <em>cwnd</em> decrease due to congestion
-event (<a href="https://github.com/NTAP/rfc8312bis/issues/11">#11</a>)<a href="#appendix-B.8-2.3" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.9-2.3">note for Fast Recovery during <em>cwnd</em> decrease due to congestion
+event (<a href="https://github.com/NTAP/rfc8312bis/issues/11">#11</a>)<a href="#appendix-B.9-2.3" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.8-2.4">add section for spurious congestion events
-(<a href="https://github.com/NTAP/rfc8312bis/issues/23">#23</a>)<a href="#appendix-B.8-2.4" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.9-2.4">add section for spurious congestion events
+(<a href="https://github.com/NTAP/rfc8312bis/issues/23">#23</a>)<a href="#appendix-B.9-2.4" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.8-2.5">initialize <em>W<sub>est</sub></em> after timeout and remove variable
+          <li class="normal" id="appendix-B.9-2.5">initialize <em>W<sub>est</sub></em> after timeout and remove variable
 <em>W<sub>last_max</sub></em>
-(<a href="https://github.com/NTAP/rfc8312bis/issues/28">#28</a>)<a href="#appendix-B.8-2.5" class="pilcrow">¶</a>
+(<a href="https://github.com/NTAP/rfc8312bis/issues/28">#28</a>)<a href="#appendix-B.9-2.5" class="pilcrow">¶</a>
 </li>
         </ul>
 </section>
 </div>
 <div id="since-rfc8312">
-<section id="appendix-B.9">
+<section id="appendix-B.10">
         <h3 id="name-since-rfc8312">
-<a href="#appendix-B.9" class="section-number selfRef">B.9. </a><a href="#name-since-rfc8312" class="section-name selfRef">Since RFC8312</a>
+<a href="#appendix-B.10" class="section-number selfRef">B.10. </a><a href="#name-since-rfc8312" class="section-name selfRef">Since RFC8312</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="appendix-B.9-1.1">converted to Markdown and xml2rfc v3<a href="#appendix-B.9-1.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-B.10-1.1">converted to Markdown and xml2rfc v3<a href="#appendix-B.10-1.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.9-1.2">updated references (as part of the conversion)<a href="#appendix-B.9-1.2" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.10-1.2">updated references (as part of the conversion)<a href="#appendix-B.10-1.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.9-1.3">updated author information<a href="#appendix-B.9-1.3" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.10-1.3">updated author information<a href="#appendix-B.10-1.3" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.9-1.4">various formatting changes<a href="#appendix-B.9-1.4" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.10-1.4">various formatting changes<a href="#appendix-B.10-1.4" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.9-1.5">move to Standards Track<a href="#appendix-B.9-1.5" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.10-1.5">move to Standards Track<a href="#appendix-B.10-1.5" class="pilcrow">¶</a>
 </li>
         </ul>
 </section>
 </div>
 <div id="since-the-original-paper">
-<section id="appendix-B.10">
+<section id="appendix-B.11">
         <h3 id="name-since-the-original-paper">
-<a href="#appendix-B.10" class="section-number selfRef">B.10. </a><a href="#name-since-the-original-paper" class="section-name selfRef">Since the Original Paper</a>
+<a href="#appendix-B.11" class="section-number selfRef">B.11. </a><a href="#name-since-the-original-paper" class="section-name selfRef">Since the Original Paper</a>
         </h3>
-<p id="appendix-B.10-1">CUBIC has gone through a few changes since the initial release
+<p id="appendix-B.11-1">CUBIC has gone through a few changes since the initial release
 <span>[<a href="#HRX08" class="xref">HRX08</a>]</span> of its algorithm and implementation. Below we highlight the
-differences between its original paper and <span>[<a href="#RFC8312" class="xref">RFC8312</a>]</span>.<a href="#appendix-B.10-1" class="pilcrow">¶</a></p>
+differences between its original paper and <span>[<a href="#RFC8312" class="xref">RFC8312</a>]</span>.<a href="#appendix-B.11-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-B.10-2.1">The original paper <span>[<a href="#HRX08" class="xref">HRX08</a>]</span> includes the pseudocode of CUBIC
+<li class="normal" id="appendix-B.11-2.1">The original paper <span>[<a href="#HRX08" class="xref">HRX08</a>]</span> includes the pseudocode of CUBIC
 implementation using Linux's pluggable congestion control framework,
 which excludes system-specific optimizations. The simplified
-pseudocode might be a good source to start with and understand CUBIC.<a href="#appendix-B.10-2.1" class="pilcrow">¶</a>
+pseudocode might be a good source to start with and understand CUBIC.<a href="#appendix-B.11-2.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.10-2.2">
+          <li class="normal" id="appendix-B.11-2.2">
             <span>[<a href="#HRX08" class="xref">HRX08</a>]</span> also includes experimental results showing its performance
-and fairness.<a href="#appendix-B.10-2.2" class="pilcrow">¶</a>
+and fairness.<a href="#appendix-B.11-2.2" class="pilcrow">¶</a>
 </li>
         </ul>
 <ul class="normal">
-<li class="normal" id="appendix-B.10-3.1">The definition of beta<em><sub>cubic</sub></em> constant
+<li class="normal" id="appendix-B.11-3.1">The definition of beta<em><sub>cubic</sub></em> constant
 was changed in <span>[<a href="#RFC8312" class="xref">RFC8312</a>]</span>. For example,
 beta<em><sub>cubic</sub></em> in the original paper was the
 window decrease constant while <span>[<a href="#RFC8312" class="xref">RFC8312</a>]</span> changed it to CUBIC
@@ -4512,13 +4617,13 @@ multiplication decrease factor. With this change, the current
 congestion window size after a congestion event in <span>[<a href="#RFC8312" class="xref">RFC8312</a>]</span> was
 beta<em><sub>cubic</sub></em> * <em>W<sub>max</sub></em> while it was
 (1-beta<em><sub>cubic</sub></em>) * <em>W<sub>max</sub></em> in the
-original paper.<a href="#appendix-B.10-3.1" class="pilcrow">¶</a>
+original paper.<a href="#appendix-B.11-3.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.10-3.2">Its pseudocode used <em>W<sub>last_max</sub></em> while <span>[<a href="#RFC8312" class="xref">RFC8312</a>]</span> used
-<em>W<sub>max</sub></em>.<a href="#appendix-B.10-3.2" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.11-3.2">Its pseudocode used <em>W<sub>last_max</sub></em> while <span>[<a href="#RFC8312" class="xref">RFC8312</a>]</span> used
+<em>W<sub>max</sub></em>.<a href="#appendix-B.11-3.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.10-3.3">Its AIMD-friendly window was <em>W<sub>tcp</sub></em> while <span>[<a href="#RFC8312" class="xref">RFC8312</a>]</span> used
-<em>W<sub>est</sub></em>.<a href="#appendix-B.10-3.3" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.11-3.3">Its AIMD-friendly window was <em>W<sub>tcp</sub></em> while <span>[<a href="#RFC8312" class="xref">RFC8312</a>]</span> used
+<em>W<sub>est</sub></em>.<a href="#appendix-B.11-3.3" class="pilcrow">¶</a>
 </li>
         </ul>
 </section>
