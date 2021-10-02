@@ -7,12 +7,12 @@ Internet-Draft                                                       UNL
 Obsoletes: 8312 (if approved)                                      S. Ha
 Updates: 5681 (if approved)                                     Colorado
 Intended status: Standards Track                                 I. Rhee
-Expires: 2 April 2022                                             Bowery
+Expires: 5 April 2022                                             Bowery
                                                                  V. Goel
                                                               Apple Inc.
                                                           L. Eggert, Ed.
                                                                   NetApp
-                                                       29 September 2021
+                                                          2 October 2021
 
 
                CUBIC for Fast and Long-Distance Networks
@@ -72,7 +72,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 2 April 2022.
+   This Internet-Draft will expire on 5 April 2022.
 
 Copyright Notice
 
@@ -477,6 +477,10 @@ Table of Contents
                   |W     (t + RTT)
                   | cubic          otherwise
                   \
+
+   The elapsed time _t_ in Figure 1 MUST NOT include periods during
+   which _cwnd_ has not been updated due to an application limit (see
+   Section 5.8).
 
    Depending on the value of the current congestion window size _cwnd_,
    CUBIC runs in three different regions:
@@ -971,10 +975,9 @@ W    = <
 
    CUBIC does not increase its congestion window size if a flow is
    currently limited by the application instead of the congestion
-   window.  In case of long periods during which _cwnd_ has not been
-   updated due to such an application limit, such as idle periods, _t_
-   in Figure 1 MUST NOT include these periods; otherwise, W_cubic(_t_)
-   might be very high after restarting from these periods.
+   window.  Section 4.2 requires that _t_ in Figure 1 does not include
+   application-limited periods, such as idle periods, otherwise
+   W_cubic(_t_) might be very high after restarting from these periods.
 
 5.9.  Responses to Sudden or Transient Events
 
