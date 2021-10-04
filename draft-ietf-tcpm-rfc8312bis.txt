@@ -7,12 +7,12 @@ Internet-Draft                                                       UNL
 Obsoletes: 8312 (if approved)                                      S. Ha
 Updates: 5681 (if approved)                                     Colorado
 Intended status: Standards Track                                 I. Rhee
-Expires: 5 April 2022                                             Bowery
+Expires: 7 April 2022                                             Bowery
                                                                  V. Goel
                                                               Apple Inc.
                                                           L. Eggert, Ed.
                                                                   NetApp
-                                                          2 October 2021
+                                                          4 October 2021
 
 
                CUBIC for Fast and Long-Distance Networks
@@ -72,7 +72,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 April 2022.
+   This Internet-Draft will expire on 7 April 2022.
 
 Copyright Notice
 
@@ -1245,6 +1245,9 @@ B.1.  Since draft-ietf-tcpm-rfc8312bis-04
 
    *  Change terminology from "AIMD" to "Reno" (#108
       (https://github.com/NTAP/rfc8312bis/issues/108))
+
+   *  Moved MUST NOT from app-limited section to main cubic AI section
+      (#97 (https://github.com/NTAP/rfc8312bis/issues/97))
 
 B.2.  Since draft-ietf-tcpm-rfc8312bis-03
 
