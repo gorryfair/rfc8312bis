@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-10-03T00:01:13.772294+00:00",
+  "timestamp": "2021-10-05T00:00:56.490137+00:00",
   "repo": "NTAP/rfc8312bis",
   "labels": [
     {
@@ -3284,7 +3284,7 @@
       ],
       "body": "Markku Kojo said,\r\n> The draft says that CUBIC MAY implement DSACK [RFC3708], limited slow\r\n  start [RFC 3742], [RFC7661] and hybrid slow start [cites a paper].\r\n  Aren't the first three down references? Not sure if it is appropriate\r\n  for a Stds Track document to cite experimental work or a paper like\r\n  this even though it's a MAY.",
       "createdAt": "2021-08-31T08:24:27Z",
-      "updatedAt": "2021-10-02T08:13:26Z",
+      "updatedAt": "2021-10-04T06:47:18Z",
       "closedAt": null,
       "comments": [
         {
@@ -3398,6 +3398,20 @@
           "body": "I was wondering why is Eifel detection (RFC 3522) experimental while the response on detection (RFC 4015) a stds track. \r\nF-RTO is stds track detection of spurious RTO which does not require timestamps to be enabled (unlike RFC 3522)\r\n\r\nShould we say,\r\n`MUST implement F-RTO detection and RFC 4015 response algorithm. MAY implement other algorithms for detection, i.e. RFC 3522 and RFC 3708`",
           "createdAt": "2021-10-02T08:13:14Z",
           "updatedAt": "2021-10-02T08:13:26Z"
+        },
+        {
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "body": "IIRC, RFC3522 has an IPR disclosure that makes it difficult to implement in open source or otherwise. RFC4015 has no such IPR. The community at the time felt strongly that the IPR meant RFC3522 shouldn't be standards track. Pasi developed F-RTO in part because of the IPR in RFC3522.",
+          "createdAt": "2021-10-04T06:25:03Z",
+          "updatedAt": "2021-10-04T06:25:03Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "NONE",
+          "body": "Note that as far as QUIC is concerned, detecting spurious RTO is completely straightforward. QUIC packets have unique numbers, any data that need to be repeated is carried in new packets, with numbers different from the initial transmission. The sender just has to record an ack of a packet that was considered lost, there is no requirement to implement F-RTO or other algorithms.",
+          "createdAt": "2021-10-04T06:47:18Z",
+          "updatedAt": "2021-10-04T06:47:18Z"
         }
       ]
     },
@@ -10442,7 +10456,7 @@
       "labels": [],
       "body": "Intended to resolve NTAP/rfc8312bis/#97",
       "createdAt": "2021-09-23T14:48:30Z",
-      "updatedAt": "2021-10-02T07:44:00Z",
+      "updatedAt": "2021-10-03T10:35:33Z",
       "baseRepository": "NTAP/rfc8312bis",
       "baseRefName": "main",
       "baseRefOid": "b28a2bada0c71ce665a96add557fac0c070bc1f6",
@@ -10896,26 +10910,42 @@
       "id": "PR_kwDOEpK-U84slr4E",
       "title": "update history for already merged 115",
       "url": "https://github.com/NTAP/rfc8312bis/pull/121",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "goelvidhi",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2021-10-02T07:50:54Z",
-      "updatedAt": "2021-10-02T08:21:09Z",
+      "updatedAt": "2021-10-04T06:22:14Z",
       "baseRepository": "NTAP/rfc8312bis",
       "baseRefName": "main",
       "baseRefOid": "8e15a9af73c7c2a932e4de9081ab4cec504eaf31",
       "headRepository": "goelvidhi/rfc8312bis",
       "headRefName": "update-history-115",
       "headRefOid": "76fe395459197710347bbf32bf23786adb023489",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2021-10-04T06:22:14Z",
+      "mergedAt": "2021-10-04T06:22:14Z",
+      "mergedBy": "larseggert",
+      "mergeCommit": {
+        "oid": "5021e76409d2e2e2a239a767074d5c44c686dbe4"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpK-U84t48RS",
+          "commit": {
+            "abbreviatedOid": "76fe395"
+          },
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-10-04T06:22:09Z",
+          "updatedAt": "2021-10-04T06:22:09Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 122,
@@ -10929,7 +10959,7 @@
       "labels": [],
       "body": "Closes #102",
       "createdAt": "2021-10-02T08:34:41Z",
-      "updatedAt": "2021-10-02T08:40:11Z",
+      "updatedAt": "2021-10-04T23:28:51Z",
       "baseRepository": "NTAP/rfc8312bis",
       "baseRefName": "main",
       "baseRefOid": "8e15a9af73c7c2a932e4de9081ab4cec504eaf31",
@@ -10947,9 +10977,30 @@
           "body": "I will add issue details to the appendix after #121 is merged.",
           "createdAt": "2021-10-02T08:35:43Z",
           "updatedAt": "2021-10-02T08:35:43Z"
+        },
+        {
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> \"the sender MAY reduce the congestion window immediately upon entering the loss recovery or use other mechanisms, such as Proportional Rate Reduction {{?PRR=RFC6937}}\"\r\n> \r\n> We also add a RFC for \" immediately upon entering the loss recovery\"? Thanks\r\n\r\nThats what CUBIC is doing right. CUBIC says,\r\n`When a congestion event is detected by mechanisms described in Section 3.1, CUBIC updates Wmax and reduces cwnd and ssthresh immediately as described below`\r\n\r\nSo, either do it immediately what CUBIC says or use something else like PRR.",
+          "createdAt": "2021-10-04T23:28:51Z",
+          "updatedAt": "2021-10-04T23:28:51Z"
         }
       ],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpK-U84t4oPd",
+          "commit": {
+            "abbreviatedOid": "c9c03f9"
+          },
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "\"the sender MAY reduce the congestion window immediately upon entering the loss recovery or use other mechanisms, such as Proportional Rate Reduction {{?PRR=RFC6937}}\"\r\n\r\nWe also add a RFC for \" immediately upon entering the loss recovery\"? Thanks\r\n",
+          "createdAt": "2021-10-04T03:03:24Z",
+          "updatedAt": "2021-10-04T03:03:24Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
