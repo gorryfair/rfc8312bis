@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-10-05T00:00:56.490137+00:00",
+  "timestamp": "2021-10-07T00:00:56.591308+00:00",
   "repo": "NTAP/rfc8312bis",
   "labels": [
     {
@@ -3985,7 +3985,7 @@
       "labels": [],
       "body": "@markkukojo said,\r\n> More importantly. The draft says in Sec. 4.2:\r\n\"It does not make any changes to the TCP Fast Recovery and Fast\r\nRetransmit algorithms [RFC6582][RFC6675].\"\r\n\r\n> But it does modify RFC6582, RFC 6675, and RFC 5681 Fast Retransmit&Fast Recovery by applying beta_cubic to cwnd, not FlightSize. This is incorrect and would bring back an old design&implementation bug that was corrected more than two decades ago when RFC 2581 was published (and subsequently corrected also for RFC 6582 and RFC 6675). Please see the implementation note attached to Equation (4) of RFC 5681: \"An easy mistake to make is to simply use cwnd, rather than FlightSize, which in some implementations may incidentally increase well beyond rwnd.\"\r\n\r\n> Using cwnd in the equation will also result in incorrect outcome in some other cases as well, for example, if the sender is application limited.",
       "createdAt": "2021-09-21T08:52:56Z",
-      "updatedAt": "2021-10-02T00:18:24Z",
+      "updatedAt": "2021-10-06T20:50:31Z",
       "closedAt": null,
       "comments": [
         {
@@ -4162,6 +4162,20 @@
           "body": "Vidhi: very interesting to hear Apple's approach which uses max(PipeAck,\nLossFlightSize)\n\nWhile it's not clear how exactly PipeACK is computed, I believe RFC7661 is\ntrying to mitigate the problem I raised. I would argue that Apple's\napproach is much closer to option 1 than option 2. In my previous email's\ntoy example, pipeACK would actually be around 100 instead of 10 because\nPipeACK is recording the maximum inflight in the most recent round-trip.\nWould that be the case in Apple's implementation?\n\nNeal and I have discussed this before. Our conclusion is the most precise\napproach is to record the flightsize on a per data packet basis. So in my\ntoy case, the starting loss packet would have a flightsize of 90.\nCongestion control should use this flight-size to reduce cwnd. But that has\na steep per-packet storage requirement.\n\nI would propose to capture our discussions in the RFC of pros & cons, and\nalso reflect the fact that some implementations use max(PipeAck,\nLossFlightSize), instead of the recommended cwnd. These insights and\nexamples would be valuable for future implementers, since congestion\ncontrol is often about trade-offs :-)\n\n\nOn Fri, Oct 1, 2021 at 4:25 PM Vidhi Goel ***@***.***> wrote:\n\n> I want to note that using FlightSize is good for persistent congestion (as\n> we would be acting quickly to reduce sending rate based on congestion\n> experienced on bytes in the network),\n> whereas,\n> Using CWND is good for transient congestion and drops unrelated to\n> congestion, because we might recover without significantly reducing\n> congestion window based on bytes in the network and instead continue to use\n> a higher CWND knowing that the drop was not due to persistent congestion.\n>\n> \u2014\n> You are receiving this because you were mentioned.\n> Reply to this email directly, view it on GitHub\n> <https://github.com/NTAP/rfc8312bis/issues/114#issuecomment-932631517>,\n> or unsubscribe\n> <https://github.com/notifications/unsubscribe-auth/AM5EPYBFDQKWNMT3D2BU7A3UEY7OFANCNFSM5EN3H3UA>\n> .\n> Triage notifications on the go with GitHub Mobile for iOS\n> <https://apps.apple.com/app/apple-store/id1477376905?ct=notification-email&mt=8&pt=524675>\n> or Android\n> <https://play.google.com/store/apps/details?id=com.github.android&referrer=utm_campaign%3Dnotification-email%26utm_medium%3Demail%26utm_source%3Dgithub>.\n>\n>\n",
           "createdAt": "2021-10-02T00:18:24Z",
           "updatedAt": "2021-10-02T00:18:24Z"
+        },
+        {
+          "author": "markkukojo",
+          "authorAssociation": "COLLABORATOR",
+          "body": "IMO what Apple stack does is the right thing to do. If I understood it correctly, it simply follows what we currently have in the RFC series:\r\nit applies FlightSize (=LossFlightSize) but implements also RFC 7661 that is meant to mitigate exactly the problem scenario which Yuchung described. RFC 7661 even mentions such a scenario explicitly.\r\nThat's why I asked whether RFC 7661 would be enough.\r\nIn the Yuchung's toy example pipeACK would be at least 89 (or 92 if SACK is in use), so the effect would be quite close to what it would be if FlightSize is recorded on per pkt basis (but without high storage requirements).\r\n\r\nThe problems with application-limited traffic are not new. It is a well-known issue and RFC 2861, the predecessor of RFC 7661, provides a nice overview of the problem space in its Intro (Sec 2). The FlightSize was selected to be the way to protect against use of invalid cwnd values for MD in the RFC series. It is not ideal, but it is the current way.\r\n\r\nI hope we are not selecting simply between the two options because neither of those is ideal.\r\n\r\nOption 1 is simply wrong as it would bring back an old, well-known problem currently avoided as documented in Stds Track RFCs. If the problem is not addressed, it easily results in behaviour where a rwnd or application-limited TCP sender does not react to congestion, because cwnd does not correctly reflect the currently available capacity but may have an arbitrarily high value. That is obviously bad for the Internet and not safe nor robust.\r\nLimiting cwnd growth like Windows TCP does help but cwnd may still be badly off in some usage scenarios.\r\n\r\nOption 2 is safe although it is known to be suboptimal for the performance of application-limited traffic. However, if RFC 7661 is adapted for CUBIC, we should have the same working solution for CUBIC as we have for the other CCs in the RFC series, right?\r\n\r\nI'd suggest the following way forward:\r\nUse option 2 and add a caveat, maybe something along the following lines:\r\n\r\nNote that a rate-limited application with idle periods or periods when unable to send at the full rate permitted by the congestion window may easily encounter notable variations in the volume of data sent from one RTT to another, resulting in FlightSize that is significantly less than congestion window on a congestion event. This may result in decreasing congestion window to a much lower value than necessary. To avoid suboptimal performance with such applications, mechanisms described in RFC 7661 [RFC7661] can be adapted to be employed with CUBIC. Appendix X provides guidelines for necessary modifications to the mechanisms in RFC 7661 when used with CUBIC.\r\n\r\nAs RFC 7661 is experimental it might be time to advance it to the Standards Track. Particularly, when it seems that application-limited scenarios are important to address and it seems to be possible to collect a good amount of experimental data to verify whether it works as intended and/or to provide data to tweak it as seen necessary.",
+          "createdAt": "2021-10-05T23:30:40Z",
+          "updatedAt": "2021-10-05T23:30:40Z"
+        },
+        {
+          "author": "stewrtrs",
+          "authorAssociation": "NONE",
+          "body": "FreeBSD/NewReno uses cwin not flightsize. I have not looked at the other congestion control modules just newReno so Cubic or others may use something else. I do think that cwin is the right thing to use here. I can go look at the other modules if there is interest.. a quick look at cc_cubic shows it too uses cwin. So thats 2 out of 6 ;)",
+          "createdAt": "2021-10-06T20:50:31Z",
+          "updatedAt": "2021-10-06T20:50:31Z"
         }
       ]
     },
@@ -10959,13 +10973,13 @@
       "labels": [],
       "body": "Closes #102",
       "createdAt": "2021-10-02T08:34:41Z",
-      "updatedAt": "2021-10-04T23:28:51Z",
+      "updatedAt": "2021-10-06T14:09:25Z",
       "baseRepository": "NTAP/rfc8312bis",
       "baseRefName": "main",
-      "baseRefOid": "8e15a9af73c7c2a932e4de9081ab4cec504eaf31",
+      "baseRefOid": "5021e76409d2e2e2a239a767074d5c44c686dbe4",
       "headRepository": "goelvidhi/rfc8312bis",
       "headRefName": "cwnd-reduction-prr",
-      "headRefOid": "c9c03f98a190e2d8db2df644fae573cd10b547ad",
+      "headRefOid": "0f04f86ceaefaf0df2d2d97b38dd3288a99537c3",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -10984,6 +10998,48 @@
           "body": "> \"the sender MAY reduce the congestion window immediately upon entering the loss recovery or use other mechanisms, such as Proportional Rate Reduction {{?PRR=RFC6937}}\"\r\n> \r\n> We also add a RFC for \" immediately upon entering the loss recovery\"? Thanks\r\n\r\nThats what CUBIC is doing right. CUBIC says,\r\n`When a congestion event is detected by mechanisms described in Section 3.1, CUBIC updates Wmax and reduces cwnd and ssthresh immediately as described below`\r\n\r\nSo, either do it immediately what CUBIC says or use something else like PRR.",
           "createdAt": "2021-10-04T23:28:51Z",
           "updatedAt": "2021-10-04T23:28:51Z"
+        },
+        {
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@lisongxu maybe I misunderstood what you said. Are you saying we should add an RFC when we say `reduce immediately`? What would you suggest? Also, please see my other comment.",
+          "createdAt": "2021-10-05T05:12:50Z",
+          "updatedAt": "2021-10-05T05:12:50Z"
+        },
+        {
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@vidhigoel-apple Yes, I was thinking to add a related RFC when we say \"reduce cwnd immediately\". I am not sure whether this is an accurate description, as Reno and others set cwnd to ssthresh at the end of fast recovery instead of immediately.",
+          "createdAt": "2021-10-05T18:14:30Z",
+          "updatedAt": "2021-10-05T18:14:30Z"
+        },
+        {
+          "author": "nealcardwell",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Adding a related RFC to document the \"reduce cwnd immediately\" alternative sounds good. I think [RFC6675] would be appropriate, since both specifies reducing cwnd immediately upon entering recovery:\r\n\r\nRFC5681 at\r\n  https://datatracker.ietf.org/doc/html/rfc5681#section-3.2\r\nsays:\r\n   2.  When the third duplicate ACK is received, a TCP MUST set ssthresh\r\n       to no more than the value given in equation (4).\r\n...\r\n   3.  The lost segment starting at SND.UNA MUST be retransmitted and\r\n       cwnd set to ssthresh plus 3*SMSS. \r\n\r\nIn RFC6675 at\r\n  https://datatracker.ietf.org/doc/html/rfc6675#section-5\r\nit says:\r\n\r\n   (1) If DupAcks >= DupThresh, go to step (4).\r\n...\r\n (4) Invoke fast retransmit and enter loss recovery as follows:\r\n...\r\n       (4.2) ssthresh = cwnd = (FlightSize / 2)\r\n\r\n             The congestion window (cwnd) and slow start threshold\r\n             (ssthresh) are reduced to half of FlightSize per [RFC5681].\r\n             Additionally, note that [RFC5681] requires that any\r\n             segments sent as part of the Limited Transmit mechanism not\r\n             be counted in FlightSize for the purpose of the above\r\n             equation.\r\n\r\n       (4.3) Retransmit the first data segment presumed dropped ...\r\n ",
+          "createdAt": "2021-10-05T20:32:57Z",
+          "updatedAt": "2021-10-05T20:32:57Z"
+        },
+        {
+          "author": "markkukojo",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I would not confuse the reader by saying that \"use ... PRR ... to update the congestion window to its new reduced *ssthresh* value at the end of loss recovery.\"\r\n\r\nPRR does not do it in this way as it is written in RFC 6937 even though that is what effectively is the outcome. I believe RFC 6937 is intentionally written like this (i.e., it does not touch cwnd nor ssthresh in the exit) so that PRR algo works nicely with both RFC 6675 and RFC 6582 which differ in how and when they set ssthresh and cwnd.  RFC 6675 does not set cwnd nor ssthresh in the end but only in the beginning and leaves both untouched during the recovery. RFC 6582 in turn explicitly sets cwnd in the end of the recovery. \r\n\r\nTo make it simple, the only thing this draft needs to say is that it applies a different MD factor than the equation (4) of RFC 5681 (and correspondingly step 4.2 of RFC 6675) when entering Fast Rexmit / Fast Recovery.",
+          "createdAt": "2021-10-06T00:25:56Z",
+          "updatedAt": "2021-10-06T00:25:56Z"
+        },
+        {
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Thank you all for the discussion! This is very helpful.\r\n\r\nBased on the discussions, it seems that it is better to clearly indicate that Cubic reduces ssthresh at the beginning of fast recovery, and also updates W_max (fast convergence) at the beginning of the fast recovery.  Cubic may reduce cwnd at the beginning or the end of fast recovery depending on the specific recovery algorithm. \r\n",
+          "createdAt": "2021-10-06T02:13:06Z",
+          "updatedAt": "2021-10-06T02:13:06Z"
+        },
+        {
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@lisongxu @nealcardwell @markkukojo I have addressed the comments to include everyone's points. Please see the new changes.\r\n\r\n@markkukojo I would like to keep the recommendation for PRR as it provides guidance for alternate approaches that may be better than what is described in CUBIC.",
+          "createdAt": "2021-10-06T08:40:26Z",
+          "updatedAt": "2021-10-06T08:41:01Z"
         }
       ],
       "reviews": [
@@ -10998,6 +11054,19 @@
           "body": "\"the sender MAY reduce the congestion window immediately upon entering the loss recovery or use other mechanisms, such as Proportional Rate Reduction {{?PRR=RFC6937}}\"\r\n\r\nWe also add a RFC for \" immediately upon entering the loss recovery\"? Thanks\r\n",
           "createdAt": "2021-10-04T03:03:24Z",
           "updatedAt": "2021-10-04T03:03:24Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOEpK-U84uD176",
+          "commit": {
+            "abbreviatedOid": "0f04f86"
+          },
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Thank you, Vidhi!",
+          "createdAt": "2021-10-06T14:09:25Z",
+          "updatedAt": "2021-10-06T14:09:25Z",
           "comments": []
         }
       ]
