@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-10-07T00:00:56.591308+00:00",
+  "timestamp": "2021-10-10T00:00:48.656820+00:00",
   "repo": "NTAP/rfc8312bis",
   "labels": [
     {
@@ -3985,7 +3985,7 @@
       "labels": [],
       "body": "@markkukojo said,\r\n> More importantly. The draft says in Sec. 4.2:\r\n\"It does not make any changes to the TCP Fast Recovery and Fast\r\nRetransmit algorithms [RFC6582][RFC6675].\"\r\n\r\n> But it does modify RFC6582, RFC 6675, and RFC 5681 Fast Retransmit&Fast Recovery by applying beta_cubic to cwnd, not FlightSize. This is incorrect and would bring back an old design&implementation bug that was corrected more than two decades ago when RFC 2581 was published (and subsequently corrected also for RFC 6582 and RFC 6675). Please see the implementation note attached to Equation (4) of RFC 5681: \"An easy mistake to make is to simply use cwnd, rather than FlightSize, which in some implementations may incidentally increase well beyond rwnd.\"\r\n\r\n> Using cwnd in the equation will also result in incorrect outcome in some other cases as well, for example, if the sender is application limited.",
       "createdAt": "2021-09-21T08:52:56Z",
-      "updatedAt": "2021-10-06T20:50:31Z",
+      "updatedAt": "2021-10-07T13:45:30Z",
       "closedAt": null,
       "comments": [
         {
@@ -4176,6 +4176,13 @@
           "body": "FreeBSD/NewReno uses cwin not flightsize. I have not looked at the other congestion control modules just newReno so Cubic or others may use something else. I do think that cwin is the right thing to use here. I can go look at the other modules if there is interest.. a quick look at cc_cubic shows it too uses cwin. So thats 2 out of 6 ;)",
           "createdAt": "2021-10-06T20:50:31Z",
           "updatedAt": "2021-10-06T20:50:31Z"
+        },
+        {
+          "author": "nealcardwell",
+          "authorAssociation": "COLLABORATOR",
+          "body": "IMHO saying that basing sshtresh on cwnd \"easily results in behaviour where a rwnd or application-limited TCP sender does not react to congestion\" overstates the issue. Basing ssthresh on cwnd still reacts to congestion; it's just that it will take longer for the cwnd to converge down to the available capacity of the path.\r\n\r\nBut basing ssthresh on FlightSize can have the same issue (slow convergence down to the available capacity of the path); just to a different degree.\r\n\r\nIf we base ssthresh on cwnd, the connection will tend to take log_2(original_cwnd / available_volume) to converge to match the current available_volume.\r\n\r\nIf we base ssthresh on FlightSize, the connection will tend to take log_2(original_flightsize / available_volume) to converge to match the current available_volume.\r\n\r\nBecause log_2 turns multiplicative ratios into linear differences, there may not be much difference between the two approaches, depending on how far apart original_cwnd and original_flightsize and available_volume are.\r\n\r\nGiven that both approaches are only guaranteed to converge eventually, IMHO we should carefully weigh the costs and benefits of over-reaction vs under-reaction, and also weight the benefits of having the RFC document \"rough consensus and  running code\".",
+          "createdAt": "2021-10-07T13:45:30Z",
+          "updatedAt": "2021-10-07T13:45:30Z"
         }
       ]
     },
@@ -10973,7 +10980,7 @@
       "labels": [],
       "body": "Closes #102",
       "createdAt": "2021-10-02T08:34:41Z",
-      "updatedAt": "2021-10-06T14:09:25Z",
+      "updatedAt": "2021-10-08T15:55:43Z",
       "baseRepository": "NTAP/rfc8312bis",
       "baseRefName": "main",
       "baseRefOid": "5021e76409d2e2e2a239a767074d5c44c686dbe4",
@@ -11068,6 +11075,58 @@
           "createdAt": "2021-10-06T14:09:25Z",
           "updatedAt": "2021-10-06T14:09:25Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDOEpK-U84uMEjt",
+          "commit": {
+            "abbreviatedOid": "0f04f86"
+          },
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2021-10-08T11:50:37Z",
+          "updatedAt": "2021-10-08T11:52:37Z",
+          "comments": [
+            {
+              "originalPosition": 19,
+              "body": "```suggestion\r\nor use other mechanisms, such as Proportional Rate Reduction {{?RFC6937}},\r\n```\r\nSince we don't use symbolic references anywhere else.",
+              "createdAt": "2021-10-08T11:50:37Z",
+              "updatedAt": "2021-10-08T11:52:37Z"
+            },
+            {
+              "originalPosition": 21,
+              "body": "```suggestion\r\nThe parameter {{{\u03b2}{}}}*<sub>cubic</sub>* SHOULD be set to 0.7, which\r\n```",
+              "createdAt": "2021-10-08T11:51:00Z",
+              "updatedAt": "2021-10-08T11:52:37Z"
+            },
+            {
+              "originalPosition": 20,
+              "body": "Should this not say that the sender \"MUST do one of the following\"? MAY leaves it open to do something completely different?",
+              "createdAt": "2021-10-08T11:52:33Z",
+              "updatedAt": "2021-10-08T11:53:01Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpK-U84uNEkU",
+          "commit": {
+            "abbreviatedOid": "0f04f86"
+          },
+          "author": "nealcardwell",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-08T15:55:43Z",
+          "updatedAt": "2021-10-08T15:55:43Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "Yes, good point. Seems much better to say \"MUST do one of the following\". e.g., like:\r\n\r\n  In case of packet loss, the sender MUST either reduce the congestion window\r\n  immediately upon entering the loss recovery similar to {{!RFC6675}}\r\n  or use other mechanisms, such as Proportional Rate Reduction {{?PRR=RFC6937}},\r\n  to reduce the congestion window more gradually.\r\n",
+              "createdAt": "2021-10-08T15:55:43Z",
+              "updatedAt": "2021-10-08T15:55:43Z"
+            }
+          ]
         }
       ]
     }
