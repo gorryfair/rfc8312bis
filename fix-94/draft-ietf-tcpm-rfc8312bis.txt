@@ -1270,6 +1270,9 @@ B.1.  Since draft-ietf-tcpm-rfc8312bis-04
    *  Clarify cwnd decrease during multiplicative decrease (#102
       (https://github.com/NTAP/rfc8312bis/issues/102))
 
+   *  Clarify text around queuing (#94
+      (https://github.com/NTAP/rfc8312bis/issues/94))
+
 B.2.  Since draft-ietf-tcpm-rfc8312bis-03
 
    *  Remove reference from abstract (#82
