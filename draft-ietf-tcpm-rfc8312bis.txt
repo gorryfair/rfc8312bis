@@ -7,12 +7,12 @@ Internet-Draft                                                       UNL
 Obsoletes: 8312 (if approved)                                      S. Ha
 Updates: 5681 (if approved)                                     Colorado
 Intended status: Standards Track                                 I. Rhee
-Expires: 7 April 2022                                             Bowery
+Expires: 16 April 2022                                            Bowery
                                                                  V. Goel
                                                               Apple Inc.
                                                           L. Eggert, Ed.
                                                                   NetApp
-                                                          4 October 2021
+                                                         13 October 2021
 
 
                CUBIC for Fast and Long-Distance Networks
@@ -72,7 +72,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 7 April 2022.
+   This Internet-Draft will expire on 16 April 2022.
 
 Copyright Notice
 
@@ -352,7 +352,7 @@ Table of Contents
 
 4.1.1.  Constants of Interest
 
-   β__cubic_: CUBIC multiplication decrease factor as described in
+   β__cubic_: CUBIC multiplicative decrease factor as described in
    Section 4.6.
 
    α__cubic_: CUBIC additive increase factor used in Reno-friendly
@@ -608,11 +608,14 @@ Table of Contents
    Section 3.1, CUBIC updates _W_max_ and reduces _cwnd_ and _ssthresh_
    immediately as described below.  An implementation MAY set a smaller
    _ssthresh_ than suggested below to accommodate rate-limited
-   applications as described in [RFC7661].  For both packet loss and
-   congestion detection through ECN, the sender MAY employ a Fast
-   Recovery algorithm to gradually adjust the congestion window to its
-   new reduced _ssthresh_ value.  The parameter β__cubic_ SHOULD be set
-   to 0.7.
+   applications as described in [RFC7661].  In case of packet loss, the
+   sender MUST reduce _cwnd_ and _ssthresh_ immediately upon entering
+   loss recovery, similar to [RFC5681] (and [RFC6675]).  Note that other
+   mechanisms, such as Proportional Rate Reduction [RFC6937], can be
+   used to reduce the sending rate during loss recovery more gradually.
+   The parameter β__cubic_ SHOULD be set to 0.7, which is different from
+   the multiplicative decrease factor used in [RFC5681] (and [RFC6675])
+   during fast recovery.
 
         ssthresh = cwnd * β         // new slow-start threshold
                            cubic
@@ -1144,6 +1147,10 @@ W    = <
               DOI 10.17487/RFC5682, September 2009,
               <https://datatracker.ietf.org/doc/html/rfc5682>.
 
+   [RFC6937]  Mathis, M., Dukkipati, N., and Y. Cheng, "Proportional
+              Rate Reduction for TCP", RFC 6937, DOI 10.17487/RFC6937,
+              May 2013, <https://datatracker.ietf.org/doc/html/rfc6937>.
+
    [RFC7661]  Fairhurst, G., Sathiaseelan, A., and R. Secchi, "Updating
               TCP to Support Rate-Limited Traffic", RFC 7661,
               DOI 10.17487/RFC7661, October 2015,
@@ -1248,6 +1255,9 @@ B.1.  Since draft-ietf-tcpm-rfc8312bis-04
 
    *  Moved MUST NOT from app-limited section to main cubic AI section
       (#97 (https://github.com/NTAP/rfc8312bis/issues/97))
+
+   *  Clarify cwnd decrease during multiplicative decrease (#102
+      (https://github.com/NTAP/rfc8312bis/issues/102))
 
 B.2.  Since draft-ietf-tcpm-rfc8312bis-03
 
