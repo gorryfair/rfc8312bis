@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-10-12T00:00:52.184776+00:00",
+  "timestamp": "2021-10-14T00:01:03.584748+00:00",
   "repo": "NTAP/rfc8312bis",
   "labels": [
     {
@@ -3163,7 +3163,7 @@
       "labels": [],
       "body": "Markku Kojo said,\r\n> The draft states that RACK (and QUIC loss detection) can be used\r\n  with CUBIC to detect losses. However, it seems to have gone\r\n  unnoticed that RACK may also detect loss of a retransmission in\r\n  which case the congestion control response is required to be taken\r\n  twice, i.e., ssthresh and cwnd must be lowered again (MUST in\r\n  RFC 5681 Sec. 4.3). Once RACK got published all new congestion\r\n  controls and updates to existing RFCs must include this essential\r\n  congestion control response, if the congestion control mechanism\r\n  intends to use RACK for loss detection.\r\n>\r\n>  This draft does not have any such requirement nor does it specify\r\n  how this is done?",
       "createdAt": "2021-08-31T08:19:05Z",
-      "updatedAt": "2021-10-11T07:31:15Z",
+      "updatedAt": "2021-10-13T05:39:17Z",
       "closedAt": null,
       "comments": [
         {
@@ -3214,6 +3214,13 @@
           "body": "The proposal here is still to close the issue with no action. If anyone objects, a PR would be nice.",
           "createdAt": "2021-10-11T07:31:15Z",
           "updatedAt": "2021-10-11T07:31:15Z"
+        },
+        {
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@markkukojo waiting to hear from you :-)",
+          "createdAt": "2021-10-13T05:39:17Z",
+          "updatedAt": "2021-10-13T05:39:17Z"
         }
       ]
     },
@@ -3222,7 +3229,7 @@
       "id": "MDU6SXNzdWU5ODM1ODI2MDQ=",
       "title": "Fairness to AIMD congestion control",
       "url": "https://github.com/NTAP/rfc8312bis/issues/88",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "goelvidhi",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -3231,8 +3238,8 @@
       "labels": [],
       "body": "Markku Kojo said,\r\n>The equation on page 12 to derive increase factor \u03b1_cubic that\r\n intends to achieve the same average window as AIMD TCP seems to\r\n  have its origins in a preliminary paper that states that the\r\n  authors do not have an explanation to the discrepancy between\r\n  their AIMD model and experimental results, which clearly deviate.\r\n  It seems to have gone unnoticed that the equation assumes equal\r\n  drop probability for the different values of the increase factor\r\n  and multiplicative decrease factor but the drop probability\r\n  changes when these factors change. The equations for the drop\r\n  probability / the # of packets in one congestion epoch\r\n  are available in the original paper and one can easily verify\r\n  this. Therefore, the equations used in CUBIC are not correct\r\n  and seem to underestimate _W_est_ for AIMD TCP, resulting in\r\n  moving away from AIMD-Friendly region too early. This gives\r\n  CUBIC unjustified advantage over AIMD TCP particularly in\r\n  environments with low level of statistical multiplexing. With\r\n  high level of multiplexing, drop probability goes higher and\r\n  differences in the drop probablilities tend to get small. On the\r\n  other hand, with such high level of competition, the theoretical\r\n  equations may not be that valid anymore.",
       "createdAt": "2021-08-31T08:21:37Z",
-      "updatedAt": "2021-10-11T07:30:14Z",
-      "closedAt": null,
+      "updatedAt": "2021-10-12T05:51:09Z",
+      "closedAt": "2021-10-12T05:51:09Z",
       "comments": [
         {
           "author": "larseggert",
@@ -3254,6 +3261,13 @@
           "body": "@lisongxu so will there be a PR to address this issue, or do we close with no action?",
           "createdAt": "2021-10-11T07:30:14Z",
           "updatedAt": "2021-10-11T07:30:14Z"
+        },
+        {
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Close with no action. Thanks",
+          "createdAt": "2021-10-12T02:49:29Z",
+          "updatedAt": "2021-10-12T02:49:29Z"
         }
       ]
     },
@@ -3271,7 +3285,7 @@
       "labels": [],
       "body": "Markku Kojo said,\r\n>This draft uses a larger cwnd decrease factor, resulting in larger\r\n  average cwnd and buffer occupation. This means that it is\r\n  likely to contribute significantly to buffer bloat, particularly\r\n  when considering also the use of concave increase function in the\r\n  beginning of the congestion avoidance that keeps the cwnd close\r\n  to maximum most of the time as carefully explained in the draft.\r\n  This means that CUBIC keeps also buffer bloated router queues\r\n  very efficiently full at all times.\r\n>\r\n>  Currently the draft does mention the slower convergence speed\r\n  as the only side effect for the larger decrease factor and does\r\n  not discuss the contribution to buffer bloat. It would be\r\n  important to assess this together with measurement data to\r\n  back up any observations.\r\n>\r\n>  Do we have data in different environments, including buffer-bloated\r\n  environments that show how much effect CUBIC has compared to\r\n  AIMD TCP?\r\n  And, how does larger decrease function impact convergence speed,\r\n  particularly in buffer-bloated environments.\r\n  Many people have complained that window-based (TCP) congestion\r\n  control drives buffer bloat. Of course, also the current standard\r\n  AIMD TCP tends to fill in the buffer-bloated queues but it\r\n  unlikely does it as effectively as CUBIC? This would be good to\r\n  understand better.",
       "createdAt": "2021-08-31T08:23:34Z",
-      "updatedAt": "2021-10-11T07:29:39Z",
+      "updatedAt": "2021-10-12T02:48:04Z",
       "closedAt": null,
       "comments": [
         {
@@ -3308,6 +3322,13 @@
           "body": "@lisongxu since you self-assigned this some time ago, would you please prepare a PR to close this issue?",
           "createdAt": "2021-10-11T07:29:39Z",
           "updatedAt": "2021-10-11T07:29:39Z"
+        },
+        {
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Thanks, @larseggert . I will ",
+          "createdAt": "2021-10-12T02:48:04Z",
+          "updatedAt": "2021-10-12T02:48:04Z"
         }
       ]
     },
@@ -3592,7 +3613,7 @@
       "labels": [],
       "body": "[Markku Kojo said](https://mailarchive.ietf.org/arch/msg/tcpm/nd4Af8QRQMDkp_R_9ZQMkI4yGAc):\r\n>Sec 5.4\r\n>\r\n>The text correctly states that CUBIC fills queues faster than AIMD TCP and increases the risk of standing queues. Then it proposes queue sizing and AQM as a solution, which is odd. Applying AQM to keep the queues shorter of course decreases the RTT (delay) seen but it does not help with standing queues (they remain standing but are just shorter).",
       "createdAt": "2021-08-31T10:50:22Z",
-      "updatedAt": "2021-10-11T07:25:30Z",
+      "updatedAt": "2021-10-13T13:52:53Z",
       "closedAt": null,
       "comments": [
         {
@@ -3629,6 +3650,27 @@
           "body": "@lisongxu would you prepare a resolution?",
           "createdAt": "2021-10-11T07:25:30Z",
           "updatedAt": "2021-10-11T07:25:30Z"
+        },
+        {
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Yes. Thanks, @larseggert ",
+          "createdAt": "2021-10-12T02:48:36Z",
+          "updatedAt": "2021-10-12T02:48:36Z"
+        },
+        {
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Thank you all for the discussion.  @markkukojo @bbriscoe @vidhigoel-apple @larseggert  How about the following revised Section 5.4? The revised parts are indicated by the bold font.\r\n\r\n> There is decade-long deployment experience with CUBIC on the Internet. CUBIC has also been extensively studied by using both NS-2 simulation and testbed experiments, covering a wide range of network environments. More information can be found in [HKLRX06].\r\n> \r\n> Same as Reno, CUBIC is a loss-based congestion control algorithm. Because CUBIC is designed to be more aggressive (due to a faster window increase function and bigger multiplicative decrease factor) than Reno in fast and long-distance networks, it can fill large drop-tail buffers more quickly than Reno and increases the risk of a standing queue [RFC8511]. In this case, proper queue sizing and management [RFC7567] could be used to **mitigate the risk to some extent** and reduce the packet queuing delay.\r\n> \r\n> **Similar to Reno, the performance of CUBIC as a loss-based congestion control algorithm suffers in networks where a packet loss is not a good indication of bandwidth utilization, such as wireless or mobile networks [Liu16].** \r\n> \r\n> [Liu16] K. Liu and J. Y. B. Lee, \"On Improving TCP Performance over Mobile Data Networks,\" IEEE Transactions on Mobile Computing, 2016.\r\n> ",
+          "createdAt": "2021-10-12T22:09:38Z",
+          "updatedAt": "2021-10-12T22:12:05Z"
+        },
+        {
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "body": "@lisongxu, thanks for the proposal - I made PR #123 for it.",
+          "createdAt": "2021-10-13T13:52:53Z",
+          "updatedAt": "2021-10-13T13:52:53Z"
         }
       ]
     },
@@ -3978,7 +4020,7 @@
       "id": "MDU6SXNzdWU5ODM3MjI2MzM=",
       "title": "On page 13",
       "url": "https://github.com/NTAP/rfc8312bis/issues/102",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "larseggert",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -3987,8 +4029,8 @@
       "labels": [],
       "body": "[Markku Kojo said](https://mailarchive.ietf.org/arch/msg/tcpm/nd4Af8QRQMDkp_R_9ZQMkI4yGAc):\r\n>On page 13:\r\n>\r\n> \" the sender MAY employ a Fast\r\n   Recovery algorithm to gradually adjust the congestion window to its\r\n   new reduced _ssthresh_ value.\"\r\n>\r\n>I assume this is aiming at saying that something similar to PRR MAY be used to reduce cwnd. This, however, is somewhat vaguely said and using fasr recovery is misleading. We need to remember also that it might not be trivial to have it right. So, dunno whether it would be useful to drop this.",
       "createdAt": "2021-08-31T10:54:13Z",
-      "updatedAt": "2021-09-24T21:09:46Z",
-      "closedAt": null,
+      "updatedAt": "2021-10-13T06:28:23Z",
+      "closedAt": "2021-10-13T06:28:23Z",
       "comments": [
         {
           "author": "goelvidhi",
@@ -4077,7 +4119,7 @@
       "labels": [],
       "body": "@markkukojo said,\r\n> More importantly. The draft says in Sec. 4.2:\r\n\"It does not make any changes to the TCP Fast Recovery and Fast\r\nRetransmit algorithms [RFC6582][RFC6675].\"\r\n\r\n> But it does modify RFC6582, RFC 6675, and RFC 5681 Fast Retransmit&Fast Recovery by applying beta_cubic to cwnd, not FlightSize. This is incorrect and would bring back an old design&implementation bug that was corrected more than two decades ago when RFC 2581 was published (and subsequently corrected also for RFC 6582 and RFC 6675). Please see the implementation note attached to Equation (4) of RFC 5681: \"An easy mistake to make is to simply use cwnd, rather than FlightSize, which in some implementations may incidentally increase well beyond rwnd.\"\r\n\r\n> Using cwnd in the equation will also result in incorrect outcome in some other cases as well, for example, if the sender is application limited.",
       "createdAt": "2021-09-21T08:52:56Z",
-      "updatedAt": "2021-10-11T18:13:15Z",
+      "updatedAt": "2021-10-13T13:56:38Z",
       "closedAt": null,
       "comments": [
         {
@@ -4303,6 +4345,27 @@
           "body": "Sorry I am late to the conversation.  I was present when the concept of setting ssthresh from flight_size was first introduced in  RFC2581  Specifically draft-ietf-tcpimpl-cong-control-01.txt, 33 years ago.  I failed to kill it then.   Today I understand the problem better, and can explain why it was wrong then and is still wrong everywhere that language has been carried forward.\r\n\r\nFirst let me define some terms:\r\nRTTscale: things that happen on about the same timescale as the RTT.  For example, traditional slowstart often causes RTTscale \"lunpyness\" in the data.\r\n\r\nCCscale: things that happen on about the same time scale as the Congestion Control sawtooth (more generally the reciprocal of the CC's natural frequency.) \r\n\r\nSEGscale: Things like TSO, that happen at scales similar to inter-segment times.\r\n\r\nAt about the time RFC 2581 was in draft, I happened to be working on a project to copy a large quantity of data over the vBNS from Pittsburgh Supercomputing Center to mag tape at the San Diego Supercomputer Center,   The path was approximately 70 mS x 125 Mb/s (I have forgotten the precise numbers).   Due to the details of the tape system, the flow control (rwin) introduced application stalls that had dimensions similar to the network.  The tape buffer was a bit larger than the network BDP and the pauses between socket reads were about one RTT. By default this system had pathologically bad performance.  The read at the far end triggered a full window burst at the sender (750+ segments).  If cwnd was large enough the very end of the burst would overflow a queue.  At the point where the sender detected the loss, the TCP had already nearly filled the receiver's socket buffer so TCP was announcing a tiny rwin, and the flight_size had to be tiny as well.  Given that this was classic Reno, setting cwnd to flightsize/2 would result in it taking nearly a minute for cwnd to recover (CCscale for Reno on this path was more than 20 seconds).\r\n\r\nThe point: if the application is bursty on a scale that is similar to the network dimensions, the flight size will be large when the segments at ends of the bursts are sent, but small when the ACKs for the same segments are received.    A loss indicates that the flight size at the time of transmission was too large, But the flight size at the time the ACK was received tells you nothing except that the application stopped keeping the network full after the lost segment was initially sent.\r\n\r\nHypothetically you could record flight size at the time segments were sent, and use it in the CC computation, and we did look at that idea a bit 30 years ago.\r\n\r\nToday, we have a better approach: Use pacing to recover the self clock after application pauses, and don't ever pull down cwnd or ssthresh because the application failed to fill the network (also don't raise cwnd except following RTTs in which the application successfully kept the network full).    More specifically avoid setting cwnd from flight_size (even indirectly), under nearly all conditions.\r\n\r\nAlgorithms that violate this principle are likely to fail industrial scale regression testing, because some specific application traffic pattern will trigger pathological behaviors over some network paths.\r\n\r\nI make a stronger (unproven) conjecture: for every patch introducing such an algorithm, and for every bursty application, there exists some path which will exhibit persistent pathological behavior, and extreme performance regressions.   To the extent this is true, such a patch will never pass code review.\r\n\r\nAn easier experiment: For a real physical path with CCscale > 1sec, and RTTscale << CCscale, design a bursty application that triggers queue overflows near the ends of the bursts.\r\n\r\nWhen you survey what the various OS's do, consider weighing the results by the deployed population.   \r\n",
           "createdAt": "2021-10-11T18:13:15Z",
           "updatedAt": "2021-10-11T18:13:15Z"
+        },
+        {
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Adding Markku's comment about relocating RFC 7661 when we do a PR for this.\r\nhttps://github.com/NTAP/rfc8312bis/pull/122#discussion_r727487563\r\n",
+          "createdAt": "2021-10-12T20:49:48Z",
+          "updatedAt": "2021-10-12T20:49:48Z"
+        },
+        {
+          "author": "stewrtrs",
+          "authorAssociation": "NONE",
+          "body": "Matt:\n\nInteresting thoughts.. and it actually corresponds to some work I am doing\non our rack stack to add hystart+ to newreno.. and what i just got\nthrough adding was a fas (flight at send) for each of the entries in\nmy send map.. I was contemplating using it as the ssthresh for hystart+ \nwhen we decided to switch to CA.. I may even plumb it in and use it\nfor normal loss based detection\u2026 at least I was contemplating it.. your\nresponse here makes me think even harder about doing so :)\n\nR\n\n> On Oct 11, 2021, at 2:13 PM, Matt Mathis ***@***.***> wrote:\n> \n> \n> Sorry I am late to the conversation. I was present when the concept of setting ssthresh from flight_size was first introduced in RFC2581 Specifically draft-ietf-tcpimpl-cong-control-01.txt, 33 years ago. I failed to kill it then. Today I understand the problem better, and can explain why it was wrong then and is still wrong everywhere that language has been carried forward.\n> \n> First let me define some terms:\n> RTTscale: things that happen on about the same timescale as the RTT. For example, traditional slowstart often causes RTTscale \"lunpyness\" in the data.\n> \n> CCscale: things that happen on about the same time scale as the Congestion Control sawtooth (more generally the reciprocal of the CC's natural frequency.)\n> \n> SEGscale: Things like TSO, that happen at scales similar to inter-segment times.\n> \n> At about the time RFC 2581 was in draft, I happened to be working on a project to copy a large quantity of data over the vBNS from Pittsburgh Supercomputing Center to mag tape at the San Diego Supercomputer Center, The path was approximately 70 mS x 125 Mb/s (I have forgotten the precise numbers). Due to the details of the tape system, the flow control (rwin) introduced application stalls that had dimensions similar to the network. The tape buffer was a bit larger than the network BDP and the pauses between socket reads were about one RTT. By default this system had pathologically bad performance. The read at the far end triggered a full window burst at the sender (750+ segments). If cwnd was large enough the very end of the burst would overflow a queue. At the point where the sender detected the loss, the TCP had already nearly filled the receiver's socket buffer so TCP was announcing a tiny rwin, and the flight_size had to be tiny as well. Given that this was classic Reno, setting cwnd to flightsize/2 would result in it taking nearly a minute for cwnd to recover (CCscale for Reno on this path was more than 20 seconds).\n> \n> The point: if the application is bursty on a scale that is similar to the network dimensions, the flight size will be large when the segments at ends of the bursts are sent, but small when the ACKs for the same segments are received. A loss indicates that the flight size at the time of transmission was too large, But the flight size at the time the ACK was received tells you nothing except that the application stopped keeping the network full after the lost segment was initially sent.\n> \n> Hypothetically you could record flight size at the time segments were sent, and use it in the CC computation, and we did look at that idea a bit 30 years ago.\n> \n> Today, we have a better approach: Use pacing to recover the self clock after application pauses, and don't ever pull down cwnd or ssthresh because the application failed to fill the network (also don't raise cwnd except following RTTs in which the application successfully kept the network full). More specifically avoid setting cwnd from flight_size (even indirectly), under nearly all conditions.\n> \n> Algorithms that violate this principle are likely to fail industrial scale regression testing, because some specific application traffic pattern will trigger pathological behaviors over some network paths.\n> \n> I make a stronger (unproven) conjecture: for every patch introducing such an algorithm, and for every bursty application, there exists some path which will exhibit persistent pathological behavior, and extreme performance regressions. To the extent this is true, such a patch will never pass code review.\n> \n> An easier experiment: For a real physical path with CCscale > 1sec, and RTTscale << CCscale, design a bursty application that triggers queue overflows near the ends of the bursts.\n> \n> When you survey what the various OS's do, consider weighing the results by the deployed population.\n> \n> \u2014\n> You are receiving this because you were mentioned.\n> Reply to this email directly, view it on GitHub, or unsubscribe.\n> Triage notifications on the go with GitHub Mobile for iOS or Android. \n> \n\n------\nRandall Stewart\n***@***.***\n\n\n\n",
+          "createdAt": "2021-10-12T21:00:47Z",
+          "updatedAt": "2021-10-12T21:00:47Z"
+        },
+        {
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "body": "I merged #122. What is left to close this issue?",
+          "createdAt": "2021-10-13T13:56:38Z",
+          "updatedAt": "2021-10-13T13:56:38Z"
         }
       ]
     },
@@ -11113,24 +11176,26 @@
       "id": "PR_kwDOEpK-U84sltcG",
       "title": "clarify text for multiplicative decrease along with adding informative reference",
       "url": "https://github.com/NTAP/rfc8312bis/pull/122",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "goelvidhi",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Closes #102",
       "createdAt": "2021-10-02T08:34:41Z",
-      "updatedAt": "2021-10-11T10:51:10Z",
+      "updatedAt": "2021-10-13T06:28:23Z",
       "baseRepository": "NTAP/rfc8312bis",
       "baseRefName": "main",
       "baseRefOid": "5021e76409d2e2e2a239a767074d5c44c686dbe4",
       "headRepository": "goelvidhi/rfc8312bis",
       "headRefName": "cwnd-reduction-prr",
-      "headRefOid": "999511008208a099825d3973435cb545f5e873dc",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "db0352060a1642a4ba819e452dff109e2376a186",
+      "closedAt": "2021-10-13T06:28:23Z",
+      "mergedAt": "2021-10-13T06:28:23Z",
+      "mergedBy": "larseggert",
+      "mergeCommit": {
+        "oid": "b37f22460569982b546fa9a6331b52593a58e3a4"
+      },
       "comments": [
         {
           "author": "goelvidhi",
@@ -11187,6 +11252,13 @@
           "body": "@lisongxu @nealcardwell @markkukojo I have addressed the comments to include everyone's points. Please see the new changes.\r\n\r\n@markkukojo I would like to keep the recommendation for PRR as it provides guidance for alternate approaches that may be better than what is described in CUBIC.",
           "createdAt": "2021-10-06T08:40:26Z",
           "updatedAt": "2021-10-06T08:41:01Z"
+        },
+        {
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@larseggert this PR is good to go.",
+          "createdAt": "2021-10-12T20:50:25Z",
+          "updatedAt": "2021-10-12T20:50:25Z"
         }
       ],
       "reviews": [
@@ -11347,8 +11419,166 @@
               "updatedAt": "2021-10-11T10:51:10Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOEpK-U84uUCcy",
+          "commit": {
+            "abbreviatedOid": "00be36f"
+          },
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-12T07:52:54Z",
+          "updatedAt": "2021-10-12T07:52:55Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "Thank you Markku and everyone for the suggestions. I have updated text with Markku's suggestion with slight modification (rearranged the brackets and s/fast recovery/loss recovery when suggesting PRR.\r\n\r\nHTML view,\r\n<img width=\"624\" alt=\"136905136-90e6c461-82b2-40ff-b243-572df4740bd7\" src=\"https://user-images.githubusercontent.com/10913828/136914815-5f0417ef-f400-4726-b49f-02590e3c6e57.png\">\r\n\r\n@nealcardwell @markkukojo @lisongxu @larseggert please review again.\r\n\r\n",
+              "createdAt": "2021-10-12T07:52:54Z",
+              "updatedAt": "2021-10-12T07:52:55Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpK-U84uVfKv",
+          "commit": {
+            "abbreviatedOid": "00be36f"
+          },
+          "author": "nealcardwell",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-12T13:28:25Z",
+          "updatedAt": "2021-10-12T13:28:25Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "This text in https://github.com/NTAP/rfc8312bis/pull/122#discussion_r726853901 looks good to me. Thanks!\r\n",
+              "createdAt": "2021-10-12T13:28:25Z",
+              "updatedAt": "2021-10-12T13:28:25Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpK-U84uVokU",
+          "commit": {
+            "abbreviatedOid": "00be36f"
+          },
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2021-10-12T13:58:07Z",
+          "updatedAt": "2021-10-12T13:59:06Z",
+          "comments": [
+            {
+              "originalPosition": 11,
+              "body": "```suggestion\r\nIn case of packet loss, the sender MUST reduce *cwnd*\r\n```",
+              "createdAt": "2021-10-12T13:58:07Z",
+              "updatedAt": "2021-10-12T13:59:06Z"
+            },
+            {
+              "originalPosition": 12,
+              "body": "```suggestion\r\nand *ssthresh* immediately upon entering loss recovery, similar to\r\n```",
+              "createdAt": "2021-10-12T13:58:26Z",
+              "updatedAt": "2021-10-12T13:59:06Z"
+            },
+            {
+              "originalPosition": 13,
+              "body": "```suggestion\r\n{{!RFC5681}} (and {{!RFC6675}}). Note that other mechanisms,\r\n```",
+              "createdAt": "2021-10-12T13:58:43Z",
+              "updatedAt": "2021-10-12T13:59:06Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpK-U84uW4jQ",
+          "commit": {
+            "abbreviatedOid": "00be36f"
+          },
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-12T19:02:13Z",
+          "updatedAt": "2021-10-12T19:02:13Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "Thank you, Vidhi! It looks good. ",
+              "createdAt": "2021-10-12T19:02:13Z",
+              "updatedAt": "2021-10-12T19:02:14Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpK-U84uXPZq",
+          "commit": {
+            "abbreviatedOid": "db03520"
+          },
+          "author": "markkukojo",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-12T20:40:01Z",
+          "updatedAt": "2021-10-12T20:40:01Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "Looks good, thanks. \r\nJust an editorial note: the sentence citing RFC7661 (or the message it intends to convey) might be better relocated together with the upcoming text that I assume we need to add to discuss and explain the rate-limited application issues.",
+              "createdAt": "2021-10-12T20:40:01Z",
+              "updatedAt": "2021-10-12T20:40:01Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpK-U84uXQ_B",
+          "commit": {
+            "abbreviatedOid": "db03520"
+          },
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-12T20:48:09Z",
+          "updatedAt": "2021-10-12T20:48:09Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "Noted. Will make sure that this is considered in the PR for that. Will put your comment link on the issue.",
+              "createdAt": "2021-10-12T20:48:09Z",
+              "updatedAt": "2021-10-12T20:48:09Z"
+            }
+          ]
         }
       ]
+    },
+    {
+      "number": 123,
+      "id": "PR_kwDOEpK-U84tJXSy",
+      "title": "PR of @lisongxu's suggestion for #94",
+      "url": "https://github.com/NTAP/rfc8312bis/pull/123",
+      "state": "OPEN",
+      "author": "larseggert",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #94.",
+      "createdAt": "2021-10-13T13:52:25Z",
+      "updatedAt": "2021-10-13T13:55:14Z",
+      "baseRepository": "NTAP/rfc8312bis",
+      "baseRefName": "main",
+      "baseRefOid": "b37f22460569982b546fa9a6331b52593a58e3a4",
+      "headRepository": "NTAP/rfc8312bis",
+      "headRefName": "fix-94",
+      "headRefOid": "4c2f67e3c6707fbb2279b2df27799e62761b5195",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
