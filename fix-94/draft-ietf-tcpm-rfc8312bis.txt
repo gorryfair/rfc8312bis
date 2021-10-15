@@ -953,7 +953,12 @@ W    = <
    tail buffers more quickly than Reno and increases the risk of a
    standing queue [RFC8511].  In this case, proper queue sizing and
    management [RFC7567] could be used to mitigate the risk to some
-   extent and reduce the packet queuing delay.
+   extent and reduce the packet queuing delay.  Also, in large-BDP
+   networks after a congestion event, CUBIC, due its cubic window
+   increase function, recovers quickly to the highest link utilization
+   point.  This mean that link utilization is less sensitive to an
+   active queue management (AQM) target that is lower than the amplitude
+   of the whole sawtooth.
 
    Similar to Reno, the performance of CUBIC as a loss-based congestion
    control algorithm suffers in networks where a packet loss is not a
@@ -1059,7 +1064,10 @@ W    = <
               RFC 6675, DOI 10.17487/RFC6675, August 2012,
               <https://datatracker.ietf.org/doc/html/rfc6675>.
 
-   [RFC7567]  "*** BROKEN REFERENCE ***".
+   [RFC7567]  Baker, F., Ed. and G. Fairhurst, Ed., "IETF
+              Recommendations Regarding Active Queue Management",
+              BCP 197, RFC 7567, DOI 10.17487/RFC7567, July 2015,
+              <https://datatracker.ietf.org/doc/html/rfc7567>.
 
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
