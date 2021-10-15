@@ -7,12 +7,12 @@ Internet-Draft                                                       UNL
 Obsoletes: 8312 (if approved)                                      S. Ha
 Updates: 5681 (if approved)                                     Colorado
 Intended status: Standards Track                                 I. Rhee
-Expires: 16 April 2022                                            Bowery
+Expires: 18 April 2022                                            Bowery
                                                                  V. Goel
                                                               Apple Inc.
                                                           L. Eggert, Ed.
                                                                   NetApp
-                                                         13 October 2021
+                                                         15 October 2021
 
 
                CUBIC for Fast and Long-Distance Networks
@@ -72,7 +72,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 16 April 2022.
+   This Internet-Draft will expire on 18 April 2022.
 
 Copyright Notice
 
@@ -1059,10 +1059,7 @@ W    = <
               RFC 6675, DOI 10.17487/RFC6675, August 2012,
               <https://datatracker.ietf.org/doc/html/rfc6675>.
 
-   [RFC7567]  Baker, F., Ed. and G. Fairhurst, Ed., "IETF
-              Recommendations Regarding Active Queue Management",
-              BCP 197, RFC 7567, DOI 10.17487/RFC7567, July 2015,
-              <https://datatracker.ietf.org/doc/html/rfc7567>.
+   [RFC7567]  "*** BROKEN REFERENCE ***".
 
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
@@ -1270,8 +1267,9 @@ B.1.  Since draft-ietf-tcpm-rfc8312bis-04
    *  Clarify cwnd decrease during multiplicative decrease (#102
       (https://github.com/NTAP/rfc8312bis/issues/102))
 
-   *  Clarify text around queuing (#94
-      (https://github.com/NTAP/rfc8312bis/issues/94))
+   *  Clarify text around queuing and slow adaptation of CUBIC in
+      wireless environments (#94 (https://github.com/NTAP/rfc8312bis/
+      issues/94))
 
 B.2.  Since draft-ietf-tcpm-rfc8312bis-03
 
