@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-10-14T00:01:03.584748+00:00",
+  "timestamp": "2021-10-17T00:01:10.834215+00:00",
   "repo": "NTAP/rfc8312bis",
   "labels": [
     {
@@ -3001,7 +3001,7 @@
       "labels": [],
       "body": "Markku Kojo said,\r\n> RFC 8311 (sec 4.1) allows modifying the TCP-sender response to\r\n  ECE for experimental purposes only. Has there been any discussion\r\n  with tsvwg in that modifying the TCP-response to ECE in CUBIC is\r\n  conflict with RFC 8311 as CUBIC is currently intended to become\r\n  a Standards Track RFC?",
       "createdAt": "2021-08-31T08:08:32Z",
-      "updatedAt": "2021-10-11T07:31:57Z",
+      "updatedAt": "2021-10-16T06:17:54Z",
       "closedAt": null,
       "comments": [
         {
@@ -3031,6 +3031,27 @@
           "body": "@markkukojo ping?",
           "createdAt": "2021-10-11T07:31:56Z",
           "updatedAt": "2021-10-11T07:31:56Z"
+        },
+        {
+          "author": "markkukojo",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> ...that merely allows experimental RFCs to define different congestion responses without having to update RFC3168 (because an exp track RFC cannot update a stds track RFC). That is the stated purpose of RFC8311. It doesn't need to say that a stds track RFC can update RFC3168, because nothing prevents the IETF updating a stds track RFC with another stds track RFC.\r\n\r\nSure, a stds track RFC can update RFC3168. I might be wrong but my understanding was that TSVWG at this time is not ready to see other than experimental modifications to  RFC 3168? \r\n\r\nIn particular, when there is little or no experimental results to support a stds track update; as Bob has recently testified that there has been hardly any ECN enabled routers in the Internet, the long deployment experience cannot include experience on modified ECN response. At the same time, RFC 8511 (ABE) documents findings saying that positive results with a larger MD factor were found only when the sender is in CA. This does not support using a larger MD factor when an ECN capable sender is in slow start.\r\n\r\nI'd leave this for tcpm wg chairs to discuss with tsvwg chairs.\r\n\r\n\r\nNits on what is normative text. \r\n\r\nRFC 2119 (the one that was valid at the time RFC 3186 was published): \r\n  These words are often capitalized.\r\n\r\nRFC 8174:\r\n  These words can be used as defined here, but using them is not\r\n  required.  Specifically, normative text does not require the use\r\n  of these key words.  They are used for clarity and consistency\r\n  when that is what's wanted, but a lot of normative text does not\r\n  use them and is still normative.",
+          "createdAt": "2021-10-15T02:04:05Z",
+          "updatedAt": "2021-10-15T02:04:05Z"
+        },
+        {
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "body": "@markkukojo based on what you write, I still don't understand if we can close this issue with no action, or else, what changes you want to see in the document.",
+          "createdAt": "2021-10-15T06:50:24Z",
+          "updatedAt": "2021-10-15T06:50:24Z"
+        },
+        {
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "body": ">In particular, when there is little or no experimental results to support a stds track update; as Bob has recently testified that there has been hardly any ECN enabled routers in the Internet, the long deployment experience cannot include experience on modified ECN response. At the same time, RFC 8511 (ABE) documents findings saying that positive results with a larger MD factor were found only when the sender is in CA. This does not support using a larger MD factor when an ECN capable sender is in slow start.\r\n\r\nThe second statement is a bit of a contradiction of the first. If we can't believe the long deployment experience of CUBIC for ECN, then how can we believe RFC 8511's findings about large MD factor during CA.",
+          "createdAt": "2021-10-16T06:17:53Z",
+          "updatedAt": "2021-10-16T06:17:53Z"
         }
       ]
     },
@@ -3048,7 +3069,7 @@
       "labels": [],
       "body": "Markku Kojo said,\r\n> ABE (RFC 8511) is currently the only experimental RFC to modify\r\n  the TCP-sender response to ECE. ABE allows modifying multiplicative\r\n  decrease factor only for AIMD TCP and only when ECE arrives in\r\n  congestion avoidance, that is, not when the sender is in slow-start.\r\n>\r\n>  Applying a decrease factor of 0.7 (or higher) when a congestion\r\n  singnal arrives and ends the initial slow start would be\r\n  inconsiderate because it extends the convergence time from\r\n  the slow-start overshoot. ABE has found that using a larger decrease\r\n  factor yields performance improvement when applied in congestion\r\n  avoidance, but not otherwise. Do we have data that would support\r\n  different findings with CUBIC?",
       "createdAt": "2021-08-31T08:13:28Z",
-      "updatedAt": "2021-10-11T17:01:01Z",
+      "updatedAt": "2021-10-15T06:56:16Z",
       "closedAt": null,
       "comments": [
         {
@@ -3120,6 +3141,13 @@
           "body": "We have over three decades of experience and consensus that after a slow-start overshoot a TCP sender must do MD with factor of 0.5 to match the overshoot. And, as Neal pointed out, this is how it was designed in order to not intentionally continue with over-aggressive sending rate during fast recovery which would be against the congestion control principles.\r\nTo change this, a lot of evidence (= well-analysed experimental data) should be provided to back up any claims proposing it is safe. Now we have none as far as I know. \r\n\r\nThis draft intends to modify MD with the justification that AI is modified to be less aggressive than the current std AI such that it compensates the use of a larger MD factor of 0.7. Such justification does not cover slow start but only the operation in steady state, i.e., MD when in CA; this draft does not provide any compensation for using an MD factor of 0.7 when in slow start. To do so, it should propose increasing cwnd at most by factor of 1.428 per RTT in slow-start. Otherwise, it must continue using the MD factor of 0.5 when in slow start because that is known to be safe. And, as I pointed out, using HyStart++ does not solve it because it is not guaranteed to work always and we do not have a good understanding on how often and how much it fails.\r\n\r\nMy intention was not to suggest that this draft should seek for an MD factor in between 0.5 and 0.7 depending on when HyStart++ exited slow start (i.e., how much did it overshoot). I just threw an idea how HyStart++ could possibly be enhanced in the future to allow an MD factor larger than 0.5 in slow start. Bob's suggestion \"to reduce by roughly the average overshoot\" is definitely not well advised. It is like suggesting a solution that works roughly half the time and fails otherwise.",
           "createdAt": "2021-10-11T17:01:00Z",
           "updatedAt": "2021-10-11T17:01:00Z"
+        },
+        {
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "body": "Please review #111 and make suggestions there if you all believe anything more needs to be said in the document about any of this. I'd like to close this issue soon.",
+          "createdAt": "2021-10-15T06:56:16Z",
+          "updatedAt": "2021-10-15T06:56:16Z"
         }
       ]
     },
@@ -3163,7 +3191,7 @@
       "labels": [],
       "body": "Markku Kojo said,\r\n> The draft states that RACK (and QUIC loss detection) can be used\r\n  with CUBIC to detect losses. However, it seems to have gone\r\n  unnoticed that RACK may also detect loss of a retransmission in\r\n  which case the congestion control response is required to be taken\r\n  twice, i.e., ssthresh and cwnd must be lowered again (MUST in\r\n  RFC 5681 Sec. 4.3). Once RACK got published all new congestion\r\n  controls and updates to existing RFCs must include this essential\r\n  congestion control response, if the congestion control mechanism\r\n  intends to use RACK for loss detection.\r\n>\r\n>  This draft does not have any such requirement nor does it specify\r\n  how this is done?",
       "createdAt": "2021-08-31T08:19:05Z",
-      "updatedAt": "2021-10-13T05:39:17Z",
+      "updatedAt": "2021-10-15T08:20:35Z",
       "closedAt": null,
       "comments": [
         {
@@ -3221,6 +3249,27 @@
           "body": "@markkukojo waiting to hear from you :-)",
           "createdAt": "2021-10-13T05:39:17Z",
           "updatedAt": "2021-10-13T05:39:17Z"
+        },
+        {
+          "author": "markkukojo",
+          "authorAssociation": "COLLABORATOR",
+          "body": "\r\n\r\n \r\n> Why do you think it is not as simple as reduce twice? For a network, packet is some bytes traveling through it - there is no difference in original data packet vs retransmission when it drops a packet. I am not getting why you think loss of a retransmissions should have a different response as compared to original data packet.\r\n\r\nThis is a bit tricky because it's not only about this draft but concerns more the other existing RFCs.\r\nFirst, no CUBIC nor any other algorithm does reduce cwnd and ssthresh always when there is a loss; They reduce only when first entering loss recovery and additional losses during the loss recovery do not  result in additional cwnd reduction as these are losses within the same RTT. However, loss of a rexmit is a loss on another RTT that occurs during loss recovery and needs a special attention and that is not currently present in the RFC series for any fast recovery algo:\r\n1. we need a detection algorithm that a) detects a loss of rexmit and b) indicates to the loss recovery and congestion control algorithms if it happened;\r\n2. we need a loss recovery algorithm that correctly selects what to (re)send;\r\n3. we need a congestion control algorithm to a) react to congestion events and b) correctly determine how much to send during recovery\r\n\r\nFor 1 a) we have RACK but for 1 b) we do not have anything because RFC 8985 does not track whether a loss it detects is an \"original\" loss or a loss of rexmit nor does it indicate when a loss of a rexmit occurs. It just marks a segment lost and that works in Linux to resend (again). \r\n\r\nFor 2 we only have RFC 6675 in the RFC series because RACK requires SACK. The fast recovery algorithm in  RFC 6675 is not written like Linux code, so e.g., NextSeg() does not work with lost rexmits. Similarly, the pipe algorithm does not count pipe correctly with lost rexmits so the congestion control does not work properly (for 3 b).  Also, other modifications are likely needed as well. That is why RFC 8985 says it must not be used with RFC 6675 (but RFC 6675 needs an update). \r\n\r\nFor 3 a) it is pretty much \"reduce again\" like you say, but depending on the cc algo one also needs to see how to correctly calculate the new values for cwnd and ssthresh as well as for any other variables that the cc algo needs in all possible scenarios. But the crucial info in this draft (and in others) is to be able to say exactly when to do this \"reduce again\". \r\n\r\nWhile RACK is fine as a detection algo I feel uneasy to say that one MAY use it with this draft as currently written because an implementer does not have necessary instructions in the RFC series how to do it correctly until RFC 6675 gets updated (or another RFC is published to describe how to implement loss recovery with lost rexmits correctly) and necessary extensions are added to RACK to track lost rexmits and to indicate when a loss of rexmit occurs.\r\nBecause  RFC 8985 and RFC 6675 do not give this necessary info, this draft basically should provide it but it is not the role of this draft as a pure congestion control algorithm. OTOH, if it is left unspecified, it is quite likely some implementers will try to figure it out themselves and would quite likely get it wrong (the experienced developers for major stacks are likely to get it right but there are tons of other stacks with developers to whom the RFCs should give precise implementation instructions). \r\n\r\nSo, this is maybe more of a process question what should be done to have all necessary pieces described properly and where to write it.",
+          "createdAt": "2021-10-14T17:00:36Z",
+          "updatedAt": "2021-10-14T17:00:36Z"
+        },
+        {
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "body": "@markkukojo thanks for the context. Could we scope this back to 8312bis and decide whether concrete changes are needed or not? ",
+          "createdAt": "2021-10-14T19:46:24Z",
+          "updatedAt": "2021-10-14T19:46:24Z"
+        },
+        {
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Thank you @markkukojo for the detailed explanation.\r\n\r\n>Because RFC 8985 and RFC 6675 do not give this necessary info, this draft basically should provide it but it is not the role of this draft as a pure congestion control algorithm.\r\n\r\nI agree with this statement and the reason is QUIC (recovery time is set to when the loss was first detected on ACK and retransmitted packets are sent after that with new packet numbers and sent timestamp) can very clearly detect original losses and rexmit losses and that is documented well in RFC 9002. So, CUBIC just works with QUIC without any modification. Although the response in congestion control is the same for both type of losses which I think is the right thing.\r\n\r\nSo, I think there is no update needed in CUBIC for this issue.\r\n\r\n",
+          "createdAt": "2021-10-15T08:19:44Z",
+          "updatedAt": "2021-10-15T08:20:35Z"
         }
       ]
     },
@@ -3348,7 +3397,7 @@
       ],
       "body": "Markku Kojo said,\r\n> The draft says that CUBIC MAY implement DSACK [RFC3708], limited slow\r\n  start [RFC 3742], [RFC7661] and hybrid slow start [cites a paper].\r\n  Aren't the first three down references? Not sure if it is appropriate\r\n  for a Stds Track document to cite experimental work or a paper like\r\n  this even though it's a MAY.",
       "createdAt": "2021-08-31T08:24:27Z",
-      "updatedAt": "2021-10-11T07:28:52Z",
+      "updatedAt": "2021-10-15T06:48:45Z",
       "closedAt": null,
       "comments": [
         {
@@ -3483,6 +3532,55 @@
           "body": "Heads up: I plan to merge #111 soon, unless I hear objections. If you do object, please make a concrete rephrasing proposal (on the PR).",
           "createdAt": "2021-10-11T07:28:52Z",
           "updatedAt": "2021-10-11T07:28:52Z"
+        },
+        {
+          "author": "markkukojo",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> It has been experimented -- was the default option for using cubic in picoquic, before switching the default to BBR. No negative feedback. There were also extensive simulations done by the MS Quic team, as part of their systematic unit tests. We should ask them, but I believe these simulations are based on scenarios they have encountered in real deployments. Implementing spurious loss recovery in QUIC-Cubic was key to achieving parity with TCP-Cubic in these scenarios.\r\n\r\nThanks Christian for the data point. Just wondering whether route fluttering was included in the test cases?\r\n \r\n> Links are not perfect, spurious reordering do happen -- that's quite visible on Wi-Fi and LTE links. I also saw some networks aggressively bundling the small UDP packets that carry QUIC ACK. Some networks will send small and large packets with different priorities. All that means that the standard recovery algorithm sometimes results in spurious loss detection. Cubic is not performing well in practice without spurious loss recovery. If this is not specified, implementations will probably just move to use BBR instead of Cubic. There is a perverse bad angel whispering to me that this would be a good thing, since BBR does result in smaller queues all over the Internet. Which means I am a bit conflicted...\r\n\r\nSure, links are not perfect. That's why these algos were brought to IETF some two decades ago. At that time maybe the hardest thing for us was to convince that spurious rexmits are a real problem ;) \r\n\r\nThere was quite a bit lessons learnt in that exercise on those days and it would be good to not ignore it all. Much is documented in those RFCs but not all, e.g., response to spurious fast rexmits never materialised. \r\nThat's why I think it is not the best option from the process point of view to embed a response to spurious rexmits in this CUBIC spec as the problem area and solution is common to all CCs. Having it in a specific response draft would also allow/invite those with expertise in this topic to join reviewing and contributing unlike it now pretty much went unnoticed by many because no one expected it to a part of CUBIC algo (me included).\r\n\r\nA correct response (UNDO) should not just simply restore previous state but consider various issues like adjusting DupThresh (or RACK reorder wnd) to avoid further spurious rexmits, control possible bursts due to UNDO, and other safeguards (see more in a latter comment). In addition, all this requires experiments in a range of environments to make it an experimental RFC, not to mention Stds Track. \r\n",
+          "createdAt": "2021-10-14T19:13:14Z",
+          "updatedAt": "2021-10-14T19:13:14Z"
+        },
+        {
+          "author": "markkukojo",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> > Do you think citing RFC 4015 for spurious RTOs is enough? This would mean we wouldn't provide any guidance for spurious detection of false fast retransmits.\r\n> \r\n> I would suggest citing all the major mechanisms that major TCP stacks use in the real world to detect spurious retransmits, namely something like: \"CUBIC implementations MAY use any of the following documented mechanisms for detecting spurious congestion events: Eifel [rfc3522] [rfc4015], F-RTO [rfc5682], DSACK [rfc3708].\"\r\n> \r\n> I believe their statuses are:\r\n> \r\n> * Eifel rfc3522 (exp), rfc4015 (std)\r\n> * F-RTO: rfc5682 (std)\r\n> * DSACK: rfc3708 (exp)\r\n\r\nPlease note that RFC 4015 is a stds track *response* algorithm for spurious RTOs. The question was why the advise in RFC 4015 is wrong and why this draft would need to modify it as the current text does and thereby maybe requires to update RFC 4015, instead of pointing to RFC 4015 as the response algo for spurious RTOs and just giving the extra state that needs to be stored/restored?\r\n",
+          "createdAt": "2021-10-14T19:16:23Z",
+          "updatedAt": "2021-10-14T19:16:23Z"
+        },
+        {
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "body": "@markkukojo could you explain what changes you would like to see in #111 or what is missing from it?",
+          "createdAt": "2021-10-14T19:31:40Z",
+          "updatedAt": "2021-10-14T19:31:40Z"
+        },
+        {
+          "author": "markkukojo",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> IIRC, RFC3522 has an IPR disclosure that makes it difficult to implement in open source or otherwise. RFC4015 has no such IPR. The community at the time felt strongly that the IPR meant RFC3522 shouldn't be standards track. Pasi developed F-RTO in part because of the IPR in RFC3522.\r\n\r\nYes, I think IPR issue is one reason but not the only one. There is much in those RFCs so my apologies for not opening it all when I said there are caveats. AFAIK, another reason why RFC 3522 (and RFC 3708) is not Std Track is that it is vulnerable to lying receivers that can easily make a fast rexmit to appear as a spurious rexmit. There is a mitigation proposed for Eifel detection but it calls for experimentation that we do not have AFAIK. As Ack supression is deemed to be quite common today, such experimentation would be even more crucial to show that it works appropriately. Without a safe detection for fast rexmits it is hard to propose a response.\r\n\r\nAs Christian noted, QUIC is much more straightforward in detecting spurious rexmits, so should not suffer from similar problems. ",
+          "createdAt": "2021-10-14T19:50:23Z",
+          "updatedAt": "2021-10-14T19:50:23Z"
+        },
+        {
+          "author": "markkukojo",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> @markkukojo could you explain what changes you would like to see in #111 or what is missing from it?\r\n\r\nText for Slow Start section:\r\n\r\n    CUBIC MUST employ a slow-start algorithm, when *cwnd* is no more than\r\n   *ssthresh* {{!RFC5681}}.\r\n\r\n    If CUBIC uses HyStart++ {{!I-D.ietf-tcpm-hystartplusplus}} for early\r\n    exit from the initial slow start, it may exit the slow start without\r\n    incurring any packet loss  ...\r\n\r\nReasoning:\r\n- HyStart++ is only for the initial slow start. Slow start is used elsewhere as well and HyStart++ is not applicable then. That is, HyStart++ cannot be a general alternative for the std slow start; in particular, \"in the rare cases when HyStart++ is not suitable\" does not make much sense.\r\n- HyStart++ is essentially the same as the initial slow start in RFC 5681. It essentially specifies an additional algorithm to decide on an early exit from slow start. (That would be good to be reflected in the Title of HyStart draft as well: HyStart++: An algorithm for Early Exit from TCP Initial Slow Start)\r\n- I asked but did not get answer why CUBIC would be dependent on HyStart++ (use  SHOULD), i.e., what are the full implications that must be understood and carefully weighted before choosing not to implement HyStart++ with CUBIC? I don't see any such reasons, maybe I am missing something?\r\n\r\n\r\nFor spurious rexmits:\r\n\r\nI cannot provide text as I have expressed my strong opinion: \r\n-this draft must not provide an alternative stds track specification for response from spurious RTOs; we already have it in RFC 4015. There is no discussion in tcpm wg, no data provided, nor justification provided to change RFC 4015. \r\n-this draft is not mature enough to provide a new stds track specification for response from spurious fast rexmits. There is no discussion in tcpm wg on the such algorithm considerations, no experiments nor data provided. There are two experimental algorithms for detecting false fast rexmits but they both have security implications which have not been considered for the proposed response. \r\n- A response to false fast rexmits should be a draft of its own because the solution is common to all congestion control algorithms, not in anyway specific to CUBIC, and the solution deserves much more attention and more careful design than what this draft currently provides.\r\n\r\nI'd suggest to move the text in sec 4.9 to sec 5.3 (Difficult Environments):\r\nThe first para extended with a brief intro for environments where and why spurious RTOs and false rexmits may occur. Pointers to results where the implications are shown. And pointing to detection algos and RFC 4015 for response to spurious RTOs + list what additional state in addition to  ssthresh to store/restore.",
+          "createdAt": "2021-10-14T22:45:48Z",
+          "updatedAt": "2021-10-14T22:45:48Z"
+        },
+        {
+          "author": "nealcardwell",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Re: \"Much is documented in those RFCs but not all, e.g., response to spurious fast rexmits never materialised.\"...\r\n\r\nEven if RFCs for responding to spurious fast retransmits never happened, the code to do that has been widely deployed and used in the Internet with good results, including at least in Linux TCP for over a decade. Since implementations are doing it, we may as well tell them how to do it well. :-)\r\n\r\nRe: \"That's why I think it is not the best option from the process point of view to embed a response to spurious rexmits in this CUBIC spec as the problem area and solution is common to all CCs.\"... \r\n\r\nThe solution is not common to all CCs, because the state variables for each CC are different. It is important for the CC spec to specify which variables need to be saved and restored if there is an undo event. That's why it's great that 8312bis covers those details.\r\n\r\nI agree the question of whether/when to undo a fast recovery is a separate question. But that's why this 8312bis is referencing other docs to cover that.\r\n\r\n",
+          "createdAt": "2021-10-15T02:17:00Z",
+          "updatedAt": "2021-10-15T02:17:00Z"
+        },
+        {
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "body": "> Text for Slow Start section:\r\n\r\n...\r\n\r\n@markkukojo, so that entire paragraph should look like the following?\r\n```\r\nCUBIC MUST employ a slow-start algorithm, when *cwnd* is no more than\r\n*ssthresh* {{!RFC5681}}. If CUBIC uses HyStart++\r\n{{!I-D.ietf-tcpm-hystartplusplus}} for early exit from the initial\r\nslow start, it may exit the slow start without incurring any packet\r\nloss. Experimental alternatives to HyStart++ include hybrid slow\r\nstart {{HR08}}, a predecessor to HyStart++ that some CUBIC\r\nimplementations have used as the default for the last decade, and\r\nlimited slow start {{?RFC3742}}.\r\n```\r\n\r\n> * I asked but did not get answer why CUBIC would be dependent on HyStart++ (use  SHOULD), i.e., what are the full implications that must be understood and carefully weighted before choosing not to implement HyStart++ with CUBIC? I don't see any such reasons, maybe I am missing something?\r\n\r\nIIRC one pragmatic reason is that there is no other standards-track mechanism.\r\n\r\n> I cannot provide text as I have expressed my strong opinion: -this draft must not provide an alternative stds track specification for response from spurious RTOs; we already have it in RFC 4015.\r\n\r\nThis sounds like you are arguing that text should be taken out of the document - which bits?\r\n\r\n> * A response to false fast rexmits should be a draft of its own because the solution is common to all congestion control algorithms, not in anyway specific to CUBIC, and the solution deserves much more attention and more careful design than what this draft currently provides.\r\n\r\nAgain, this sounds like you are arguing that text should be taken out of the document - which bits?\r\n\r\n> I'd suggest to move the text in sec 4.9 to sec 5.3 (Difficult Environments): The first para extended with a brief intro for environments where and why spurious RTOs and false rexmits may occur. Pointers to results where the implications are shown. And pointing to detection algos and RFC 4015 for response to spurious RTOs + list what additional state in addition to ssthresh to store/restore.\r\n\r\nFirst, I thought spurious RTOs and fals RTXs are not uncommon on general Internet paths. So I'm not sure that moving that text into a section called \"difficult environments\" is appropriate.\r\n\r\nSecond, it sounds like you don't just want to move the existing text, you are outlining an complete rewrite of what we have. It would be more actionable if you could propose a draft of the concrete text you think should be there (ideally, as a PR.)\r\n",
+          "createdAt": "2021-10-15T06:48:16Z",
+          "updatedAt": "2021-10-15T06:48:45Z"
         }
       ]
     },
@@ -3500,7 +3598,7 @@
       "labels": [],
       "body": "[Markku Kojo said](https://mailarchive.ietf.org/arch/msg/tcpm/nd4Af8QRQMDkp_R_9ZQMkI4yGAc):\r\n> I regret to say that the discussion in Sec 5. brings up surprisingly little data to back up the claims that are made. Given the long deployment experience that is emphasised in the draft, there, however, is little evidence (measurement data) summarised and cited to back up the claims. \"There is a long deployment experience\" does not provide any evidence as such. There should be a lot of studies with measurement data accumulated over the years that would support the assertions in the doc. Or, is there?",
       "createdAt": "2021-08-31T10:48:59Z",
-      "updatedAt": "2021-10-11T07:26:18Z",
+      "updatedAt": "2021-10-16T08:19:30Z",
       "closedAt": null,
       "comments": [
         {
@@ -3516,6 +3614,27 @@
           "body": "@lisongxu ping",
           "createdAt": "2021-10-11T07:26:17Z",
           "updatedAt": "2021-10-11T07:26:17Z"
+        },
+        {
+          "author": "sangtaeha",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@larseggert @lisongxu We have maintained a website for more than 10 years (2005 - 2016) showing the performance of CUBIC over many different networks. That site is gone now. I will try to find a comprehensive measurement study instead.",
+          "createdAt": "2021-10-16T06:55:36Z",
+          "updatedAt": "2021-10-16T06:55:36Z"
+        },
+        {
+          "author": "sangtaeha",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@lisongxu We have a COMNET paper that evaluates CUBIC along with the other protocols w/ and w/o background traffic. Our INFOCOM convex ordering paper shows evidence of its stability.  Another COMNET paper \"Taming the elephant..\" also has real-world results as well. Adding a few experimental study papers after that may be enough.",
+          "createdAt": "2021-10-16T07:09:17Z",
+          "updatedAt": "2021-10-16T07:09:17Z"
+        },
+        {
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "body": "If the site is on archive.org, we might be able to link to that?",
+          "createdAt": "2021-10-16T08:19:30Z",
+          "updatedAt": "2021-10-16T08:19:30Z"
         }
       ]
     },
@@ -3613,7 +3732,7 @@
       "labels": [],
       "body": "[Markku Kojo said](https://mailarchive.ietf.org/arch/msg/tcpm/nd4Af8QRQMDkp_R_9ZQMkI4yGAc):\r\n>Sec 5.4\r\n>\r\n>The text correctly states that CUBIC fills queues faster than AIMD TCP and increases the risk of standing queues. Then it proposes queue sizing and AQM as a solution, which is odd. Applying AQM to keep the queues shorter of course decreases the RTT (delay) seen but it does not help with standing queues (they remain standing but are just shorter).",
       "createdAt": "2021-08-31T10:50:22Z",
-      "updatedAt": "2021-10-13T13:52:53Z",
+      "updatedAt": "2021-10-15T06:52:16Z",
       "closedAt": null,
       "comments": [
         {
@@ -3671,6 +3790,13 @@
           "body": "@lisongxu, thanks for the proposal - I made PR #123 for it.",
           "createdAt": "2021-10-13T13:52:53Z",
           "updatedAt": "2021-10-13T13:52:53Z"
+        },
+        {
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "body": "@markkukojo, please review #123. I would like to close this issue.",
+          "createdAt": "2021-10-15T06:52:16Z",
+          "updatedAt": "2021-10-15T06:52:16Z"
         }
       ]
     },
@@ -4119,7 +4245,7 @@
       "labels": [],
       "body": "@markkukojo said,\r\n> More importantly. The draft says in Sec. 4.2:\r\n\"It does not make any changes to the TCP Fast Recovery and Fast\r\nRetransmit algorithms [RFC6582][RFC6675].\"\r\n\r\n> But it does modify RFC6582, RFC 6675, and RFC 5681 Fast Retransmit&Fast Recovery by applying beta_cubic to cwnd, not FlightSize. This is incorrect and would bring back an old design&implementation bug that was corrected more than two decades ago when RFC 2581 was published (and subsequently corrected also for RFC 6582 and RFC 6675). Please see the implementation note attached to Equation (4) of RFC 5681: \"An easy mistake to make is to simply use cwnd, rather than FlightSize, which in some implementations may incidentally increase well beyond rwnd.\"\r\n\r\n> Using cwnd in the equation will also result in incorrect outcome in some other cases as well, for example, if the sender is application limited.",
       "createdAt": "2021-09-21T08:52:56Z",
-      "updatedAt": "2021-10-13T13:56:38Z",
+      "updatedAt": "2021-10-15T11:20:35Z",
       "closedAt": null,
       "comments": [
         {
@@ -4366,6 +4492,41 @@
           "body": "I merged #122. What is left to close this issue?",
           "createdAt": "2021-10-13T13:56:38Z",
           "updatedAt": "2021-10-13T13:56:38Z"
+        },
+        {
+          "author": "markkukojo",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> IMHO saying that basing sshtresh on cwnd \"easily results in behaviour where a rwnd or application-limited TCP sender does not react to congestion\" overstates the issue. Basing ssthresh on cwnd still reacts to congestion; it's just that it will take longer for the cwnd to converge down to the available capacity of the path.\r\n\r\nMy bad to be inaccurate. It should have read:\r\n \"easily results in behaviour where a rwnd or application-limited TCP sender does not react to \r\n  a congestion event or a significant number of consecutive congestion events\"\r\n\r\nSure the cwnd will at some point converge down. Otherwise it would result in congestion collapse which is not the issue here. The issue is negative impact to other flows and being unfair.\r\n\r\nIf an application-limited sender is sending (or receiver receiving) at more or less constant rate for a long period of time (alone on the bottleneck), the cwnd may after a while be arbitrarily high, meaning that the sender does not react to congestion for a notably long period of time if new flows join (this is against one of the major cc principles saying \"must react to congestion event immediately\" that we just agreed on). Note that if we have a relatively stable path with tail-drop bottleneck, according to the packet conservation principle a sender sending at constant rate is not subject to regular losses because it does not seek for more capacity; other flows need to \"push\" a bit with good timing or enough variation in packet delivery is needed cause a drop. So, it may take much longer than some linear number of CA epochs per your log scale equations before such a sender encounters enough drops to get cwnd to level of its FlightSize.",
+          "createdAt": "2021-10-15T00:06:45Z",
+          "updatedAt": "2021-10-15T00:06:45Z"
+        },
+        {
+          "author": "markkukojo",
+          "authorAssociation": "COLLABORATOR",
+          "body": "\r\n> When you survey what the various OS's do, consider weighing the results by the deployed population.\r\n\r\nMatt, thanks for participating.\r\n\r\nThe deployed major stacks do it all differently. One uses FlightSize together with RFC 7661 to address app & rwnd limited case.  Others use cwnd with no or varying measures to prevent cwnd from growing on RTTs when the network is not kept full.\r\n\r\nOTOH, a significant number of RFCs in the RFC series use FlightSize and we should come up with an RFC that is compatible (and readable) with the other RFCs. And no one is proposing a resolution which just uses FlightSize alone like RFC 5681.\r\n\r\nBut the actual point wrt to your interesting mag tape example or other experiments and the \"better approach\". The mag tape example seems to have essentially the same behaviour as Yuchung's application-limited toy example  (but just just caused by receiver via rwnd). \r\nWe have RFC7661 with a simple algo that tracks of the amount of data Acked during recent RTTs (at least 3 most recent RTTs) and maintains a variable PipeACK to store the highest per RTT value among the recent RTTs in PipeACK. When entering loss recovery it uses max(PipeACK, FlightSize) to calculate new reduced value for cwnd. Doesn't that essentially provide the same outcome? \r\n\r\nRFC7661 differs from your \"better approach\" though in that sense it doesn't keep the non-validated cwnd forever but is required to adjust cwnd after 5 mins (as currently specified). Is there any reason why one should keep the non-validated cwnd for longer than that? \r\nDoes not sound like feasible to allow a sender that has first been alone on the path with buffer bloated bottleneck and acquired a huge cwnd (much more than the bottleneck link capacity) and then gone idle for hours to restart with the same cwnd although it would pace the cwnd worth of data over one RTT; things may have changed and only a tiny fraction of the capacity is anymore available. Even with pacing these packets are uncontrolled data with no ack clock, causing significant negative impact on other flows, i.e., it is like allowing an enormous init wnd with pacing.",
+          "createdAt": "2021-10-15T01:10:49Z",
+          "updatedAt": "2021-10-15T01:10:49Z"
+        },
+        {
+          "author": "mattmathis",
+          "authorAssociation": "NONE",
+          "body": "> the cwnd may after a while be arbitrarily high\r\n\r\nNo this is a different bug.  Don't raise cwnd unless flight size has reached cwnd at least once sometime since the last cwnd increment, so that you know that the path can actually deliver a cwnd sized window.   Then a multiplicative cwnd reduction does the right thing, even if it happens while inflight is tiny.   The case that you mention is not a problem: not only are there no reductions, there are no increases either, which is correct: we have zero new information and the estimate of the network capacity remains constant (and larger than in use by the application).\r\n\r\nI was prototyping this type of algorithm when 2581 came out: I dropped a whole pile of work in the dumpster and switched my focus to socket buffer autotuning and TCP instrumentation (web100/ESTATS-MIB).  I have to admit I stopped paying much attention to derivative RFCs.\r\n\r\nBTW Linux does this correctly - I know nothing about other stacks.\r\n\r\nI believe PipeACK is (nearly?) isomorphic to simply not raising cwnd when it isn't controlling the flight size.\r\n\r\nAs for decaying estimates: I have never been able to make sense of this idea.    It isn't the right model for the most common case, which is a bunch of low duty cycle on/off transactional applications sharing a fixed link.  Most of the time the old estimate is correct forever, however every so often transactions collide, and (assuming a paced restart and short queues) you get 50% or 66% loss.  My preference would be to make the collisions converge in one RTT, by reducing cwnd by the losses (or the pacing rate by losses/RTT).   This idea is present in PRR, but is not uniformly applied everywhere it could be.   I remain open minded about decaying estimates: I just have never seen an approach that seems right.\r\n\r\nAlthough backwards compatibility with existing standards is admirable,  standards that include persistent pathological behaviors under straightforward conditions are unlikely to be deployed at scale.   If you want standards to be relevant, you must not specify such behaviors.  If a strict implementation of a standard does not work well, then the standard will be doomed to be only partially implemented.",
+          "createdAt": "2021-10-15T04:49:32Z",
+          "updatedAt": "2021-10-15T04:49:57Z"
+        },
+        {
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "body": "Does anyone believe anything else in the current text needs to change before this issue can be closed?",
+          "createdAt": "2021-10-15T06:34:47Z",
+          "updatedAt": "2021-10-15T06:34:47Z"
+        },
+        {
+          "author": "gorryfair",
+          "authorAssociation": "NONE",
+          "body": "RFC 5681 was clear:  ssthresh MUST be set to no more than the value given in equation (4):\r\n      ssthresh = max (FlightSize / 2, 2*SMSS)\r\n\r\nRFC 2581 is obsolete. RFC7661 provides some rationale and some limits to how a flow might use cwnd here. \r\n\r\nSince this is proposed as PS, the present text in this ID certainly appears to make a substantive change to the RFC series, and I think it does not yet provide a justification and analysis of how that would compete with RFC 5691 traffic. If the text remains in this form, I do think this needs to be discussed in a TCPM meeting.",
+          "createdAt": "2021-10-15T11:20:35Z",
+          "updatedAt": "2021-10-15T11:20:35Z"
         }
       ]
     },
@@ -10117,7 +10278,7 @@
       "labels": [],
       "body": "Fixes #90.",
       "createdAt": "2021-09-16T11:59:26Z",
-      "updatedAt": "2021-10-11T14:42:17Z",
+      "updatedAt": "2021-10-16T07:39:04Z",
       "baseRepository": "NTAP/rfc8312bis",
       "baseRefName": "main",
       "baseRefOid": "e9231bf28b4f00618a47586890e8b305e574ad05",
@@ -10415,6 +10576,32 @@
           "body": "Seems ready.",
           "createdAt": "2021-10-11T14:42:17Z",
           "updatedAt": "2021-10-11T14:42:17Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOEpK-U84ujmPV",
+          "commit": {
+            "abbreviatedOid": "2363cde"
+          },
+          "author": "nealcardwell",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "LGTM, thanks!\r\n",
+          "createdAt": "2021-10-15T17:31:39Z",
+          "updatedAt": "2021-10-15T17:31:39Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOEpK-U84ukkez",
+          "commit": {
+            "abbreviatedOid": "2363cde"
+          },
+          "author": "sangtaeha",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Looks good to me. Thanks!",
+          "createdAt": "2021-10-16T07:39:04Z",
+          "updatedAt": "2021-10-16T07:39:04Z",
           "comments": []
         }
       ]
@@ -11566,19 +11753,222 @@
       "labels": [],
       "body": "Fixes #94.",
       "createdAt": "2021-10-13T13:52:25Z",
-      "updatedAt": "2021-10-13T13:55:14Z",
+      "updatedAt": "2021-10-15T10:40:06Z",
       "baseRepository": "NTAP/rfc8312bis",
       "baseRefName": "main",
       "baseRefOid": "b37f22460569982b546fa9a6331b52593a58e3a4",
       "headRepository": "NTAP/rfc8312bis",
       "headRefName": "fix-94",
-      "headRefOid": "4c2f67e3c6707fbb2279b2df27799e62761b5195",
+      "headRefOid": "b6994bda2b9bcd6a4d5364ce02f9ec52f384141a",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpK-U84uhZnE",
+          "commit": {
+            "abbreviatedOid": "4c2f67e"
+          },
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2021-10-15T06:44:33Z",
+          "updatedAt": "2021-10-15T06:57:11Z",
+          "comments": [
+            {
+              "originalPosition": 32,
+              "body": "```suggestion\r\n- Clarify text around queuing and slow adaptation of CUBIC in wireless environments\r\n```",
+              "createdAt": "2021-10-15T06:44:33Z",
+              "updatedAt": "2021-10-15T06:58:11Z"
+            },
+            {
+              "originalPosition": 20,
+              "body": "I think we should add this line somewhere around here, but don't know the right place.\r\n`In large BDP networks after a congestion event, CUBIC, due its cubic window increase function recovers quickly to the highest link utilization point.  This mean that link utilization is less sensitive to an AQM target that is lower than the amplitude of the whole sawtooth.`",
+              "createdAt": "2021-10-15T06:57:04Z",
+              "updatedAt": "2021-10-15T06:57:11Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpK-U84uhcLA",
+          "commit": {
+            "abbreviatedOid": "fc80c61"
+          },
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-15T07:02:16Z",
+          "updatedAt": "2021-10-15T07:02:17Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "I added it, please check",
+              "createdAt": "2021-10-15T07:02:16Z",
+              "updatedAt": "2021-10-15T07:02:17Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpK-U84uhnvQ",
+          "commit": {
+            "abbreviatedOid": "fc80c61"
+          },
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-15T08:00:38Z",
+          "updatedAt": "2021-10-15T08:00:39Z",
+          "comments": [
+            {
+              "originalPosition": 22,
+              "body": "```suggestion\r\npoint. This means that link utilization is less sensitive to an active\r\n```",
+              "createdAt": "2021-10-15T08:00:38Z",
+              "updatedAt": "2021-10-15T08:00:39Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpK-U84uhnxa",
+          "commit": {
+            "abbreviatedOid": "fc80c61"
+          },
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-15T08:00:49Z",
+          "updatedAt": "2021-10-15T08:00:49Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "Looks good.",
+              "createdAt": "2021-10-15T08:00:49Z",
+              "updatedAt": "2021-10-15T08:00:49Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpK-U84uhn2Q",
+          "commit": {
+            "abbreviatedOid": "fc80c61"
+          },
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-10-15T08:01:09Z",
+          "updatedAt": "2021-10-15T08:01:09Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 124,
+      "id": "PR_kwDOEpK-U84tPUdL",
+      "title": "cwnd should be at least 1 and after that use timer",
+      "url": "https://github.com/NTAP/rfc8312bis/pull/124",
+      "state": "OPEN",
+      "author": "goelvidhi",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "closes #83.\r\n\r\nWill add the changelog soon.",
+      "createdAt": "2021-10-15T07:56:44Z",
+      "updatedAt": "2021-10-16T06:47:20Z",
+      "baseRepository": "NTAP/rfc8312bis",
+      "baseRefName": "main",
+      "baseRefOid": "b37f22460569982b546fa9a6331b52593a58e3a4",
+      "headRepository": "goelvidhi/rfc8312bis",
+      "headRefName": "lower-bound-cwnd",
+      "headRefOid": "6ddd381eba63b3d461df40ed3e7dc81f1443b8e7",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "<img width=\"630\" alt=\"Screen Shot 2021-10-15 at 1 02 43 AM\" src=\"https://user-images.githubusercontent.com/10913828/137453368-68134a92-3850-4441-b0e9-0bd38a0ef349.png\">\r\n\r\nI have updated the equation so that cwnd is at least 1MSS. Also added text about how to handle a new congestion event if there are more congestion events after cwnd = 1MSS",
+          "createdAt": "2021-10-15T08:04:15Z",
+          "updatedAt": "2021-10-15T08:04:15Z"
+        },
+        {
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "body": "This still needs a change log.",
+          "createdAt": "2021-10-16T05:43:09Z",
+          "updatedAt": "2021-10-16T05:43:09Z"
+        },
+        {
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Added changelog",
+          "createdAt": "2021-10-16T05:56:47Z",
+          "updatedAt": "2021-10-16T05:56:47Z"
+        },
+        {
+          "author": "sangtaeha",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> <img alt=\"Screen Shot 2021-10-15 at 1 02 43 AM\" width=\"630\" src=\"https://user-images.githubusercontent.com/10913828/137453368-68134a92-3850-4441-b0e9-0bd38a0ef349.png\">\r\n> \r\n> I have updated the equation so that cwnd is at least 1MSS. Also added text about how to handle a new congestion event if there are more congestion events after cwnd = 1MSS\r\n\r\n@goelvidhi How do you think about the following change?\r\n\r\nAfter that, if there is a new congestion event,\r\n->\r\nIf congestion persists,\r\n\r\nAlso we have to cite RFC5033, not RFC3168.\r\n\r\n",
+          "createdAt": "2021-10-16T06:21:07Z",
+          "updatedAt": "2021-10-16T06:21:07Z"
+        },
+        {
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> @goelvidhi How do you think about the following change?\r\n> \r\n> After that, if there is a new congestion event, -> If congestion persists,\r\n\r\nUpdate the text.\r\n\r\n> \r\n> Also we have to cite RFC5033, not RFC3168.\r\n\r\nThe backoff using timer is described in RFC 3168 in Section 6.2, something like,\r\n`Therefore, the sending TCP MUST reset the\r\n   retransmit timer on receiving the ECN-Echo packet when the congestion\r\n   window is one.`\r\n\r\nThat's why I referenced 3168. I didn't understand why we should reference 5033?\r\n",
+          "createdAt": "2021-10-16T06:38:46Z",
+          "updatedAt": "2021-10-16T06:39:57Z"
+        },
+        {
+          "author": "sangtaeha",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> > @goelvidhi How do you think about the following change?\r\n> > After that, if there is a new congestion event, -> If congestion persists,\r\n> \r\n> Update the text.\r\n> \r\n> > Also we have to cite RFC5033, not RFC3168.\r\n> \r\n> The backoff using timer is described in RFC 3168 in Section 6.2, something like, `Therefore, the sending TCP MUST reset the retransmit timer on receiving the ECN-Echo packet when the congestion window is one.`\r\n> \r\n> That's why I referenced 3168. I didn't understand why we should reference 5033?\r\n\r\nI thought that is more specific to ECN. From RFC5033, I see a more general description. I think either way seems fine.\r\n\r\n 'For \"full backoff\", at some point the algorithm would reduce the\r\n       sending rate to one packet per round-trip time and then\r\n       exponentially backoff the time between single packet\r\n       transmissions if congestion persists.'",
+          "createdAt": "2021-10-16T06:47:20Z",
+          "updatedAt": "2021-10-16T06:47:20Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpK-U84uiJSG",
+          "commit": {
+            "abbreviatedOid": "1c0367d"
+          },
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-15T10:39:30Z",
+          "updatedAt": "2021-10-15T10:39:31Z",
+          "comments": [
+            {
+              "originalPosition": 22,
+              "body": "```suggestion\r\nNote that CUBIC will continue to reduce *cwnd* in response to congestion\r\nevents until it reaches a value of 1 MSS. After that, if there is a\r\nnew congestion event, a sender with the *cwnd* of 1 MSS needs to reduce\r\nits sending rate even further. It can achieve that by using a retransmission\r\ntimer with exponential backoff, as described in {{!RFC3168}}.\r\n```",
+              "createdAt": "2021-10-15T10:39:30Z",
+              "updatedAt": "2021-10-15T10:39:31Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpK-U84ukhD_",
+          "commit": {
+            "abbreviatedOid": "690a028"
+          },
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-10-16T03:27:55Z",
+          "updatedAt": "2021-10-16T03:27:55Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
