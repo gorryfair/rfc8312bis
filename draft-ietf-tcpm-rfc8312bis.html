@@ -1034,7 +1034,7 @@ address div.right {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Xu, et al.</td>
-<td class="center">Expires 16 April 2022</td>
+<td class="center">Expires 21 April 2022</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1053,12 +1053,12 @@ address div.right {
 <a href="https://datatracker.ietf.org/doc/html/rfc5681" class="eref">5681</a> (if approved)</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2021-10-13" class="published">13 October 2021</time>
+<time datetime="2021-10-18" class="published">18 October 2021</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2022-04-16">16 April 2022</time></dd>
+<dd class="expires"><time datetime="2022-04-21">21 April 2022</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1144,7 +1144,7 @@ do this.<a href="#section-note.2-3" class="pilcrow">¶</a></p>
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 16 April 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 21 April 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -3206,12 +3206,12 @@ window reduction.<a href="#section-4.9-2" class="pilcrow">¶</a></p>
 </div>
 </div>
 <p id="section-4.9-4">CUBIC MAY implement an algorithm to detect spurious retransmissions,
-such as DSACK <span>[<a href="#RFC3708" class="xref">RFC3708</a>]</span>, Forward RTO-Recovery <span>[<a href="#RFC5682" class="xref">RFC5682</a>]</span> or Eifel
-<span>[<a href="#RFC3522" class="xref">RFC3522</a>]</span>. Once a spurious congestion event is detected, CUBIC
-SHOULD restore the original values of above-mentioned variables as
-follows if the current <em>cwnd</em> is lower than <em>prior_cwnd</em>. Restoring
-the original values ensures that CUBIC's performance is similar to
-what it would be without spurious losses.<a href="#section-4.9-4" class="pilcrow">¶</a></p>
+such as Forward RTO-Recovery <span>[<a href="#RFC5682" class="xref">RFC5682</a>]</span>. Experimental alternatives
+include DSACK <span>[<a href="#RFC3708" class="xref">RFC3708</a>]</span> and Eifel <span>[<a href="#RFC3522" class="xref">RFC3522</a>]</span>. Once a spurious
+congestion event is detected, CUBIC SHOULD restore the original values
+of above-mentioned variables as follows if the current <em>cwnd</em> is lower
+than <em>prior_cwnd</em>. Restoring the original values ensures that CUBIC's
+performance is similar to what it would be without spurious losses.<a href="#section-4.9-4" class="pilcrow">¶</a></p>
 <div id="section-4.9-5">
           <div class="alignCenter art-svg artwork" id="section-4.9-5.1">
 <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="19.176ex" role="img" viewBox="0 -4379.3 21713.8 8256.3" width="50.432ex">
@@ -3431,18 +3431,21 @@ these variables.<a href="#section-4.9-6" class="pilcrow">¶</a></p>
 <a href="#section-4.10" class="section-number selfRef">4.10. </a><a href="#name-slow-start" class="section-name selfRef">Slow Start</a>
         </h3>
 <p id="section-4.10-1">CUBIC MUST employ a slow-start algorithm, when <em>cwnd</em> is no more than
-<em>ssthresh</em>. Among the slow-start algorithms, CUBIC MAY choose the Reno
-TCP slow start <span>[<a href="#RFC5681" class="xref">RFC5681</a>]</span> in general networks, or the limited slow
-start <span>[<a href="#RFC3742" class="xref">RFC3742</a>]</span> or hybrid slow start <span>[<a href="#HR08" class="xref">HR08</a>]</span> for fast and
-long-distance networks.<a href="#section-4.10-1" class="pilcrow">¶</a></p>
-<p id="section-4.10-2">When CUBIC uses hybrid slow start <span>[<a href="#HR08" class="xref">HR08</a>]</span>, it may exit the first slow
-start without incurring any packet loss and thus <em>W<sub>max</sub></em> is
-undefined. In this special case, CUBIC switches to congestion
-avoidance and increases its congestion window size using <a href="#eq1" class="xref">Figure 1</a>,
-where <em>t</em> is the elapsed time since the beginning of the current
-congestion avoidance, <em>K</em> is set to 0, and <em>W<sub>max</sub></em> is set to
-the congestion window size at the beginning of the current congestion
-avoidance stage.<a href="#section-4.10-2" class="pilcrow">¶</a></p>
+<em>ssthresh</em>. In general, CUBIC SHOULD use the HyStart++ slow start
+algorithm <span>[<a href="#I-D.ietf-tcpm-hystartplusplus" class="xref">I-D.ietf-tcpm-hystartplusplus</a>]</span>, or MAY use the Reno TCP
+slow start algorithm <span>[<a href="#RFC5681" class="xref">RFC5681</a>]</span> in the rare cases when
+HyStart++ is not suitable. Experimental alternatives include
+hybrid slow start <span>[<a href="#HR08" class="xref">HR08</a>]</span>, a predecessor to HyStart++ that some CUBIC
+implementations have used as the default for the last decade, and
+limited slow start <span>[<a href="#RFC3742" class="xref">RFC3742</a>]</span>.<a href="#section-4.10-1" class="pilcrow">¶</a></p>
+<p id="section-4.10-2">When CUBIC uses HyStart++ <span>[<a href="#I-D.ietf-tcpm-hystartplusplus" class="xref">I-D.ietf-tcpm-hystartplusplus</a>]</span>, it may
+exit the first slow start without incurring any packet loss and
+thus <em>W<sub>max</sub></em> is undefined. In this special case, CUBIC
+switches to congestion avoidance and increases its congestion window
+size using <a href="#eq1" class="xref">Figure 1</a>, where <em>t</em> is the elapsed time since the beginning
+of the current congestion avoidance, <em>K</em> is set to 0,
+and <em>W<sub>max</sub></em> is set to the congestion window size at the
+beginning of the current congestion avoidance stage.<a href="#section-4.10-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -4178,6 +4181,10 @@ information about TCP security concerns can be found in <span>[<a href="#RFC5681
 <a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
+<dt id="I-D.ietf-tcpm-hystartplusplus">[I-D.ietf-tcpm-hystartplusplus]</dt>
+        <dd>
+<span class="refAuthor">Balasubramanian, P.</span>, <span class="refAuthor">Huang, Y.</span>, and <span class="refAuthor">M. Olson</span>, <span class="refTitle">"HyStart++: Modified Slow Start for TCP"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-tcpm-hystartplusplus-03</span>, <time datetime="2021-07-25" class="refDate">25 July 2021</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-tcpm-hystartplusplus-03">https://datatracker.ietf.org/doc/html/draft-ietf-tcpm-hystartplusplus-03</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
         <dd>
 <span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/rfc2119">https://datatracker.ietf.org/doc/html/rfc2119</a>&gt;</span>. </dd>
@@ -4197,6 +4204,10 @@ information about TCP security concerns can be found in <span>[<a href="#RFC5681
 <dt id="RFC5681">[RFC5681]</dt>
         <dd>
 <span class="refAuthor">Allman, M.</span>, <span class="refAuthor">Paxson, V.</span>, and <span class="refAuthor">E. Blanton</span>, <span class="refTitle">"TCP Congestion Control"</span>, <span class="seriesInfo">RFC 5681</span>, <span class="seriesInfo">DOI 10.17487/RFC5681</span>, <time datetime="2009-09" class="refDate">September 2009</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/rfc5681">https://datatracker.ietf.org/doc/html/rfc5681</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC5682">[RFC5682]</dt>
+        <dd>
+<span class="refAuthor">Sarolahti, P.</span>, <span class="refAuthor">Kojo, M.</span>, <span class="refAuthor">Yamamoto, K.</span>, and <span class="refAuthor">M. Hata</span>, <span class="refTitle">"Forward RTO-Recovery (F-RTO): An Algorithm for Detecting Spurious Retransmission Timeouts with TCP"</span>, <span class="seriesInfo">RFC 5682</span>, <span class="seriesInfo">DOI 10.17487/RFC5682</span>, <time datetime="2009-09" class="refDate">September 2009</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/rfc5682">https://datatracker.ietf.org/doc/html/rfc5682</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC6298">[RFC6298]</dt>
         <dd>
@@ -4284,10 +4295,6 @@ information about TCP security concerns can be found in <span>[<a href="#RFC5681
 <dt id="RFC4960">[RFC4960]</dt>
         <dd>
 <span class="refAuthor">Stewart, R., Ed.</span>, <span class="refTitle">"Stream Control Transmission Protocol"</span>, <span class="seriesInfo">RFC 4960</span>, <span class="seriesInfo">DOI 10.17487/RFC4960</span>, <time datetime="2007-09" class="refDate">September 2007</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/rfc4960">https://datatracker.ietf.org/doc/html/rfc4960</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="RFC5682">[RFC5682]</dt>
-        <dd>
-<span class="refAuthor">Sarolahti, P.</span>, <span class="refAuthor">Kojo, M.</span>, <span class="refAuthor">Yamamoto, K.</span>, and <span class="refAuthor">M. Hata</span>, <span class="refTitle">"Forward RTO-Recovery (F-RTO): An Algorithm for Detecting Spurious Retransmission Timeouts with TCP"</span>, <span class="seriesInfo">RFC 5682</span>, <span class="seriesInfo">DOI 10.17487/RFC5682</span>, <time datetime="2009-09" class="refDate">September 2009</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/rfc5682">https://datatracker.ietf.org/doc/html/rfc5682</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC6937">[RFC6937]</dt>
         <dd>
@@ -4391,23 +4398,28 @@ information about TCP security concerns can be found in <span>[<a href="#RFC5681
           <li class="normal" id="appendix-B.1-1.2">Update RFC5681
 (<a href="https://github.com/NTAP/rfc8312bis/issues/99">#99</a>)<a href="#appendix-B.1-1.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.1-1.3">Clarify what we mean by "new ACK" and use it in the text in more places.
-(<a href="https://github.com/NTAP/rfc8312bis/issues/101">#101</a>)<a href="#appendix-B.1-1.3" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.1-1.3">Rephrase text around algorithmic alternatives, add HyStart++
+(<a href="https://github.com/NTAP/rfc8312bis/issues/85">#85</a>,
+<a href="https://github.com/NTAP/rfc8312bis/issues/86">#86</a>,
+<a href="https://github.com/NTAP/rfc8312bis/issues/90">#90</a>)<a href="#appendix-B.1-1.3" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.1-1.4">Rewrite the Responses to Sudden or Transient Events section
-(<a href="https://github.com/NTAP/rfc8312bis/issues/98">#98</a>)<a href="#appendix-B.1-1.4" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.1-1.4">Clarify what we mean by "new ACK" and use it in the text in more places.
+(<a href="https://github.com/NTAP/rfc8312bis/issues/101">#101</a>)<a href="#appendix-B.1-1.4" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.1-1.5">Remove confusing text about <em>cwnd<sub>start</sub></em> in Section 4.2
-(<a href="https://github.com/NTAP/rfc8312bis/issues/100">#100</a>)<a href="#appendix-B.1-1.5" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.1-1.5">Rewrite the Responses to Sudden or Transient Events section
+(<a href="https://github.com/NTAP/rfc8312bis/issues/98">#98</a>)<a href="#appendix-B.1-1.5" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.1-1.6">Change terminology from "AIMD" to "Reno"
-(<a href="https://github.com/NTAP/rfc8312bis/issues/108">#108</a>)<a href="#appendix-B.1-1.6" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.1-1.6">Remove confusing text about <em>cwnd<sub>start</sub></em> in Section 4.2
+(<a href="https://github.com/NTAP/rfc8312bis/issues/100">#100</a>)<a href="#appendix-B.1-1.6" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.1-1.7">Moved MUST NOT from app-limited section to main cubic AI section
-(<a href="https://github.com/NTAP/rfc8312bis/issues/97">#97</a>)<a href="#appendix-B.1-1.7" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.1-1.7">Change terminology from "AIMD" to "Reno"
+(<a href="https://github.com/NTAP/rfc8312bis/issues/108">#108</a>)<a href="#appendix-B.1-1.7" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.1-1.8">Clarify cwnd decrease during multiplicative decrease
-(<a href="https://github.com/NTAP/rfc8312bis/issues/102">#102</a>)<a href="#appendix-B.1-1.8" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.1-1.8">Moved MUST NOT from app-limited section to main cubic AI section
+(<a href="https://github.com/NTAP/rfc8312bis/issues/97">#97</a>)<a href="#appendix-B.1-1.8" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="appendix-B.1-1.9">Clarify cwnd decrease during multiplicative decrease
+(<a href="https://github.com/NTAP/rfc8312bis/issues/102">#102</a>)<a href="#appendix-B.1-1.9" class="pilcrow">¶</a>
 </li>
         </ul>
 </section>
