@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-10-17T00:01:10.834215+00:00",
+  "timestamp": "2021-10-19T00:00:49.126312+00:00",
   "repo": "NTAP/rfc8312bis",
   "labels": [
     {
@@ -3060,7 +3060,7 @@
       "id": "MDU6SXNzdWU5ODM1NzQ3Mzg=",
       "title": "RFC 8511 handling of ECE signal (slow start vs congestion avoidance)",
       "url": "https://github.com/NTAP/rfc8312bis/issues/85",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "goelvidhi",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -3069,8 +3069,8 @@
       "labels": [],
       "body": "Markku Kojo said,\r\n> ABE (RFC 8511) is currently the only experimental RFC to modify\r\n  the TCP-sender response to ECE. ABE allows modifying multiplicative\r\n  decrease factor only for AIMD TCP and only when ECE arrives in\r\n  congestion avoidance, that is, not when the sender is in slow-start.\r\n>\r\n>  Applying a decrease factor of 0.7 (or higher) when a congestion\r\n  singnal arrives and ends the initial slow start would be\r\n  inconsiderate because it extends the convergence time from\r\n  the slow-start overshoot. ABE has found that using a larger decrease\r\n  factor yields performance improvement when applied in congestion\r\n  avoidance, but not otherwise. Do we have data that would support\r\n  different findings with CUBIC?",
       "createdAt": "2021-08-31T08:13:28Z",
-      "updatedAt": "2021-10-15T06:56:16Z",
-      "closedAt": null,
+      "updatedAt": "2021-10-18T10:17:26Z",
+      "closedAt": "2021-10-18T10:17:26Z",
       "comments": [
         {
           "author": "bbriscoe",
@@ -3156,7 +3156,7 @@
       "id": "MDU6SXNzdWU5ODM1NzcwMjU=",
       "title": "Slow-Start Overshoot w/ loss-based congestion conrol",
       "url": "https://github.com/NTAP/rfc8312bis/issues/86",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "goelvidhi",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -3165,12 +3165,12 @@
       "labels": [],
       "body": "Markku Kojo said,\r\n> The larger decrease factor of 0.7 seems unadviseable also if\r\n  used in the initial slow start with loss based congestion\r\n  control (w/ Not-ECT traffic); packets start getting dropped\r\n  when a TCP sender has increased cwnd in slow start such that\r\n  the available network bandwidth and buffering capacity at the\r\n  bottleneck is filled, but the TCP sender continues sending\r\n  more packets for one RTT doubling cwnd and hence also the number\r\n  of packets inflight before the congestion signal reaches the sender.\r\n  Now, even if the sender uses the standard decrease factor of 0.5,\r\n  the cwnd gets reduced only to a value that equals to the cwnd just\r\n  before (or around) the congestion point. That is, the network is\r\n  still full when the sender enters fast recovery but we do not\r\n  expect more drops during fast recovery in a deterministic model.\r\n  Only in congestion avoidance after the recovery, the sender\r\n  increases cwnd again and gets a packet drop that takes the\r\n  sender to a normal sawtooth cycle in an ideal case. So, the\r\n  convergence time from slow-start is expexted to be fast though\r\n  in reality loss recovery does not always work ideally with\r\n  such many drops in a window of data.\r\n>\r\n>  However, if the sender applies decrease factor of 0.7, it\r\n  continues in fast recovery with a 40% higher cwnd than what is\r\n  the available network capacity. This is very likely to result in\r\n  significant number of packet losses during fast recovery, and\r\n  very likely to result in loss of retransmissions. So, it is no\r\n  wonder that so many people have been very concerned about the\r\n  slow-start overshoot and the problems it creates.\r\n  It is very obvious that applying decrease factor of 0.7 in\r\n  the initial slow start is likely to extend the convergence\r\n  time from the slow-start overshoot significantly. Or, do we\r\n  have data that shows that such concern is unnecessary?\r\n  Also, a number of new loss-recovery mechanisms have been\r\n  introduced maybe mainly because of this?\r\n  I would hesitate recommending decrease factor of 0.7 when\r\n  a congestion event occurs during the initial slow start.",
       "createdAt": "2021-08-31T08:15:52Z",
-      "updatedAt": "2021-09-15T09:26:57Z",
-      "closedAt": null,
+      "updatedAt": "2021-10-18T10:17:26Z",
+      "closedAt": "2021-10-18T10:17:26Z",
       "comments": [
         {
           "author": "bbriscoe",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "body": "[Same response as for Issue #85](https://github.com/NTAP/rfc8312bis/issues/85#issuecomment-919805852).\r\n\r\nI suggest #85 and #86 are folded into one issue.",
           "createdAt": "2021-09-15T09:26:57Z",
           "updatedAt": "2021-09-15T09:26:57Z"
@@ -3334,7 +3334,7 @@
       "labels": [],
       "body": "Markku Kojo said,\r\n>This draft uses a larger cwnd decrease factor, resulting in larger\r\n  average cwnd and buffer occupation. This means that it is\r\n  likely to contribute significantly to buffer bloat, particularly\r\n  when considering also the use of concave increase function in the\r\n  beginning of the congestion avoidance that keeps the cwnd close\r\n  to maximum most of the time as carefully explained in the draft.\r\n  This means that CUBIC keeps also buffer bloated router queues\r\n  very efficiently full at all times.\r\n>\r\n>  Currently the draft does mention the slower convergence speed\r\n  as the only side effect for the larger decrease factor and does\r\n  not discuss the contribution to buffer bloat. It would be\r\n  important to assess this together with measurement data to\r\n  back up any observations.\r\n>\r\n>  Do we have data in different environments, including buffer-bloated\r\n  environments that show how much effect CUBIC has compared to\r\n  AIMD TCP?\r\n  And, how does larger decrease function impact convergence speed,\r\n  particularly in buffer-bloated environments.\r\n  Many people have complained that window-based (TCP) congestion\r\n  control drives buffer bloat. Of course, also the current standard\r\n  AIMD TCP tends to fill in the buffer-bloated queues but it\r\n  unlikely does it as effectively as CUBIC? This would be good to\r\n  understand better.",
       "createdAt": "2021-08-31T08:23:34Z",
-      "updatedAt": "2021-10-12T02:48:04Z",
+      "updatedAt": "2021-10-18T14:03:19Z",
       "closedAt": null,
       "comments": [
         {
@@ -3378,6 +3378,27 @@
           "body": "Thanks, @larseggert . I will ",
           "createdAt": "2021-10-12T02:48:04Z",
           "updatedAt": "2021-10-12T02:48:04Z"
+        },
+        {
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@larseggert This issue overlaps mainly with two other issues. The buffer bloat part overlaps with issue #94, and the convergence part overlaps with issue #96. ",
+          "createdAt": "2021-10-17T22:05:21Z",
+          "updatedAt": "2021-10-17T22:05:21Z"
+        },
+        {
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "body": "@lisongxu do you think anything more needs to be done here after those issues are closed?",
+          "createdAt": "2021-10-18T10:16:43Z",
+          "updatedAt": "2021-10-18T10:16:43Z"
+        },
+        {
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@larseggert No, thank you",
+          "createdAt": "2021-10-18T14:03:19Z",
+          "updatedAt": "2021-10-18T14:03:19Z"
         }
       ]
     },
@@ -3397,7 +3418,7 @@
       ],
       "body": "Markku Kojo said,\r\n> The draft says that CUBIC MAY implement DSACK [RFC3708], limited slow\r\n  start [RFC 3742], [RFC7661] and hybrid slow start [cites a paper].\r\n  Aren't the first three down references? Not sure if it is appropriate\r\n  for a Stds Track document to cite experimental work or a paper like\r\n  this even though it's a MAY.",
       "createdAt": "2021-08-31T08:24:27Z",
-      "updatedAt": "2021-10-15T06:48:45Z",
+      "updatedAt": "2021-10-18T14:03:02Z",
       "closedAt": null,
       "comments": [
         {
@@ -3581,6 +3602,34 @@
           "body": "> Text for Slow Start section:\r\n\r\n...\r\n\r\n@markkukojo, so that entire paragraph should look like the following?\r\n```\r\nCUBIC MUST employ a slow-start algorithm, when *cwnd* is no more than\r\n*ssthresh* {{!RFC5681}}. If CUBIC uses HyStart++\r\n{{!I-D.ietf-tcpm-hystartplusplus}} for early exit from the initial\r\nslow start, it may exit the slow start without incurring any packet\r\nloss. Experimental alternatives to HyStart++ include hybrid slow\r\nstart {{HR08}}, a predecessor to HyStart++ that some CUBIC\r\nimplementations have used as the default for the last decade, and\r\nlimited slow start {{?RFC3742}}.\r\n```\r\n\r\n> * I asked but did not get answer why CUBIC would be dependent on HyStart++ (use  SHOULD), i.e., what are the full implications that must be understood and carefully weighted before choosing not to implement HyStart++ with CUBIC? I don't see any such reasons, maybe I am missing something?\r\n\r\nIIRC one pragmatic reason is that there is no other standards-track mechanism.\r\n\r\n> I cannot provide text as I have expressed my strong opinion: -this draft must not provide an alternative stds track specification for response from spurious RTOs; we already have it in RFC 4015.\r\n\r\nThis sounds like you are arguing that text should be taken out of the document - which bits?\r\n\r\n> * A response to false fast rexmits should be a draft of its own because the solution is common to all congestion control algorithms, not in anyway specific to CUBIC, and the solution deserves much more attention and more careful design than what this draft currently provides.\r\n\r\nAgain, this sounds like you are arguing that text should be taken out of the document - which bits?\r\n\r\n> I'd suggest to move the text in sec 4.9 to sec 5.3 (Difficult Environments): The first para extended with a brief intro for environments where and why spurious RTOs and false rexmits may occur. Pointers to results where the implications are shown. And pointing to detection algos and RFC 4015 for response to spurious RTOs + list what additional state in addition to ssthresh to store/restore.\r\n\r\nFirst, I thought spurious RTOs and fals RTXs are not uncommon on general Internet paths. So I'm not sure that moving that text into a section called \"difficult environments\" is appropriate.\r\n\r\nSecond, it sounds like you don't just want to move the existing text, you are outlining an complete rewrite of what we have. It would be more actionable if you could propose a draft of the concrete text you think should be there (ideally, as a PR.)\r\n",
           "createdAt": "2021-10-15T06:48:16Z",
           "updatedAt": "2021-10-15T06:48:45Z"
+        },
+        {
+          "author": "markkukojo",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> > Text for Slow Start section:\r\n> \r\n> ...\r\n> \r\n> @markkukojo, so that entire paragraph should look like the following?\r\n> \r\n> ```\r\n> CUBIC MUST employ a slow-start algorithm, when *cwnd* is no more than\r\n> *ssthresh* {{!RFC5681}}. If CUBIC uses HyStart++\r\n> {{!I-D.ietf-tcpm-hystartplusplus}} for early exit from the initial\r\n> slow start, it may exit the slow start without incurring any packet\r\n> loss. Experimental alternatives to HyStart++ include hybrid slow\r\n> start {{HR08}}, a predecessor to HyStart++ that some CUBIC\r\n> implementations have used as the default for the last decade, and\r\n> limited slow start {{?RFC3742}}.\r\n> ```\r\n\r\nNo. Sorry, I meant with the three dots (...) that I modified the beginning of that para and the rest of the para may remain untouched. Please, see below for the full text. \r\n\r\n  CUBIC MUST employ a slow-start algorithm, when *cwnd* is no more than\r\n  *ssthresh* {{!RFC5681}}.\r\n\r\n  If CUBIC uses HyStart++ {{!I-D.ietf-tcpm-hystartplusplus}} for early \r\n  exit from the initial slow start, it may exit the slow start without\r\n  incurring any packet loss and thus *W<sub>max</sub>* is undefined.\r\n  I  n this special case, CUBIC\r\n  switches to congestion avoidance and increases its congestion window\r\n  size using {{eq1}}, where *t* is the elapsed time since the beginning\r\n  of the current congestion avoidance, *K* is set to 0,\r\n  and *W<sub>max</sub>* is set to the congestion window size at the\r\n  beginning of the current congestion avoidance stage.\r\n\r\nI also tried to explain why the draft cannot say \"in general SHOULD use HyStart++ ...\". HyStart++ is specified for the initial slow start only! You cannot require it to be used e.g., after a timeout when CUBIC like any other TCP CC algo must use RFC 5681 slow start as there is no other slow start specified for that purpose. Same holds for the other cases where cwnd < ssthresh. \r\n\r\nFurthermore, the current text effectively says (claims):  \r\n\"... MAY use the Reno TCP slow start algorithm {{!RFC5681}} in the rare cases (of RTO) when\r\nHyStart++ is not suitable.\"\r\n\r\n> > * I asked but did not get answer why CUBIC would be dependent on HyStart++ (use  SHOULD), i.e., what are the full implications that must be understood and carefully weighted before choosing not to implement HyStart++ with CUBIC? I don't see any such reasons, maybe I am missing something?\r\n\r\n> \r\n> IIRC one pragmatic reason is that there is no other standards-track mechanism.\r\n\r\nMy apologies but I don't understand this reasoning. If something is stds track, it is not a reason to make it automatically a SHOULD. For SHOULD (and MUST) there needs to be a reason why it is required and it needs to be explained.  What beaks if CUBIC does not use HyStart++?\r\nThere is currently no justification provided to SHOULD in the draft.\r\n\r\n> > I cannot provide text as I have expressed my strong opinion: -this draft must not provide an alternative stds track specification for response from spurious RTOs; we already have it in RFC 4015.\r\n> \r\n> This sounds like you are arguing that text should be taken out of the document - which bits?\r\n> \r\n> > * A response to false fast rexmits should be a draft of its own because the solution is common to all congestion control algorithms, not in anyway specific to CUBIC, and the solution deserves much more attention and more careful design than what this draft currently provides.\r\n> \r\n> Again, this sounds like you are arguing that text should be taken out of the document - which bits?\r\n> \r\n> > I'd suggest to move the text in sec 4.9 to sec 5.3 (Difficult Environments): The first para extended with a brief intro for environments where and why spurious RTOs and false rexmits may occur. Pointers to results where the implications are shown. And pointing to detection algos and RFC 4015 for response to spurious RTOs + list what additional state in addition to ssthresh to store/restore.\r\n> \r\n> First, I thought spurious RTOs and fals RTXs are not uncommon on general Internet paths. So I'm not sure that moving that text into a section called \"difficult environments\" is appropriate.\r\n\r\nSure, spurious RTOs and false RTXs occur. But how often, in what conditions, what are the reasons, what else may happen at the same time? We need evidence (well analysed measurement results) that it is common and that we understand the reasons for such behaviour and hence are able to justify a correct way to do the response. Currently there is nothing in this draft about these. Moreover, what could be done to avoid such spurious rexmits, what actions the IETF has taken/should take to advise how to avoid them. Is the transport protocol the only actor that should be prepared and react? What we need to take into account if we undo cc state and how the state is safely restored? All these questions are specific to the problem area of spurious rexmits but not specific to CUBIC. Undo involves a congestion control decision and as far as I remember IETF has never accepted a Stds Track RFC for congestion control actions without any evidence that demonstrates that the proposed cc actions are safe and correct. Why should this draft make an exception? Please see my reply to Neal concerning whether cc actions as currently proposed are safe and correct.\r\n\r\nIf the problem is shown to be common, then the text may better belong to sec 5.4 (Investigating a Range of Environments) than a section about difficult environments.\r\n \r\n> Second, it sounds like you don't just want to move the existing text, you are outlining an complete rewrite of what we have. It would be more actionable if you could propose a draft of the concrete text you think should be there (ideally, as a PR.)\r\n\r\nYes, it requires much more consideration and analysis than the current piece of text in this draft. In particular, if one wants to specify a new mechanisms to restore state or a mechanism that deviates from the one for which we have a stds track specification (RFC 4015). \r\nI may help in writing the text for sec 5.3/5.4 but I don't have any measurement results that demonstrate the problem and how common the problem is. ",
+          "createdAt": "2021-10-18T12:38:05Z",
+          "updatedAt": "2021-10-18T12:38:05Z"
+        },
+        {
+          "author": "markkukojo",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> Re: \"Much is documented in those RFCs but not all, e.g., response to spurious fast rexmits never materialised.\"...\r\n> \r\n> Even if RFCs for responding to spurious fast retransmits never happened, the code to do that has been widely deployed and used in the Internet with good results, including at least in Linux TCP for over a decade. Since implementations are doing it, we may as well tell them how to do it well. :-)\r\n\r\nYes, UNDO has been there in Linux well be before CUBIC was invented. But UNDO being implemented in Linux does not alone provide any evidence that doing UNDO like rfc8312bis proposes is the right way to do it. ;)\r\n\r\nI fully agree that it is important to tell how to restore cc state \"well\" but the problem is exactly that this draft does not do it now. In other words, you are saying and supporting that it is all ok to   \r\nrestore cc state such that after a detection algo figures that it was false fast rexmit the TCP sender,    \r\n\r\na) blasts a full cwnd worth data at line speed,\r\nb) does not consider adjusting dupack treshold to avoid further false rexmits,\r\nc) does not need to be prepared for a lying receiver that can easily make a fast rexmit to appear as a spurious rexmit, i.e., it is fine make it easy to fool the sender not to react to congestion at all?\r\n\r\n> Re: \"That's why I think it is not the best option from the process point of view to embed a response to spurious rexmits in this CUBIC spec as the problem area and solution is common to all CCs.\"...\r\n> \r\n> The solution is not common to all CCs, because the state variables for each CC are different. It is important for the CC spec to specify which variables need to be saved and restored if there is an undo event. That's why it's great that 8312bis covers those details.\r\n\r\nSure, I am not objecting to specifying which variables need to be saved and restored *in addition* to those that the existing RFCs already do and what is common to all CCs. But what I try to say is that this is the quite trivial part of the cc response to spurious rexmit.\r\n\r\nI'm objecting that this draft modifies RFC 4015 response to spurious RTOs such that after the undo\r\n\r\na) the TCP sender blasts a full restored cwnd worth of *unnecessary rexmits* at the bottleneck\r\n    line speed,\r\nb) does not adjust RTO and RTO calculation to avoid further spurious RTOs,\r\nc) executes UNDO even if it received the acceptable Ack with ECE,\r\nd) and more ...\r\n\r\nIt would be helpful for the discussion if everyone would read RFC 4015 and the related RFCs and compare what they say to what RFC8312bis says.\r\nI'm not saying that the existing RFCs are perfect but they contain useful advise that this draft rfc8312bis totally misses .",
+          "createdAt": "2021-10-18T12:50:40Z",
+          "updatedAt": "2021-10-18T12:50:40Z"
+        },
+        {
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "body": "Could you propose a PR that would address your concerns? I think we'll keep missing things otherwise.",
+          "createdAt": "2021-10-18T13:52:49Z",
+          "updatedAt": "2021-10-18T13:52:49Z"
+        },
+        {
+          "author": "nealcardwell",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> a) blasts a full cwnd worth data at line speed,\r\n\r\nThat's a separate problem. Restart from idle does that as well. TCP implementations should use pacing to solve this problem of blasting full cwnds. Pacing is the only complete and general solution to blasting full cwnds, and it's orthogonal to CUBIC.\r\n\r\n> b) does not consider adjusting dupack treshold to avoid further false rexmits,\r\n\r\nThat's an orthogonal loss recovery issue, and belongs in a separate document focused on loss recovery. For example, the RACK RFC covers this kind of issue. It doesn't make sense to put this in a CUBIC document, because the CUBIC document doesn't know whether \r\n\r\n> c) does not need to be prepared for a lying receiver that can easily make a fast rexmit to appear as a spurious rexmit, i.e., it is fine make it easy to fool the sender not to react to congestion at all?\r\n\r\nInteractions between lying receivers and the detection of spurious loss recovery episodes are a loss recovery issue, not a congestion control issue, and belong in a loss recovery document.\r\n\r\n\r\n> Sure, I am not objecting to specifying which variables need to be saved and\r\n>  restored in addition to those that the existing RFCs already do and what\r\n> is common to all CCs. But what I try to say is that this is the quite\r\n> trivial part of the cc response to spurious rexmit.\r\n\r\nMost of the issues you are bringing up are loss recovery issues, not congestion control issues, and should be in a separate document, IMHO. IMHO the 8312bis is a CC document, and should effectively say something like: \"if your loss detection algorithm detects that a previous loss inference was spurious, then the CUBIC CC response is X\".\r\n\r\n\r\n> a) the TCP sender blasts a full restored cwnd worth of unnecessary rexmits\r\n> at the bottleneck line speed,\r\n\r\nIf the loss recovery has been undone, the sender is not in a loss recovery state, and thus would not retransmit anything.\r\n\r\n> b) does not adjust RTO and RTO calculation to avoid further spurious RTOs,\r\n\r\nThat's an orthogonal loss recovery issue about how to adjust the RTO calculation based on an undo even, and belongs in a separate document focused on loss recovery. \r\n\r\n> c) executes UNDO even if it received the acceptable Ack with ECE,\r\n\r\nThat's an orthogonal loss recovery issue about whether undo should happen, and belongs in a separate document focused on loss recovery. \r\n\r\n\r\n",
+          "createdAt": "2021-10-18T14:03:02Z",
+          "updatedAt": "2021-10-18T14:03:02Z"
         }
       ]
     },
@@ -3598,7 +3647,7 @@
       "labels": [],
       "body": "[Markku Kojo said](https://mailarchive.ietf.org/arch/msg/tcpm/nd4Af8QRQMDkp_R_9ZQMkI4yGAc):\r\n> I regret to say that the discussion in Sec 5. brings up surprisingly little data to back up the claims that are made. Given the long deployment experience that is emphasised in the draft, there, however, is little evidence (measurement data) summarised and cited to back up the claims. \"There is a long deployment experience\" does not provide any evidence as such. There should be a lot of studies with measurement data accumulated over the years that would support the assertions in the doc. Or, is there?",
       "createdAt": "2021-08-31T10:48:59Z",
-      "updatedAt": "2021-10-16T08:19:30Z",
+      "updatedAt": "2021-10-18T17:40:07Z",
       "closedAt": null,
       "comments": [
         {
@@ -3635,6 +3684,20 @@
           "body": "If the site is on archive.org, we might be able to link to that?",
           "createdAt": "2021-10-16T08:19:30Z",
           "updatedAt": "2021-10-16T08:19:30Z"
+        },
+        {
+          "author": "sangtaeha",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@larseggert Indeed, I found those. While I read Markku's comment about \"There is a long deployment experience,\" I am not sure if there is better evidence than the fact CUBIC has been used in Linux for more than a decade and later Windows and macOS. While I am searching the measurement studies, there are too many papers to cite, which is not feasible, so I am adding a few references of mine and also a few recent studies.\r\n\r\n@lisongxu There are a lot of measurement studies including ours and we may cite a few of them if needed. \r\n\r\n- NS2 evaluation results, Dummynet testbed results, and internet evaluations\r\nhttps://web.archive.org/web/20161118125842/http://netsrv.csc.ncsu.edu/wiki/index.php/TCP_Testing\r\n\r\n- Dummet experiments w/ and w/o background traffic\r\nhttps://web.archive.org/web/20161103143537/http://netsrv.csc.ncsu.edu/highspeed/\r\n\r\n- CUBIC's stability experiments\r\nhttps://web.archive.org/web/20160122052654/http://netsrv.csc.ncsu.edu/convex-ordering/\r\n\r\n- Technical Report on evaluating TCP congestion control protocols \r\nhttps://netstech.org/asteppaper.htm\r\n\r\n- Internet evaluation of HyStart\r\nSangtae Ha and Injong Rhee, \u201cTaming the Elephants: New TCP Slow Start,\u201d Elsevier Computer Networks, vol. 55, no. 9, pp. 2092\u20132110, 2011.\r\n\r\n- Impact of background traffic to CUBIC and the other TCP congestion control protocols.\r\nSangtae Ha, Long Le, Injong Rhee, and Lisong Xu, \u201cImpact of Background Trac on Performance of High-Speed TCP Variant Protocols,\u201d Elsevier Computer Networks, vol. 15, no. 4, pp. 852\u2013865, 2007.\r\n\r\n- Stability analysis of CUBIC\r\nHan Cai, Do Young Eun, Sangtae Ha, Injong Rhee, and Lisong Xu, \u201cStochastic Convex Ordering for Multiplicative Decrease Internet Congestion Control,\u201d Elsevier Computer Networks, vol. 53, no. 3, pp. 365\u2013381, 2009. \r\n\r\n- Two recent measurement papers among many\r\nSalman Muhammad, Touseef Javed Chaudhery, Youngtae Noh, \"Study on Performance of AQM schemes over TCP Variants in Different Network Environments,\", IET Communications, Vol. 1(19), 2021.\r\nJ. Gomez, E. Kfoury, J. Crichigno, E. Bou-Harb and G. Srivastava, \"A Performance Evaluation of TCP BBRv2 Alpha,\" 2020 43rd International Conference on Telecommunications and Signal Processing (TSP), 2020, pp. 309-312",
+          "createdAt": "2021-10-18T16:39:42Z",
+          "updatedAt": "2021-10-18T16:39:42Z"
+        },
+        {
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "body": "Let's add some text about and references to some (or all) of those and assume the issue is addressed.",
+          "createdAt": "2021-10-18T17:40:07Z",
+          "updatedAt": "2021-10-18T17:40:07Z"
         }
       ]
     },
@@ -3690,7 +3753,7 @@
       "id": "MDU6SXNzdWU5ODM3MTkxOTc=",
       "title": "Sec 5.3",
       "url": "https://github.com/NTAP/rfc8312bis/issues/93",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "larseggert",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -3699,8 +3762,8 @@
       "labels": [],
       "body": "[Markku Kojo said](https://mailarchive.ietf.org/arch/msg/tcpm/nd4Af8QRQMDkp_R_9ZQMkI4yGAc):\r\n>Sec 5.3\r\n>\r\n>Any experimental data to summarize and cite?",
       "createdAt": "2021-08-31T10:49:58Z",
-      "updatedAt": "2021-10-11T07:25:43Z",
-      "closedAt": null,
+      "updatedAt": "2021-10-18T10:17:02Z",
+      "closedAt": "2021-10-18T10:17:02Z",
       "comments": [
         {
           "author": "larseggert",
@@ -3715,6 +3778,13 @@
           "body": "@lisongxu ping",
           "createdAt": "2021-10-11T07:25:43Z",
           "updatedAt": "2021-10-11T07:25:43Z"
+        },
+        {
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@markkukojo, sorry for the late response. This section/sentence \"\"CUBIC is designed to remedy the poor performance of Reno in fast and long-distance network\" is actually a summary of this document itself. \r\n\r\n@larseggert I would suggest closing this issue without any action. \r\n\r\nThanks",
+          "createdAt": "2021-10-17T21:58:43Z",
+          "updatedAt": "2021-10-17T21:58:43Z"
         }
       ]
     },
@@ -3845,7 +3915,7 @@
       "labels": [],
       "body": "[Markku Kojo said](https://mailarchive.ietf.org/arch/msg/tcpm/nd4Af8QRQMDkp_R_9ZQMkI4yGAc):\r\n>Sec 5.6\r\n>\r\n>Competing CUBIC flows will converge but it happens very slowly and requires a large amount of data to send, i.e., short flows are more unlikely to live long enough to converge. This seems to be case at least according to the results in original paper [HRX08, Fig 4 b].\r\nSummary and citing some performance data would be very useful and much more convincing.",
       "createdAt": "2021-08-31T10:51:06Z",
-      "updatedAt": "2021-10-12T00:00:48Z",
+      "updatedAt": "2021-10-17T22:09:50Z",
       "closedAt": null,
       "comments": [
         {
@@ -3882,6 +3952,13 @@
           "body": "Thanks for the update and apologies for the delay (not now able to do this as a day job :(\r\n\r\nThere is a number of claims in this para. Each of them calls for evidence, i.e., performance data to summarise and cite that shows this really is the case. Otherwise, these claims do not have much value.\r\n\r\nThe last sentence starting \"Generally\" is not quite true. Convergence happens in two directions: 1) for acquiring more capacity when such capacity becomes available, and 2) for relinquishing capacity when congestion is encountered (e.g., more flows join to share the common bottleneck.\r\nIn the latter case (case 2), CUBIC is significantly slower due to larger beta and therefore CUBIC actually is unfair against Reno. But, the last sentence discusses CUBIC vs. Reno which actually is not in scope in Sec 5.6. ",
           "createdAt": "2021-10-12T00:00:48Z",
           "updatedAt": "2021-10-12T00:00:48Z"
+        },
+        {
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Thanks, @markkukojo. We will add some citations related to the convergence of cubic. ",
+          "createdAt": "2021-10-17T22:09:50Z",
+          "updatedAt": "2021-10-17T22:09:50Z"
         }
       ]
     },
@@ -10271,24 +10348,26 @@
       "id": "PR_kwDOEpK-U84r1W8B",
       "title": "Rephrase text around algorithmic alternatives.",
       "url": "https://github.com/NTAP/rfc8312bis/pull/111",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "larseggert",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "Fixes #90.",
       "createdAt": "2021-09-16T11:59:26Z",
-      "updatedAt": "2021-10-16T07:39:04Z",
+      "updatedAt": "2021-10-18T10:17:31Z",
       "baseRepository": "NTAP/rfc8312bis",
       "baseRefName": "main",
       "baseRefOid": "e9231bf28b4f00618a47586890e8b305e574ad05",
       "headRepository": "NTAP/rfc8312bis",
       "headRefName": "downrefs",
       "headRefOid": "2363cdea378a411e3f060cc3e3c2e84b2056b238",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2021-10-18T10:17:26Z",
+      "mergedAt": "2021-10-18T10:17:26Z",
+      "mergedBy": "larseggert",
+      "mergeCommit": {
+        "oid": "3932f43e13cf100c050448d658bc492d3b476adc"
+      },
       "comments": [
         {
           "author": "sangtaeha",
@@ -10602,6 +10681,19 @@
           "body": "Looks good to me. Thanks!",
           "createdAt": "2021-10-16T07:39:04Z",
           "updatedAt": "2021-10-16T07:39:04Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOEpK-U84ulKub",
+          "commit": {
+            "abbreviatedOid": "2363cde"
+          },
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-10-17T22:07:27Z",
+          "updatedAt": "2021-10-17T22:07:27Z",
           "comments": []
         }
       ]
@@ -11879,13 +11971,13 @@
       "labels": [],
       "body": "closes #83.\r\n\r\nWill add the changelog soon.",
       "createdAt": "2021-10-15T07:56:44Z",
-      "updatedAt": "2021-10-16T06:47:20Z",
+      "updatedAt": "2021-10-18T21:32:59Z",
       "baseRepository": "NTAP/rfc8312bis",
       "baseRefName": "main",
       "baseRefOid": "b37f22460569982b546fa9a6331b52593a58e3a4",
       "headRepository": "goelvidhi/rfc8312bis",
       "headRefName": "lower-bound-cwnd",
-      "headRefOid": "6ddd381eba63b3d461df40ed3e7dc81f1443b8e7",
+      "headRefOid": "2ffa5a9986e47d3bec49ec883e18aea06f578b19",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -11932,6 +12024,20 @@
           "body": "> > @goelvidhi How do you think about the following change?\r\n> > After that, if there is a new congestion event, -> If congestion persists,\r\n> \r\n> Update the text.\r\n> \r\n> > Also we have to cite RFC5033, not RFC3168.\r\n> \r\n> The backoff using timer is described in RFC 3168 in Section 6.2, something like, `Therefore, the sending TCP MUST reset the retransmit timer on receiving the ECN-Echo packet when the congestion window is one.`\r\n> \r\n> That's why I referenced 3168. I didn't understand why we should reference 5033?\r\n\r\nI thought that is more specific to ECN. From RFC5033, I see a more general description. I think either way seems fine.\r\n\r\n 'For \"full backoff\", at some point the algorithm would reduce the\r\n       sending rate to one packet per round-trip time and then\r\n       exponentially backoff the time between single packet\r\n       transmissions if congestion persists.'",
           "createdAt": "2021-10-16T06:47:20Z",
           "updatedAt": "2021-10-16T06:47:20Z"
+        },
+        {
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> I thought that is more specific to ECN. From RFC5033, I see a more general description. I think either way seems fine.\r\n> \r\n> 'For \"full backoff\", at some point the algorithm would reduce the sending rate to one packet per round-trip time and then exponentially backoff the time between single packet transmissions if congestion persists.'\r\n\r\nOk, I added the \"full backoff\" requirement in the congestion collapse section. Please take a look.\r\n\r\n",
+          "createdAt": "2021-10-18T07:41:30Z",
+          "updatedAt": "2021-10-18T07:41:30Z"
+        },
+        {
+          "author": "markkukojo",
+          "authorAssociation": "COLLABORATOR",
+          "body": "This text is fine for ECN but there is slight misunderstanding here. Only when ECE arrives the cwnd has lower bound of 1 MSS. If it is loss event, then the original equation with lower bound of 2 MSS for both cwnd and ssthresh was correct. So, we need two separate branches here: one for loss-induced congestion event and another for ECE. And a correct RFC to cite for ECN operation is RFC 3168 as Vidhi originally had. RFC 5033 provides a generic requirement that both loss-based CC and ECN follow anyway (see below). \r\n\r\nThe rationale and explanation why it is different is as follows. RFC 5681 (and RFC 2581 earlier) is for loss-based CC and it requires that ssthresh is lower bounded to 2 MSS and cwnd is assigned the same value as ssthresh during fast recovery (i.e., cwnd is also lower bounded to 2 MSS for fast recovery). This is fine because if the sender is able to enter fast recovery it means that ack clock is running  and the sender is getting Acks ((DupAcks) so it is not necessary to reduce the send rate below 2 MSS. But when cwnd (==FlightSize) is 2 MSS and a segment is dropped (or both segments are dropped) a TCP sender \r\na) cannot get three dupacks and is forced to wait for an RTO that takes cwnd=1 MSS (and ssthresh has minimum of 2 MSS), or\r\nb) alternatively if limited transmit is in use and only one segment is dropped, the TCP sender effectively sends only one segment on the arrival of the 1st dupack and waits one RTT to get the 2nd dupack and waits yet another RTT to get the 3rd dupack that triggers fast rexmit&fast recovery. Now it is ok again to set lower bound of 2 MSS for cwnd when entering fast recovery because the sender effectively already reduced the sending rate to 1 MSS/RTT for at least one RTT (effectively for two RTTs) and was not forced to enter RTO recovery because ack clock was running.\r\n\r\nWhen ECN is in use things are different because when ECN is operating ideally a TCP sender will never see RTO, so it would never reach cwnd = 1 MSS if cwnd is lower bounded to 2 MSS (except in case we start with IW = 1 MSS and immediately receive ECE). Therefore, on ECE the cwnd must not be lower bounded to 2 MSS.",
+          "createdAt": "2021-10-18T21:29:12Z",
+          "updatedAt": "2021-10-18T21:29:12Z"
         }
       ],
       "reviews": [
@@ -11967,6 +12073,32 @@
           "createdAt": "2021-10-16T03:27:55Z",
           "updatedAt": "2021-10-16T03:27:55Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDOEpK-U84umi9j",
+          "commit": {
+            "abbreviatedOid": "96145d0"
+          },
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2021-10-18T10:12:45Z",
+          "updatedAt": "2021-10-18T10:15:19Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "```suggestion\r\na sender with a *cwnd* of 1 MSS needs to reduce\r\n```",
+              "createdAt": "2021-10-18T10:12:45Z",
+              "updatedAt": "2021-10-18T10:15:19Z"
+            },
+            {
+              "originalPosition": 34,
+              "body": "```suggestion\r\n{{!RFC5033}}. After reducing the sending rate to one packet per\r\nRTT, CUBIC then exponentially increases the transmission\r\ntimer for each packet retransmission while congestion persists.\r\n```",
+              "createdAt": "2021-10-18T10:15:06Z",
+              "updatedAt": "2021-10-18T10:15:19Z"
+            }
+          ]
         }
       ]
     }
