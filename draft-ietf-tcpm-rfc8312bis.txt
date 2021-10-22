@@ -7,12 +7,12 @@ Internet-Draft                                                       UNL
 Obsoletes: 8312 (if approved)                                      S. Ha
 Updates: 5681 (if approved)                                     Colorado
 Intended status: Standards Track                                 I. Rhee
-Expires: 21 April 2022                                            Bowery
+Expires: 25 April 2022                                            Bowery
                                                                  V. Goel
                                                               Apple Inc.
                                                           L. Eggert, Ed.
                                                                   NetApp
-                                                         18 October 2021
+                                                         22 October 2021
 
 
                CUBIC for Fast and Long-Distance Networks
@@ -72,7 +72,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 21 April 2022.
+   This Internet-Draft will expire on 25 April 2022.
 
 Copyright Notice
 
@@ -617,19 +617,29 @@ Table of Contents
    the multiplicative decrease factor used in [RFC5681] (and [RFC6675])
    during fast recovery.
 
-        ssthresh = cwnd * β         // new slow-start threshold
-                           cubic
+            cwnd * β            new slow-start threshold
+ssthresh =          cubic
 
-        ssthresh = max(ssthresh, 2) // threshold is at least 2 MSS
+            /max(ssthresh, 2)   reduction on packet loss, cwnd is at least 2 MSS
+            |
+cwnd =      <
+            |max(ssthresh, 1)   reduction on ECE, cwnd is at least 1 MSS
+            \
 
-
-                                    // window reduction
-        cwnd = ssthresh
+            max(ssthresh, 2)    ssthresh is at least 2 MSS
+ssthresh =
 
    A side effect of setting β__cubic_ to a value bigger than 0.5 is
    slower convergence.  We believe that while a more adaptive setting of
    β__cubic_ could result in faster convergence, it will make the
    analysis of CUBIC much harder.
+
+   Note that CUBIC will continue to reduce _cwnd_ in response to
+   congestion events due to ECN-Echo ACKs until it reaches a value of 1
+   MSS.  If congestion persists, a sender with a _cwnd_ of 1 MSS needs
+   to reduce its sending rate even further.  It can achieve that by
+   using a retransmission timer with exponential backoff, as described
+   in [RFC3168].
 
 4.7.  Fast Convergence
 
@@ -966,6 +976,12 @@ W    = <
    algorithm of Reno.  Thus, it does not modify the ACK clocking and
    timeout behaviors of Reno.
 
+   CUBIC also satisfies the "full backoff" requirement as described in
+   [RFC5033].  After reducing the sending rate to one packet per RTT in
+   response to congestion events due to ECN-Echo ACKs, CUBIC then
+   exponentially increases the transmission timer for each packet
+   retransmission while congestion persists.
+
 5.6.  Fairness within the Alternative Congestion Control Algorithm
 
    CUBIC ensures convergence of competing CUBIC flows with the same RTT
@@ -1274,6 +1290,9 @@ B.1.  Since draft-ietf-tcpm-rfc8312bis-04
 
    *  Clarify cwnd decrease during multiplicative decrease (#102
       (https://github.com/NTAP/rfc8312bis/issues/102))
+
+   *  Set lower bound of cwnd to 1 MSS and use retransmit timer
+      thereafter (#83 (https://github.com/NTAP/rfc8312bis/issues/83))
 
 B.2.  Since draft-ietf-tcpm-rfc8312bis-03
 
