@@ -222,19 +222,6 @@ html {
   --small-font-size: 14.5px;
   scrollbar-color: #bbb #eee;
 }
-@media (prefers-color-scheme: dark) {
-html {
-  --background-color: #121212;
-  --text-color: #f0f0f0;
-  --title-color: #fff;
-  --link-color: #4da4f0;
-  --highlight-color: #282828;
-  --line-color: #444;
-  --pilcrow-weak: #444;
-  --pilcrow-strong: #666;
-  scrollbar-color: #777 #333;
-}
-}
 body {
   max-width: 600px;
   margin: 75px auto;
@@ -453,17 +440,22 @@ figcaption, caption {
   text-align: left;
 }
 @media screen {
-  pre {
+  pre, svg {
     display: inline-block;
     overflow-x: auto;
+  }
+  pre {
     max-width: 100%;
     width: calc(100% - 22px - 1em);
+  }
+  svg {
+    max-width: calc(100% - 22px - 1em);
   }
   figure pre {
     display: block;
     width: calc(100% - 25px);
   }
-  pre + .pilcrow {
+  pre + .pilcrow, svg + .pilcrow {
     display: inline-block;
     vertical-align: text-bottom;
     padding-bottom: 8px;
@@ -477,9 +469,6 @@ aside, blockquote {
   font-style: italic;
 }
 blockquote {
-  background-color: var(--highlight-color);
-  border: 1px solid var(--line-color);
-  border-radius: 3px;
   margin: 1em 0;
 }
 cite {
@@ -1022,6 +1011,34 @@ address div.right {
   font-weight: bold;
   font-size: 0.9em;
 }
+
+/* Dark mode. */
+@media (prefers-color-scheme: dark) {
+html {
+  --background-color: #121212;
+  --text-color: #f0f0f0;
+  --title-color: #fff;
+  --link-color: #4da4f0;
+  --highlight-color: #282828;
+  --line-color: #444;
+  --pilcrow-weak: #444;
+  --pilcrow-strong: #666;
+  scrollbar-color: #777 #333;
+}
+/* Trick: a prefix match works because only black and white are allowed */
+svg [stroke="black"], svg [stroke^="#000"] {
+  stroke: var(--text-color);
+}
+svg [stroke="white"], svg [stroke^="#fff"] {
+  stroke: var(--background-color);
+}
+svg [fill="black"], svg [fill^="#000"], svg :not([fill]) {
+  fill: var(--text-color);
+}
+svg [stroke="fill"], svg [fill^="#fff"] {
+  fill: var(--background-color);
+}
+}
 </style>
 
 </head>
@@ -1034,7 +1051,7 @@ address div.right {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Xu, et al.</td>
-<td class="center">Expires 18 April 2022</td>
+<td class="center">Expires 25 April 2022</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1053,12 +1070,12 @@ address div.right {
 <a href="https://datatracker.ietf.org/doc/html/rfc5681" class="eref">5681</a> (if approved)</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2021-10-15" class="published">15 October 2021</time>
+<time datetime="2021-10-22" class="published">22 October 2021</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2022-04-18">18 April 2022</time></dd>
+<dd class="expires"><time datetime="2022-04-25">25 April 2022</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1144,7 +1161,7 @@ do this.<a href="#section-note.2-3" class="pilcrow">¶</a></p>
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 18 April 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 25 April 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -2550,7 +2567,7 @@ is different from the multiplicative decrease factor used in <span>[<a href="#RF
 (and <span>[<a href="#RFC6675" class="xref">RFC6675</a>]</span>) during fast recovery.<a href="#section-4.6-1" class="pilcrow">¶</a></p>
 <div id="section-4.6-2">
           <div class="alignCenter art-svg artwork" id="section-4.6-2.1">
-<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="9.509ex" role="img" viewBox="0 -2298.3 24417.8 4094.3" width="56.712ex">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="12.843ex" role="img" viewBox="0 -3015.9 34501.8 5529.4" width="80.133ex">
               <defs>
                 <path d="M390 441l-24 -146h-15c0 64 -36 120 -92 120c-25 0 -51 -17 -51 -58c0 -55 134 -147 134 -242c0 -62 -48 -125 -135 -125c-34 0 -98 20 -110 20c-9 0 -18 -4 -30 -21h-17l25 156h16c0 -63 41 -130 104 -130c59 0 73 50 73 89c0 82 -130 132 -130 230c0 79 59 107 114 107 c43 0 63 -20 92 -20c11 0 22 10 30 20h16Z" id="E1-STIXWEBNORMALI-1D460" stroke-width="1"></path>
                 <path d="M283 438l-10 -38h-70l-78 -320c-1 -3 -2 -8 -2 -11c0 -6 3 -12 16 -12c0 0 23 2 60 52l13 -11c-24 -31 -74 -107 -133 -107c-31 0 -39 25 -39 52c0 13 2 26 5 37l81 320h-77l5 29c75 14 136 51 177 138h13l-31 -129h70Z" id="E1-STIXWEBNORMALI-1D461" stroke-width="1"></path>
@@ -2567,7 +2584,6 @@ is different from the multiplicative decrease factor used in <span>[<a href="#RF
                 <path d="M444 428l-89 -348c-1 -4 -1 -6 -1 -9c0 -8 4 -14 14 -14c21 0 40 26 57 46l5 6l13 -11c-23 -33 -74 -107 -132 -107c-29 0 -40 19 -40 52c0 9 1 25 4 37l26 95h-1c-7 -5 -97 -126 -137 -156c-23 -17 -49 -28 -72 -28c-47 0 -61 36 -61 74c0 21 3 40 8 59l59 231 c4 15 6 21 6 25c0 12 -11 23 -33 23c-7 0 -19 -1 -26 -3l-3 15l157 26l-84 -326c-2 -9 -3 -16 -3 -24c0 -21 8 -34 26 -34c25 0 65 31 100 77c43 57 89 146 109 219l21 75h77Z" id="E1-STIXWEBNORMALI-1D462" stroke-width="1"></path>
                 <path d="M214 382l4 -4c33 32 72 63 121 63c70 0 111 -69 111 -151c0 -121 -109 -301 -266 -301c-53 0 -94 18 -139 48l144 563c1 4 2 8 2 11c-1 13 -16 21 -29 21c-10 0 -22 -1 -30 -4l-3 16l158 24zM179 252l-55 -215c0 -7 32 -19 55 -19c122 0 188 174 188 276 c0 70 -38 92 -71 92c-72 0 -106 -89 -117 -134Z" id="E1-STIXWEBNORMALI-1D44F" stroke-width="1"></path>
                 <path d="M257 566c0 -26 -22 -46 -48 -46c-29 0 -48 20 -48 46c0 25 19 50 48 50c26 0 48 -25 48 -50zM227 441l-92 -364c-1 -6 -1 -10 -1 -14c0 -7 6 -10 13 -10c22 0 28 12 64 51l13 -10c-35 -45 -85 -105 -134 -105c-28 0 -40 19 -40 46c0 12 0 31 79 338c1 2 2 9 2 12 c0 17 -8 22 -31 22c-9 0 -21 -2 -28 -4l-3 16Z" id="E1-STIXWEBNORMALI-1D456" stroke-width="1"></path>
-                <path d="M287 676l-228 -690h-68l229 690h67Z" id="E1-STIXWEBMAIN-2F" stroke-width="1"></path>
                 <path d="M485 0h-208l1 15c50 4 62 24 62 90v199c0 71 -24 101 -73 101c-33 0 -57 -12 -103 -57v-276c0 -39 14 -53 65 -57v-15h-211v15c51 4 62 20 62 79v243c0 49 -7 65 -35 65c-11 0 -22 -1 -29 -4v17c55 16 88 27 137 45l8 -3v-78h1c52 59 98 81 144 81c76 0 118 -55 118 -154 v-221c0 -54 12 -65 61 -70v-15Z" id="E1-STIXWEBMAIN-6E" stroke-width="1"></path>
                 <path d="M408 164l16 -7c-39 -109 -109 -167 -209 -167c-118 0 -190 89 -190 227c0 141 81 243 207 243c62 0 107 -24 139 -69c20 -28 30 -60 34 -114h-308c5 -76 10 -115 46 -163c28 -37 65 -55 111 -55c67 0 105 31 154 105zM99 309h204c-11 81 -32 115 -98 115 c-56 0 -95 -40 -106 -115Z" id="E1-STIXWEBMAIN-65" stroke-width="1"></path>
                 <path d="M694 450v-15c-20 -7 -25 -14 -41 -54l-138 -346c-16 -40 -21 -49 -28 -49s-9 5 -24 43l-91 236l-112 -240c-12 -26 -20 -39 -25 -39c-6 0 -14 13 -26 44l-135 342c-21 54 -30 61 -53 63v15h180v-15c-35 -4 -46 -12 -46 -33c0 -10 2 -20 6 -30l99 -261l91 199l-20 56 c-19 54 -32 65 -69 69v15h203v-15c-47 -7 -58 -14 -58 -35c0 -17 5 -29 17 -60l84 -224l90 222c11 27 17 51 17 67s-10 23 -44 30v15h123Z" id="E1-STIXWEBMAIN-77" stroke-width="1"></path>
@@ -2580,22 +2596,29 @@ is different from the multiplicative decrease factor used in <span>[<a href="#RF
                 <path d="M160 458v-92c50 72 78 94 120 94c34 0 55 -20 55 -53c0 -28 -15 -45 -39 -45c-13 0 -24 5 -40 20c-11 10 -20 15 -26 15c-28 0 -70 -50 -70 -82v-225c0 -57 17 -72 85 -75v-15h-240v15c64 12 71 19 71 69v250c0 44 -9 60 -34 60c-12 0 -21 -1 -35 -4v16 c59 19 95 33 148 54Z" id="E1-STIXWEBMAIN-72" stroke-width="1"></path>
                 <path d="M487 0h-212v15c58 6 68 18 68 87v198c0 70 -25 106 -74 106c-40 0 -70 -17 -112 -63v-241c0 -69 10 -81 68 -87v-15h-216v15c58 8 64 17 64 87v471c0 43 -8 51 -51 51c-4 0 -9 0 -12 -1v16l27 8c57 17 80 24 115 36l5 -3v-304c46 60 88 84 147 84c82 0 123 -54 123 -159 v-199c0 -69 6 -77 60 -87v-15Z" id="E1-STIXWEBMAIN-68" stroke-width="1"></path>
                 <path d="M491 42l-147 -52l-4 3v64c-34 -47 -72 -67 -128 -67c-111 0 -185 87 -185 215c0 142 93 255 208 255c40 0 67 -11 105 -43v156c0 41 -9 51 -46 51c-8 0 -14 0 -22 -1v16c64 17 99 27 147 44l5 -2v-567c0 -46 8 -57 44 -57c5 0 6 0 23 1v-16zM340 102v230 c0 53 -48 100 -102 100c-76 0 -125 -74 -125 -187c0 -123 54 -203 138 -203c31 0 56 11 74 32c9 10 15 21 15 28Z" id="E1-STIXWEBMAIN-64" stroke-width="1"></path>
+                <path d="M350 -170v-11c-67 1 -93 7 -121 25s-44 59 -44 115v177c0 69 -18 93 -85 114c67 20 85 43 85 113v178c0 57 15 96 44 114s55 24 121 25v-11c-69 -18 -91 -48 -91 -123v-168c0 -83 -19 -109 -94 -129c75 -19 94 -45 94 -128v-168c0 -75 22 -105 91 -123Z" id="E1-STIXWEBMAIN-7B" stroke-width="1"></path>
                 <path d="M775 0h-218v15c56 6 65 17 65 75v206c0 79 -20 112 -77 112c-47 0 -77 -18 -107 -61v-252c0 -65 15 -79 72 -80v-15h-224v15c57 4 68 10 68 71v211c0 69 -22 111 -65 111c-37 0 -86 -19 -106 -43c-7 -8 -13 -15 -13 -17v-278c0 -43 15 -53 68 -55v-15h-222v15 c56 1 70 15 70 73v248c0 49 -9 66 -35 66c-11 0 -19 -1 -32 -4v17c55 15 88 26 139 45l8 -3v-74h2c66 68 108 77 153 77c54 0 88 -27 106 -84c54 58 105 84 163 84c81 0 116 -62 116 -180v-203c0 -45 13 -58 43 -60l26 -2v-15Z" id="E1-STIXWEBMAIN-6D" stroke-width="1"></path>
                 <path d="M479 0h-201v15c33 2 40 6 40 24c0 7 -2 12 -6 18l-91 140l-79 -123c-14 -22 -20 -34 -20 -41c0 -13 11 -18 40 -18v-15h-145v15c33 3 45 10 73 51l114 165l-94 144c-31 47 -47 60 -77 60h-9v15h207v-15c-30 -1 -43 -7 -43 -22c0 -13 17 -46 46 -89c5 -7 10 -13 14 -20 c10 13 20 29 30 44c22 35 37 53 37 65c0 14 -10 20 -40 22v15h158v-15c-32 -1 -62 -17 -81 -44l-83 -120l128 -196c28 -43 51 -60 82 -60v-15Z" id="E1-STIXWEBMAIN-78" stroke-width="1"></path>
                 <path d="M304 -161l-12 -16c-158 90 -244 259 -244 429c0 185 87 329 247 424l9 -16c-139 -119 -170 -212 -170 -405c0 -186 30 -299 170 -416Z" id="E1-STIXWEBMAIN-28" stroke-width="1"></path>
                 <path d="M83 -141l-10 19c55 37 83 74 83 107c0 7 -6 13 -14 13s-18 -4 -29 -4c-37 0 -58 17 -58 51s24 57 60 57c45 0 80 -35 80 -87c0 -60 -43 -123 -112 -156Z" id="E1-STIXWEBMAIN-2C" stroke-width="1"></path>
                 <path d="M474 137l-54 -137h-391v12l178 189c94 99 130 175 130 260c0 91 -54 141 -139 141c-72 0 -107 -32 -147 -130l-21 5c21 117 85 199 208 199c113 0 185 -77 185 -176c0 -79 -39 -154 -128 -248l-165 -176h234c42 0 63 11 96 67Z" id="E1-STIXWEBMAIN-32" stroke-width="1"></path>
                 <path d="M29 660l12 16c153 -92 244 -259 244 -429c0 -185 -88 -327 -247 -424l-9 16c142 117 170 211 170 405c0 187 -25 302 -170 416Z" id="E1-STIXWEBMAIN-29" stroke-width="1"></path>
-                <path d="M180 632c0 -29 -22 -51 -52 -51c-28 0 -50 22 -50 51c0 28 23 51 51 51c29 0 51 -23 51 -51zM253 0h-237v15c69 4 79 13 79 89v227c0 47 -8 63 -33 63c-9 0 -24 0 -42 -5v16l155 55l4 -4v-351c0 -74 8 -85 74 -90v-15Z" id="E1-STIXWEBMAIN-69" stroke-width="1"></path>
-                <path d="M864 0h-280v19c79 5 90 21 90 104v449l-255 -572h-14l-252 549v-398c0 -110 16 -128 93 -132v-19h-234v19c83 6 97 20 97 132v398c0 76 -13 89 -95 94v19h198l231 -502l221 502h199v-19c-72 -1 -87 -18 -87 -93v-438c0 -71 15 -88 88 -93v-19Z" id="E1-STIXWEBMAIN-4D" stroke-width="1"></path>
-                <path d="M469 463h-25c-12 44 -23 70 -41 94c-35 45 -85 78 -145 78c-62 0 -101 -40 -101 -95c0 -68 74 -110 179 -171c106 -62 155 -120 155 -196c0 -112 -88 -187 -204 -187c-42 0 -81 7 -118 23c-19 8 -36 11 -47 11c-15 0 -28 -12 -28 -33h-22l-29 212h22 c46 -121 111 -177 206 -177c70 0 119 46 119 112c0 35 -10 58 -29 79c-35 38 -104 82 -168 116c-90 48 -122 110 -122 172c0 109 75 175 174 175c41 0 67 -6 105 -22c18 -8 34 -12 44 -12c17 0 28 12 32 34h21Z" id="E1-STIXWEBMAIN-53" stroke-width="1"></path>
+                <path d="M394 0h-276v15c74 4 95 25 95 80v449c0 34 -9 49 -30 49c-10 0 -27 -5 -45 -12l-27 -10v14l179 91l9 -3v-597c0 -43 20 -61 95 -61v-15Z" id="E1-STIXWEBMAIN-31" stroke-width="1"></path>
+                <path d="M717 -350v-44c-216 30 -358 196 -358 551v337c0 119 -69 294 -216 319v44c147 25 216 200 216 319v347c0 354 142 512 358 543v-44c-177 -57 -255 -185 -255 -346c0 -78 12 -187 12 -244v-163c0 -197 -61 -349 -248 -432v-2c187 -84 248 -238 248 -434v-157 c0 -64 -12 -136 -12 -208c0 -166 66 -322 255 -386Z" id="E1-STIXWEBSIZE3-7B" stroke-width="1"></path>
                 <path d="M480 50v-14c-51 -14 -87 -25 -137 -45l-5 3v82h-2c-49 -67 -106 -86 -143 -86c-77 0 -122 51 -122 128v251c0 50 -14 64 -62 67v14h146v-323c0 -46 32 -79 71 -79c29 0 59 9 84 31c16 14 23 23 23 58v231c0 53 -14 61 -74 65v17h158v-343c0 -46 11 -57 57 -57h6Z" id="E1-STIXWEBMAIN-75" stroke-width="1"></path>
                 <path d="M398 156l14 -9c-32 -62 -52 -91 -82 -115c-34 -28 -72 -42 -115 -42c-111 0 -190 93 -190 222c0 83 30 152 84 197c40 33 88 51 135 51c84 0 154 -47 154 -103c0 -23 -21 -42 -47 -42c-22 0 -40 17 -48 46l-6 22c-10 37 -23 48 -59 48c-81 0 -136 -70 -136 -174 c0 -115 63 -195 155 -195c57 0 93 24 141 94Z" id="E1-STIXWEBMAIN-63" stroke-width="1"></path>
+                <path d="M180 632c0 -29 -22 -51 -52 -51c-28 0 -50 22 -50 51c0 28 23 51 51 51c29 0 51 -23 51 -51zM253 0h-237v15c69 4 79 13 79 89v227c0 47 -8 63 -33 63c-9 0 -24 0 -42 -5v16l155 55l4 -4v-351c0 -74 8 -85 74 -90v-15Z" id="E1-STIXWEBMAIN-69" stroke-width="1"></path>
+                <path d="M159 458v-77c44 55 88 79 144 79c97 0 167 -89 167 -213c0 -145 -91 -257 -210 -257c-42 0 -65 10 -101 43v-157c0 -63 13 -74 88 -75v-18h-242v17c59 6 70 17 70 69v468c0 47 -7 57 -41 57c-9 0 -16 0 -25 -1v16c55 17 91 30 144 51zM159 334v-246c0 -30 57 -66 104 -66 c72 0 121 75 121 185c0 117 -49 193 -123 193c-46 0 -102 -36 -102 -66Z" id="E1-STIXWEBMAIN-70" stroke-width="1"></path>
+                <path d="M505 0h-218v15h19c12 0 21 6 21 15c0 5 -3 13 -11 23l-150 198v-184c0 -35 15 -49 55 -51l20 -1v-15h-234v15c72 12 75 15 75 67v482c0 48 -9 61 -43 61c-10 0 -19 -1 -32 -2v16l30 8c60 16 86 24 125 36l4 -2v-420l137 122c14 13 23 26 23 35c0 13 -11 17 -50 18v14h204 v-15c-64 0 -93 -12 -216 -126l-29 -27l153 -194c41 -52 73 -70 117 -73v-15Z" id="E1-STIXWEBMAIN-6B" stroke-width="1"></path>
+                <path d="M864 0h-280v19c79 5 90 21 90 104v449l-255 -572h-14l-252 549v-398c0 -110 16 -128 93 -132v-19h-234v19c83 6 97 20 97 132v398c0 76 -13 89 -95 94v19h198l231 -502l221 502h199v-19c-72 -1 -87 -18 -87 -93v-438c0 -71 15 -88 88 -93v-19Z" id="E1-STIXWEBMAIN-4D" stroke-width="1"></path>
+                <path d="M469 463h-25c-12 44 -23 70 -41 94c-35 45 -85 78 -145 78c-62 0 -101 -40 -101 -95c0 -68 74 -110 179 -171c106 -62 155 -120 155 -196c0 -112 -88 -187 -204 -187c-42 0 -81 7 -118 23c-19 8 -36 11 -47 11c-15 0 -28 -12 -28 -33h-22l-29 212h22 c46 -121 111 -177 206 -177c70 0 119 46 119 112c0 35 -10 58 -29 79c-35 38 -104 82 -168 116c-90 48 -122 110 -122 172c0 109 75 175 174 175c41 0 67 -6 105 -22c18 -8 34 -12 44 -12c17 0 28 12 32 34h21Z" id="E1-STIXWEBMAIN-53" stroke-width="1"></path>
+                <path d="M597 169l-46 -169h-539v19c77 5 87 18 87 95v436c0 74 -12 89 -87 93v19h530l4 -143h-25c-15 90 -38 105 -154 105h-131c-28 0 -35 -4 -35 -36v-220h151c86 0 101 17 113 96h23v-234h-23c-12 84 -27 97 -113 97h-151v-243c0 -42 27 -47 101 -47h36c143 0 186 26 231 132 h28Z" id="E1-STIXWEBMAIN-45" stroke-width="1"></path>
+                <path d="M614 131l19 -18c-58 -83 -155 -127 -273 -127c-91 0 -178 32 -236 89c-61 60 -96 151 -96 250c0 100 33 183 90 247c64 71 150 104 243 104c39 0 79 -4 119 -15c21 -6 52 -18 69 -18c19 0 36 12 42 33h20l9 -227h-23c-12 55 -27 84 -52 111c-44 47 -96 76 -161 76 c-151 0 -240 -122 -240 -295c0 -110 25 -188 72 -239c44 -47 109 -72 178 -72c90 0 145 30 220 101Z" id="E1-STIXWEBMAIN-43" stroke-width="1"></path>
               </defs>
               <g fill="black" stroke="currentColor" stroke-width="0" transform="matrix(1 0 0 -1 0 0)">
                 <g transform="translate(167,0)">
                   <g transform="translate(-11,0)">
-                    <g transform="translate(0,1380)">
+                    <g transform="translate(0,2111)">
                       <use xlink:href="#E1-STIXWEBNORMALI-1D460" x="0" y="0"></use>
                       <use xlink:href="#E1-STIXWEBNORMALI-1D460" x="440" y="0"></use>
                       <use xlink:href="#E1-STIXWEBNORMALI-1D461" x="881" y="0"></use>
@@ -2605,12 +2628,34 @@ is different from the multiplicative decrease factor used in <span>[<a href="#RF
                       <use xlink:href="#E1-STIXWEBNORMALI-1D460" x="2562" y="0"></use>
                       <use xlink:href="#E1-STIXWEBNORMALI-210E" x="3002" y="0"></use>
                       <use xlink:href="#E1-STIXWEBMAIN-3D" x="3793" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBNORMALI-1D450" x="4757" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBNORMALI-1D464" x="5172" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBNORMALI-1D45B" x="5948" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBNORMALI-1D451" x="6445" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-2217" x="7200" y="0"></use>
-                      <g transform="translate(7946,0)">
+                    </g>
+                    <g transform="translate(0,-31)">
+                      <use xlink:href="#E1-STIXWEBNORMALI-1D450" x="0" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBNORMALI-1D464" x="415" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBNORMALI-1D45B" x="1191" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBNORMALI-1D451" x="1688" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-3D" x="2498" y="0"></use>
+                    </g>
+                    <g transform="translate(0,-2212)">
+                      <use xlink:href="#E1-STIXWEBNORMALI-1D460" x="0" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBNORMALI-1D460" x="440" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBNORMALI-1D461" x="881" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBNORMALI-210E" x="1194" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBNORMALI-1D45F" x="1708" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBNORMALI-1D452" x="2116" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBNORMALI-1D460" x="2562" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBNORMALI-210E" x="3002" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-3D" x="3793" y="0"></use>
+                    </g>
+                  </g>
+                  <g transform="translate(5468,0)">
+                    <g transform="translate(0,2111)">
+                      <use xlink:href="#E1-STIXWEBNORMALI-1D450" x="0" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBNORMALI-1D464" x="415" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBNORMALI-1D45B" x="1191" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBNORMALI-1D451" x="1688" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-2217" x="2443" y="0"></use>
+                      <g transform="translate(3188,0)">
                         <use xlink:href="#E1-STIXWEBMAIN-3B2" x="0" y="0"></use>
                         <g transform="translate(496,-254)">
                           <use xlink:href="#E1-STIXWEBNORMALI-1D450" transform="scale(0.707)" x="0" y="0"></use>
@@ -2621,7 +2666,176 @@ is different from the multiplicative decrease factor used in <span>[<a href="#RF
                         </g>
                       </g>
                     </g>
-                    <g transform="translate(0,-81)">
+                    <g transform="translate(0,-31)">
+                      <use xlink:href="#E1-STIXWEBSIZE3-7B" x="0" y="-586"></use>
+                      <g transform="translate(1073,0)">
+                        <g transform="translate(-11,0)">
+                          <g transform="translate(0,650)">
+                            <use xlink:href="#E1-STIXWEBMAIN-6D" x="0" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-61" x="778" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-78" x="1223" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-28" x="1723" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBNORMALI-1D460" x="2057" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBNORMALI-1D460" x="2497" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBNORMALI-1D461" x="2938" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBNORMALI-210E" x="3251" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBNORMALI-1D45F" x="3765" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBNORMALI-1D452" x="4173" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBNORMALI-1D460" x="4619" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBNORMALI-210E" x="5059" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-2C" x="5573" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-32" x="5990" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-29" x="6490" y="0"></use>
+                          </g>
+                          <g transform="translate(0,-750)">
+                            <use xlink:href="#E1-STIXWEBMAIN-6D" x="0" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-61" x="778" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-78" x="1223" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-28" x="1723" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBNORMALI-1D460" x="2057" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBNORMALI-1D460" x="2497" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBNORMALI-1D461" x="2938" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBNORMALI-210E" x="3251" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBNORMALI-1D45F" x="3765" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBNORMALI-1D452" x="4173" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBNORMALI-1D460" x="4619" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBNORMALI-210E" x="5059" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-2C" x="5573" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-31" x="5990" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-29" x="6490" y="0"></use>
+                          </g>
+                        </g>
+                      </g>
+                    </g>
+                    <g transform="translate(0,-2212)">
+                      <use xlink:href="#E1-STIXWEBMAIN-6D" x="0" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-61" x="778" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-78" x="1223" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-28" x="1723" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBNORMALI-1D460" x="2057" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBNORMALI-1D460" x="2497" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBNORMALI-1D461" x="2938" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBNORMALI-210E" x="3251" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBNORMALI-1D45F" x="3765" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBNORMALI-1D452" x="4173" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBNORMALI-1D460" x="4619" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBNORMALI-210E" x="5059" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-2C" x="5573" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-32" x="5990" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-29" x="6490" y="0"></use>
+                    </g>
+                  </g>
+                  <g transform="translate(14523,0)">
+                    <g transform="translate(0,2111)">
+                      <use xlink:href="#E1-STIXWEBMAIN-6E"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-65" x="500" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-77" x="945" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-73" x="1917" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-6C" x="2307" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-6F" x="2585" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-77" x="3086" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-2D" x="3808" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-73" x="4142" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-74" x="4531" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-61" x="4810" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-72" x="5254" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-74" x="5588" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-74" x="6116" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-68" x="6395" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-72" x="6895" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-65" x="7229" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-73" x="7673" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-68" x="8063" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-6F" x="8563" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-6C" x="9064" y="0"></use>
+                      <use xlink:href="#E1-STIXWEBMAIN-64" x="9342" y="0"></use>
+                    </g>
+                    <g transform="translate(0,-31)">
+                      <g transform="translate(167,0)">
+                        <g transform="translate(-11,0)">
+                          <g transform="translate(0,659)">
+                            <use xlink:href="#E1-STIXWEBMAIN-72"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-65" x="333" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-64" x="778" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-75" x="1278" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-63" x="1779" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-74" x="2223" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-69" x="2502" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-6F" x="2780" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-6E" x="3281" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-6F" x="4031" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-6E" x="4532" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-70" x="5282" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-61" x="5783" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-63" x="6227" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-6B" x="6672" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-65" x="7172" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-74" x="7617" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-6C" x="8145" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-6F" x="8424" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-73" x="8924" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-73" x="9314" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-2C" x="9703" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBNORMALI-1D450" x="10120" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBNORMALI-1D464" x="10536" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBNORMALI-1D45B" x="11311" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBNORMALI-1D451" x="11809" y="0"></use>
+                            <g transform="translate(12341,0)">
+                              <use xlink:href="#E1-STIXWEBMAIN-69" x="250" y="0"></use>
+                              <use xlink:href="#E1-STIXWEBMAIN-73" x="528" y="0"></use>
+                              <use xlink:href="#E1-STIXWEBMAIN-61" x="1168" y="0"></use>
+                              <use xlink:href="#E1-STIXWEBMAIN-74" x="1612" y="0"></use>
+                              <use xlink:href="#E1-STIXWEBMAIN-6C" x="2141" y="0"></use>
+                              <use xlink:href="#E1-STIXWEBMAIN-65" x="2419" y="0"></use>
+                              <use xlink:href="#E1-STIXWEBMAIN-61" x="2864" y="0"></use>
+                              <use xlink:href="#E1-STIXWEBMAIN-73" x="3308" y="0"></use>
+                              <use xlink:href="#E1-STIXWEBMAIN-74" x="3698" y="0"></use>
+                              <use xlink:href="#E1-STIXWEBMAIN-32" x="4226" y="0"></use>
+                              <use xlink:href="#E1-STIXWEBMAIN-4D" x="4977" y="0"></use>
+                              <use xlink:href="#E1-STIXWEBMAIN-53" x="5866" y="0"></use>
+                              <use xlink:href="#E1-STIXWEBMAIN-53" x="6423" y="0"></use>
+                            </g>
+                          </g>
+                          <g transform="translate(0,-759)">
+                            <use xlink:href="#E1-STIXWEBMAIN-72"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-65" x="333" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-64" x="778" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-75" x="1278" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-63" x="1779" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-74" x="2223" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-69" x="2502" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-6F" x="2780" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-6E" x="3281" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-6F" x="4031" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-6E" x="4532" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-45" x="5282" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-43" x="5894" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-45" x="6561" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBMAIN-2C" x="7173" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBNORMALI-1D450" x="7590" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBNORMALI-1D464" x="8005" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBNORMALI-1D45B" x="8781" y="0"></use>
+                            <use xlink:href="#E1-STIXWEBNORMALI-1D451" x="9278" y="0"></use>
+                            <g transform="translate(9811,0)">
+                              <use xlink:href="#E1-STIXWEBMAIN-69" x="250" y="0"></use>
+                              <use xlink:href="#E1-STIXWEBMAIN-73" x="528" y="0"></use>
+                              <use xlink:href="#E1-STIXWEBMAIN-61" x="1168" y="0"></use>
+                              <use xlink:href="#E1-STIXWEBMAIN-74" x="1612" y="0"></use>
+                              <use xlink:href="#E1-STIXWEBMAIN-6C" x="2141" y="0"></use>
+                              <use xlink:href="#E1-STIXWEBMAIN-65" x="2419" y="0"></use>
+                              <use xlink:href="#E1-STIXWEBMAIN-61" x="2864" y="0"></use>
+                              <use xlink:href="#E1-STIXWEBMAIN-73" x="3308" y="0"></use>
+                              <use xlink:href="#E1-STIXWEBMAIN-74" x="3698" y="0"></use>
+                              <use xlink:href="#E1-STIXWEBMAIN-31" x="4226" y="0"></use>
+                              <use xlink:href="#E1-STIXWEBMAIN-4D" x="4977" y="0"></use>
+                              <use xlink:href="#E1-STIXWEBMAIN-53" x="5866" y="0"></use>
+                              <use xlink:href="#E1-STIXWEBMAIN-53" x="6423" y="0"></use>
+                            </g>
+                          </g>
+                        </g>
+                      </g>
+                    </g>
+                    <g transform="translate(0,-2212)">
                       <use xlink:href="#E1-STIXWEBNORMALI-1D460" x="0" y="0"></use>
                       <use xlink:href="#E1-STIXWEBNORMALI-1D460" x="440" y="0"></use>
                       <use xlink:href="#E1-STIXWEBNORMALI-1D461" x="881" y="0"></use>
@@ -2630,112 +2844,21 @@ is different from the multiplicative decrease factor used in <span>[<a href="#RF
                       <use xlink:href="#E1-STIXWEBNORMALI-1D452" x="2116" y="0"></use>
                       <use xlink:href="#E1-STIXWEBNORMALI-1D460" x="2562" y="0"></use>
                       <use xlink:href="#E1-STIXWEBNORMALI-210E" x="3002" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-3D" x="3793" y="0"></use>
-                      <g transform="translate(4757,0)">
-                        <use xlink:href="#E1-STIXWEBMAIN-6D" x="0" y="0"></use>
-                        <use xlink:href="#E1-STIXWEBMAIN-61" x="778" y="0"></use>
-                        <use xlink:href="#E1-STIXWEBMAIN-78" x="1223" y="0"></use>
+                      <g transform="translate(3516,0)">
+                        <use xlink:href="#E1-STIXWEBMAIN-69" x="250" y="0"></use>
+                        <use xlink:href="#E1-STIXWEBMAIN-73" x="528" y="0"></use>
+                        <use xlink:href="#E1-STIXWEBMAIN-61" x="1168" y="0"></use>
+                        <use xlink:href="#E1-STIXWEBMAIN-74" x="1612" y="0"></use>
+                        <use xlink:href="#E1-STIXWEBMAIN-6C" x="2141" y="0"></use>
+                        <use xlink:href="#E1-STIXWEBMAIN-65" x="2419" y="0"></use>
+                        <use xlink:href="#E1-STIXWEBMAIN-61" x="2864" y="0"></use>
+                        <use xlink:href="#E1-STIXWEBMAIN-73" x="3308" y="0"></use>
+                        <use xlink:href="#E1-STIXWEBMAIN-74" x="3698" y="0"></use>
+                        <use xlink:href="#E1-STIXWEBMAIN-32" x="4226" y="0"></use>
+                        <use xlink:href="#E1-STIXWEBMAIN-4D" x="4977" y="0"></use>
+                        <use xlink:href="#E1-STIXWEBMAIN-53" x="5866" y="0"></use>
+                        <use xlink:href="#E1-STIXWEBMAIN-53" x="6423" y="0"></use>
                       </g>
-                      <use xlink:href="#E1-STIXWEBMAIN-28" x="6480" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBNORMALI-1D460" x="6814" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBNORMALI-1D460" x="7254" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBNORMALI-1D461" x="7695" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBNORMALI-210E" x="8008" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBNORMALI-1D45F" x="8522" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBNORMALI-1D452" x="8930" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBNORMALI-1D460" x="9376" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBNORMALI-210E" x="9816" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-2C" x="10330" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-32" x="10747" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-29" x="11247" y="0"></use>
-                    </g>
-                    <g transform="translate(0,-1481)">
-                      <use xlink:href="#E1-STIXWEBNORMALI-1D450" x="0" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBNORMALI-1D464" x="415" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBNORMALI-1D45B" x="1191" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBNORMALI-1D451" x="1688" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-3D" x="2498" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBNORMALI-1D460" x="3462" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBNORMALI-1D460" x="3902" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBNORMALI-1D461" x="4343" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBNORMALI-210E" x="4656" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBNORMALI-1D45F" x="5170" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBNORMALI-1D452" x="5578" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBNORMALI-1D460" x="6024" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBNORMALI-210E" x="6464" y="0"></use>
-                    </g>
-                  </g>
-                  <g transform="translate(12570,0)">
-                    <g transform="translate(0,1380)">
-                      <use xlink:href="#E1-STIXWEBMAIN-2F"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-2F" x="278" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-6E" x="807" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-65" x="1307" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-77" x="1752" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-73" x="2724" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-6C" x="3114" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-6F" x="3392" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-77" x="3893" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-2D" x="4615" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-73" x="4949" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-74" x="5338" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-61" x="5617" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-72" x="6061" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-74" x="6395" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-74" x="6923" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-68" x="7202" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-72" x="7702" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-65" x="8036" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-73" x="8480" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-68" x="8870" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-6F" x="9370" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-6C" x="9871" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-64" x="10149" y="0"></use>
-                    </g>
-                    <g transform="translate(0,-81)">
-                      <use xlink:href="#E1-STIXWEBMAIN-2F"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-2F" x="278" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-74" x="807" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-68" x="1085" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-72" x="1586" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-65" x="1919" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-73" x="2364" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-68" x="2753" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-6F" x="3254" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-6C" x="3754" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-64" x="4033" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-69" x="4783" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-73" x="5062" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-61" x="5701" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-74" x="6146" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-6C" x="6674" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-65" x="6953" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-61" x="7397" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-73" x="7842" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-74" x="8231" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-32" x="8760" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-4D" x="9510" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-53" x="10400" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-53" x="10956" y="0"></use>
-                    </g>
-                    <g transform="translate(0,-1481)">
-                      <use xlink:href="#E1-STIXWEBMAIN-2F"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-2F" x="278" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-77" x="807" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-69" x="1529" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-6E" x="1808" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-64" x="2308" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-6F" x="2809" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-77" x="3309" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-72" x="4282" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-65" x="4615" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-64" x="5060" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-75" x="5560" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-63" x="6061" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-74" x="6505" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-69" x="6784" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-6F" x="7062" y="0"></use>
-                      <use xlink:href="#E1-STIXWEBMAIN-6E" x="7563" y="0"></use>
                     </g>
                   </g>
                 </g>
@@ -2747,6 +2870,11 @@ is different from the multiplicative decrease factor used in <span>[<a href="#RF
 than 0.5 is slower convergence. We believe that while a more adaptive
 setting of <span class="contact-name">β</span><em><sub>cubic</sub></em> could result in faster
 convergence, it will make the analysis of CUBIC much harder.<a href="#section-4.6-3" class="pilcrow">¶</a></p>
+<p id="section-4.6-4">Note that CUBIC will continue to reduce <em>cwnd</em> in response to congestion
+events due to ECN-Echo ACKs until it reaches a value of 1 MSS.
+If congestion persists, a sender with a <em>cwnd</em> of 1 MSS needs to reduce
+its sending rate even further. It can achieve that by using a retransmission
+timer with exponential backoff, as described in <span>[<a href="#RFC3168" class="xref">RFC3168</a>]</span>.<a href="#section-4.6-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="fast-convergence">
@@ -3206,12 +3334,12 @@ window reduction.<a href="#section-4.9-2" class="pilcrow">¶</a></p>
 </div>
 </div>
 <p id="section-4.9-4">CUBIC MAY implement an algorithm to detect spurious retransmissions,
-such as DSACK <span>[<a href="#RFC3708" class="xref">RFC3708</a>]</span>, Forward RTO-Recovery <span>[<a href="#RFC5682" class="xref">RFC5682</a>]</span> or Eifel
-<span>[<a href="#RFC3522" class="xref">RFC3522</a>]</span>. Once a spurious congestion event is detected, CUBIC
-SHOULD restore the original values of above-mentioned variables as
-follows if the current <em>cwnd</em> is lower than <em>prior_cwnd</em>. Restoring
-the original values ensures that CUBIC's performance is similar to
-what it would be without spurious losses.<a href="#section-4.9-4" class="pilcrow">¶</a></p>
+such as Forward RTO-Recovery <span>[<a href="#RFC5682" class="xref">RFC5682</a>]</span>. Experimental alternatives
+include DSACK <span>[<a href="#RFC3708" class="xref">RFC3708</a>]</span> and Eifel <span>[<a href="#RFC3522" class="xref">RFC3522</a>]</span>. Once a spurious
+congestion event is detected, CUBIC SHOULD restore the original values
+of above-mentioned variables as follows if the current <em>cwnd</em> is lower
+than <em>prior_cwnd</em>. Restoring the original values ensures that CUBIC's
+performance is similar to what it would be without spurious losses.<a href="#section-4.9-4" class="pilcrow">¶</a></p>
 <div id="section-4.9-5">
           <div class="alignCenter art-svg artwork" id="section-4.9-5.1">
 <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" height="19.176ex" role="img" viewBox="0 -4379.3 21713.8 8256.3" width="50.432ex">
@@ -3431,18 +3559,21 @@ these variables.<a href="#section-4.9-6" class="pilcrow">¶</a></p>
 <a href="#section-4.10" class="section-number selfRef">4.10. </a><a href="#name-slow-start" class="section-name selfRef">Slow Start</a>
         </h3>
 <p id="section-4.10-1">CUBIC MUST employ a slow-start algorithm, when <em>cwnd</em> is no more than
-<em>ssthresh</em>. Among the slow-start algorithms, CUBIC MAY choose the Reno
-TCP slow start <span>[<a href="#RFC5681" class="xref">RFC5681</a>]</span> in general networks, or the limited slow
-start <span>[<a href="#RFC3742" class="xref">RFC3742</a>]</span> or hybrid slow start <span>[<a href="#HR08" class="xref">HR08</a>]</span> for fast and
-long-distance networks.<a href="#section-4.10-1" class="pilcrow">¶</a></p>
-<p id="section-4.10-2">When CUBIC uses hybrid slow start <span>[<a href="#HR08" class="xref">HR08</a>]</span>, it may exit the first slow
-start without incurring any packet loss and thus <em>W<sub>max</sub></em> is
-undefined. In this special case, CUBIC switches to congestion
-avoidance and increases its congestion window size using <a href="#eq1" class="xref">Figure 1</a>,
-where <em>t</em> is the elapsed time since the beginning of the current
-congestion avoidance, <em>K</em> is set to 0, and <em>W<sub>max</sub></em> is set to
-the congestion window size at the beginning of the current congestion
-avoidance stage.<a href="#section-4.10-2" class="pilcrow">¶</a></p>
+<em>ssthresh</em>. In general, CUBIC SHOULD use the HyStart++ slow start
+algorithm <span>[<a href="#I-D.ietf-tcpm-hystartplusplus" class="xref">I-D.ietf-tcpm-hystartplusplus</a>]</span>, or MAY use the Reno TCP
+slow start algorithm <span>[<a href="#RFC5681" class="xref">RFC5681</a>]</span> in the rare cases when
+HyStart++ is not suitable. Experimental alternatives include
+hybrid slow start <span>[<a href="#HR08" class="xref">HR08</a>]</span>, a predecessor to HyStart++ that some CUBIC
+implementations have used as the default for the last decade, and
+limited slow start <span>[<a href="#RFC3742" class="xref">RFC3742</a>]</span>.<a href="#section-4.10-1" class="pilcrow">¶</a></p>
+<p id="section-4.10-2">When CUBIC uses HyStart++ <span>[<a href="#I-D.ietf-tcpm-hystartplusplus" class="xref">I-D.ietf-tcpm-hystartplusplus</a>]</span>, it may
+exit the first slow start without incurring any packet loss and
+thus <em>W<sub>max</sub></em> is undefined. In this special case, CUBIC
+switches to congestion avoidance and increases its congestion window
+size using <a href="#eq1" class="xref">Figure 1</a>, where <em>t</em> is the elapsed time since the beginning
+of the current congestion avoidance, <em>K</em> is set to 0,
+and <em>W<sub>max</sub></em> is set to the congestion window size at the
+beginning of the current congestion avoidance stage.<a href="#section-4.10-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -4099,6 +4230,11 @@ networks <span>[<a href="#LIU16" class="xref">LIU16</a>]</span>.<a href="#sectio
 behaves like Reno, since CUBIC modifies only the window adjustment
 algorithm of Reno. Thus, it does not modify the ACK clocking and
 timeout behaviors of Reno.<a href="#section-5.5-1" class="pilcrow">¶</a></p>
+<p id="section-5.5-2">CUBIC also satisfies the "full backoff" requirement as described in
+<span>[<a href="#RFC5033" class="xref">RFC5033</a>]</span>. After reducing the sending rate to one packet per
+RTT in response to congestion events due to ECN-Echo ACKs, CUBIC
+then exponentially increases the transmission
+timer for each packet retransmission while congestion persists.<a href="#section-5.5-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="fairness-within-the-alternative-congestion-control-algorithm">
@@ -4187,6 +4323,10 @@ information about TCP security concerns can be found in <span>[<a href="#RFC5681
 <a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
+<dt id="I-D.ietf-tcpm-hystartplusplus">[I-D.ietf-tcpm-hystartplusplus]</dt>
+        <dd>
+<span class="refAuthor">Balasubramanian, P.</span>, <span class="refAuthor">Huang, Y.</span>, and <span class="refAuthor">M. Olson</span>, <span class="refTitle">"HyStart++: Modified Slow Start for TCP"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-tcpm-hystartplusplus-03</span>, <time datetime="2021-07-25" class="refDate">25 July 2021</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-tcpm-hystartplusplus-03">https://datatracker.ietf.org/doc/html/draft-ietf-tcpm-hystartplusplus-03</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
         <dd>
 <span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/rfc2119">https://datatracker.ietf.org/doc/html/rfc2119</a>&gt;</span>. </dd>
@@ -4206,6 +4346,10 @@ information about TCP security concerns can be found in <span>[<a href="#RFC5681
 <dt id="RFC5681">[RFC5681]</dt>
         <dd>
 <span class="refAuthor">Allman, M.</span>, <span class="refAuthor">Paxson, V.</span>, and <span class="refAuthor">E. Blanton</span>, <span class="refTitle">"TCP Congestion Control"</span>, <span class="seriesInfo">RFC 5681</span>, <span class="seriesInfo">DOI 10.17487/RFC5681</span>, <time datetime="2009-09" class="refDate">September 2009</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/rfc5681">https://datatracker.ietf.org/doc/html/rfc5681</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC5682">[RFC5682]</dt>
+        <dd>
+<span class="refAuthor">Sarolahti, P.</span>, <span class="refAuthor">Kojo, M.</span>, <span class="refAuthor">Yamamoto, K.</span>, and <span class="refAuthor">M. Hata</span>, <span class="refTitle">"Forward RTO-Recovery (F-RTO): An Algorithm for Detecting Spurious Retransmission Timeouts with TCP"</span>, <span class="seriesInfo">RFC 5682</span>, <span class="seriesInfo">DOI 10.17487/RFC5682</span>, <time datetime="2009-09" class="refDate">September 2009</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/rfc5682">https://datatracker.ietf.org/doc/html/rfc5682</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC6298">[RFC6298]</dt>
         <dd>
@@ -4297,10 +4441,6 @@ information about TCP security concerns can be found in <span>[<a href="#RFC5681
 <dt id="RFC4960">[RFC4960]</dt>
         <dd>
 <span class="refAuthor">Stewart, R., Ed.</span>, <span class="refTitle">"Stream Control Transmission Protocol"</span>, <span class="seriesInfo">RFC 4960</span>, <span class="seriesInfo">DOI 10.17487/RFC4960</span>, <time datetime="2007-09" class="refDate">September 2007</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/rfc4960">https://datatracker.ietf.org/doc/html/rfc4960</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="RFC5682">[RFC5682]</dt>
-        <dd>
-<span class="refAuthor">Sarolahti, P.</span>, <span class="refAuthor">Kojo, M.</span>, <span class="refAuthor">Yamamoto, K.</span>, and <span class="refAuthor">M. Hata</span>, <span class="refTitle">"Forward RTO-Recovery (F-RTO): An Algorithm for Detecting Spurious Retransmission Timeouts with TCP"</span>, <span class="seriesInfo">RFC 5682</span>, <span class="seriesInfo">DOI 10.17487/RFC5682</span>, <time datetime="2009-09" class="refDate">September 2009</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/rfc5682">https://datatracker.ietf.org/doc/html/rfc5682</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC6937">[RFC6937]</dt>
         <dd>
@@ -4404,26 +4544,34 @@ information about TCP security concerns can be found in <span>[<a href="#RFC5681
           <li class="normal" id="appendix-B.1-1.2">Update RFC5681
 (<a href="https://github.com/NTAP/rfc8312bis/issues/99">#99</a>)<a href="#appendix-B.1-1.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.1-1.3">Clarify what we mean by "new ACK" and use it in the text in more places.
-(<a href="https://github.com/NTAP/rfc8312bis/issues/101">#101</a>)<a href="#appendix-B.1-1.3" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.1-1.3">Rephrase text around algorithmic alternatives, add HyStart++
+(<a href="https://github.com/NTAP/rfc8312bis/issues/85">#85</a>,
+<a href="https://github.com/NTAP/rfc8312bis/issues/86">#86</a>,
+<a href="https://github.com/NTAP/rfc8312bis/issues/90">#90</a>)<a href="#appendix-B.1-1.3" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.1-1.4">Rewrite the Responses to Sudden or Transient Events section
-(<a href="https://github.com/NTAP/rfc8312bis/issues/98">#98</a>)<a href="#appendix-B.1-1.4" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.1-1.4">Clarify what we mean by "new ACK" and use it in the text in more places.
+(<a href="https://github.com/NTAP/rfc8312bis/issues/101">#101</a>)<a href="#appendix-B.1-1.4" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.1-1.5">Remove confusing text about <em>cwnd<sub>start</sub></em> in Section 4.2
-(<a href="https://github.com/NTAP/rfc8312bis/issues/100">#100</a>)<a href="#appendix-B.1-1.5" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.1-1.5">Rewrite the Responses to Sudden or Transient Events section
+(<a href="https://github.com/NTAP/rfc8312bis/issues/98">#98</a>)<a href="#appendix-B.1-1.5" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.1-1.6">Change terminology from "AIMD" to "Reno"
-(<a href="https://github.com/NTAP/rfc8312bis/issues/108">#108</a>)<a href="#appendix-B.1-1.6" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.1-1.6">Remove confusing text about <em>cwnd<sub>start</sub></em> in Section 4.2
+(<a href="https://github.com/NTAP/rfc8312bis/issues/100">#100</a>)<a href="#appendix-B.1-1.6" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.1-1.7">Moved MUST NOT from app-limited section to main cubic AI section
-(<a href="https://github.com/NTAP/rfc8312bis/issues/97">#97</a>)<a href="#appendix-B.1-1.7" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.1-1.7">Change terminology from "AIMD" to "Reno"
+(<a href="https://github.com/NTAP/rfc8312bis/issues/108">#108</a>)<a href="#appendix-B.1-1.7" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.1-1.8">Clarify cwnd decrease during multiplicative decrease
-(<a href="https://github.com/NTAP/rfc8312bis/issues/102">#102</a>)<a href="#appendix-B.1-1.8" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.1-1.8">Moved MUST NOT from app-limited section to main cubic AI section
+(<a href="https://github.com/NTAP/rfc8312bis/issues/97">#97</a>)<a href="#appendix-B.1-1.8" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.1-1.9">Clarify text around queuing and slow adaptation of CUBIC in wireless environments
-(<a href="https://github.com/NTAP/rfc8312bis/issues/94">#94</a>)<a href="#appendix-B.1-1.9" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.1-1.9">Clarify cwnd decrease during multiplicative decrease
+(<a href="https://github.com/NTAP/rfc8312bis/issues/102">#102</a>)<a href="#appendix-B.1-1.9" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="appendix-B.1-1.10">Clarify text around queuing and slow adaptation of CUBIC in wireless environments
+(<a href="https://github.com/NTAP/rfc8312bis/issues/94">#94</a>)<a href="#appendix-B.1-1.10" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="appendix-B.1-1.11">Set lower bound of cwnd to 1 MSS and use retransmit timer thereafter
+(<a href="https://github.com/NTAP/rfc8312bis/issues/83">#83</a>)<a href="#appendix-B.1-1.11" class="pilcrow">¶</a>
 </li>
         </ul>
 </section>
