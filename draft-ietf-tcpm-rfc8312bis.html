@@ -4206,10 +4206,19 @@ environments. More information can be found in <span>[<a href="#HKLRX06" class="
 Because CUBIC is designed to be more aggressive (due to a faster
 window increase function and bigger multiplicative decrease factor)
 than Reno in fast and long-distance networks, it can fill large
-drop-tail buffers more quickly than Reno and increases the risk of
-a standing queue <span>[<a href="#RFC8511" class="xref">RFC8511</a>]</span>. In this case, proper queue sizing and
-management <span>[<a href="#RFC7567" class="xref">RFC7567</a>]</span> could be used to reduce the packet queuing
-delay.<a href="#section-5.4-2" class="pilcrow">¶</a></p>
+drop-tail buffers more quickly than Reno and increases the risk of a
+standing queue <span>[<a href="#RFC8511" class="xref">RFC8511</a>]</span>. In this case, proper queue sizing and
+management <span>[<a href="#RFC7567" class="xref">RFC7567</a>]</span> could be used to mitigate the risk to some
+extent and reduce the packet queuing delay. Also, in large-BDP
+networks after a congestion event, CUBIC, due its cubic window
+increase function, recovers quickly to the highest link utilization
+point. This means that link utilization is less sensitive to an active
+queue management (AQM) target that is lower than the amplitude of the
+whole sawtooth.<a href="#section-5.4-2" class="pilcrow">¶</a></p>
+<p id="section-5.4-3">Similar to Reno, the performance of CUBIC as a loss-based congestion
+control algorithm suffers in networks where a packet loss is not a
+good indication of bandwidth utilization, such as wireless or mobile
+networks <span>[<a href="#LIU16" class="xref">LIU16</a>]</span>.<a href="#section-5.4-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="protection-against-congestion-collapse">
@@ -4405,6 +4414,10 @@ information about TCP security concerns can be found in <span>[<a href="#RFC5681
         <dd>
 <span class="refAuthor">Kelly, T.</span>, <span class="refTitle">"Scalable TCP: improving performance in highspeed wide area networks"</span>, <span class="seriesInfo">ACM SIGCOMM Computer Communication Review Vol. 33, pp. 83-91</span>, <span class="seriesInfo">DOI 10.1145/956981.956989</span>, <time datetime="2003-04" class="refDate">April 2003</time>, <span>&lt;<a href="https://doi.org/10.1145/956981.956989">https://doi.org/10.1145/956981.956989</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="LIU16">[LIU16]</dt>
+        <dd>
+<span class="refAuthor">Liu, K.</span> and <span class="refAuthor">J. Lee</span>, <span class="refTitle">"On Improving TCP Performance over Mobile Data Networks"</span>, <span class="seriesInfo">IEEE Transactions on Mobile Computing Vol. 15, pp. 2522-2536</span>, <span class="seriesInfo">DOI 10.1109/tmc.2015.2500227</span>, <time datetime="2016-10" class="refDate">October 2016</time>, <span>&lt;<a href="https://doi.org/10.1109/tmc.2015.2500227">https://doi.org/10.1109/tmc.2015.2500227</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC3465">[RFC3465]</dt>
         <dd>
 <span class="refAuthor">Allman, M.</span>, <span class="refTitle">"TCP Congestion Control with Appropriate Byte Counting (ABC)"</span>, <span class="seriesInfo">RFC 3465</span>, <span class="seriesInfo">DOI 10.17487/RFC3465</span>, <time datetime="2003-02" class="refDate">February 2003</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/rfc3465">https://datatracker.ietf.org/doc/html/rfc3465</a>&gt;</span>. </dd>
@@ -4554,8 +4567,11 @@ information about TCP security concerns can be found in <span>[<a href="#RFC5681
           <li class="normal" id="appendix-B.1-1.9">Clarify cwnd decrease during multiplicative decrease
 (<a href="https://github.com/NTAP/rfc8312bis/issues/102">#102</a>)<a href="#appendix-B.1-1.9" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.1-1.10">Set lower bound of cwnd to 1 MSS and use retransmit timer thereafter
-(<a href="https://github.com/NTAP/rfc8312bis/issues/83">#83</a>)<a href="#appendix-B.1-1.10" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.1-1.10">Clarify text around queuing and slow adaptation of CUBIC in wireless environments
+(<a href="https://github.com/NTAP/rfc8312bis/issues/94">#94</a>)<a href="#appendix-B.1-1.10" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="appendix-B.1-1.11">Set lower bound of cwnd to 1 MSS and use retransmit timer thereafter
+(<a href="https://github.com/NTAP/rfc8312bis/issues/83">#83</a>)<a href="#appendix-B.1-1.11" class="pilcrow">¶</a>
 </li>
         </ul>
 </section>
