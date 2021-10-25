@@ -7,12 +7,12 @@ Internet-Draft                                                       UNL
 Obsoletes: 8312 (if approved)                                      S. Ha
 Updates: 5681 (if approved)                                     Colorado
 Intended status: Standards Track                                 I. Rhee
-Expires: 25 April 2022                                            Bowery
+Expires: 28 April 2022                                            Bowery
                                                                  V. Goel
                                                               Apple Inc.
                                                           L. Eggert, Ed.
                                                                   NetApp
-                                                         22 October 2021
+                                                         25 October 2021
 
 
                CUBIC for Fast and Long-Distance Networks
@@ -72,7 +72,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 25 April 2022.
+   This Internet-Draft will expire on 28 April 2022.
 
 Copyright Notice
 
@@ -606,28 +606,41 @@ Table of Contents
 
    When a congestion event is detected by mechanisms described in
    Section 3.1, CUBIC updates _W_max_ and reduces _cwnd_ and _ssthresh_
-   immediately as described below.  An implementation MAY set a smaller
-   _ssthresh_ than suggested below to accommodate rate-limited
-   applications as described in [RFC7661].  In case of packet loss, the
-   sender MUST reduce _cwnd_ and _ssthresh_ immediately upon entering
-   loss recovery, similar to [RFC5681] (and [RFC6675]).  Note that other
+   immediately as described below.  In case of packet loss, the sender
+   MUST reduce _cwnd_ and _ssthresh_ immediately upon entering loss
+   recovery, similar to [RFC5681] (and [RFC6675]).  Note that other
    mechanisms, such as Proportional Rate Reduction [RFC6937], can be
    used to reduce the sending rate during loss recovery more gradually.
    The parameter β__cubic_ SHOULD be set to 0.7, which is different from
    the multiplicative decrease factor used in [RFC5681] (and [RFC6675])
    during fast recovery.
 
-            cwnd * β            new slow-start threshold
-ssthresh =          cubic
+   In Figure 5, _flight_size_ is the amount of outstanding data in the
+   network, as defined in [RFC5681].  Note that a rate-limited
+   application with idle periods or periods when unable to send at the
+   full rate permitted by _cwnd_ may easily encounter notable variations
+   in the volume of data sent from one RTT to another, resulting in
+   _flight_size_ that is significantly less than _cwnd_ on a congestion
+   event.  This may decrease _cwnd_ to a much lower value than
+   necessary.  To avoid suboptimal performance with such applications,
+   some implementations of CUBIC use _cwnd_ instead of _flight_size_ to
+   calculate the new _ssthresh_ in Figure 5.  Alternatively, the
+   mechanisms described in [RFC7661] may also be adopted to mitigate
+   this issue.
 
-            /max(ssthresh, 2)   reduction on packet loss, cwnd is at least 2 MSS
+            flight_size * β      // new ssthresh
+ssthresh =                 cubic
+
+            /max(ssthresh, 2)    // reduction on packet loss, cwnd is at least 2 MSS
             |
 cwnd =      <
-            |max(ssthresh, 1)   reduction on ECE, cwnd is at least 1 MSS
+            |max(ssthresh, 1)    // reduction on ECE, cwnd is at least 1 MSS
             \
 
-            max(ssthresh, 2)    ssthresh is at least 2 MSS
+            max(ssthresh, 2)     // ssthresh is at least 2 MSS
 ssthresh =
+
+                               Figure 5
 
    A side effect of setting β__cubic_ to a value bigger than 0.5 is
    slower convergence.  We believe that while a more adaptive setting of
@@ -794,7 +807,7 @@ W    = <
                             |/              cubic     4 / 3
                                                       |/ p
 
-                                  Figure 5
+                                  Figure 6
 
    With β__cubic_ set to 0.7, the above formula reduces to:
 
@@ -806,10 +819,10 @@ W    = <
                                                 4 / 3
                                                 |/ p
 
-                                  Figure 6
+                                  Figure 7
 
    We will determine the value of _C_ in the following subsection using
-   Figure 6.
+   Figure 7.
 
 5.1.  Fairness to Reno
 
@@ -826,7 +839,7 @@ W    = <
    types of networks.  The following two tables show the average window
    sizes of Reno TCP, HSTCP, and CUBIC TCP.  The average window sizes of
    Reno TCP and HSTCP are from [RFC3649].  The average window size of
-   CUBIC is calculated using Figure 6 and the CUBIC Reno-friendly region
+   CUBIC is calculated using Figure 7 and the CUBIC Reno-friendly region
    for three different values of _C_.
 
    +=============+=======+========+================+=========+========+
@@ -897,7 +910,7 @@ W    = <
    in fast and long-distance networks.  Based on these observations and
    extensive deployment experience, we find _C_=0.4 gives a good balance
    between Reno-friendliness and aggressiveness of window increase.
-   Therefore, _C_ SHOULD be set to 0.4.  With _C_ set to 0.4, Figure 6
+   Therefore, _C_ SHOULD be set to 0.4.  With _C_ set to 0.4, Figure 7
    is reduced to:
 
                                                ____
@@ -908,9 +921,9 @@ W    = <
                                              4 / 3
                                              |/ p
 
-                                  Figure 7
+                                  Figure 8
 
-   Figure 7 is then used in the next subsection to show the scalability
+   Figure 8 is then used in the next subsection to show the scalability
    of CUBIC.
 
 5.2.  Using Spare Capacity
@@ -1313,6 +1326,9 @@ B.1.  Since draft-ietf-tcpm-rfc8312bis-04
 
    *  Set lower bound of cwnd to 1 MSS and use retransmit timer
       thereafter (#83 (https://github.com/NTAP/rfc8312bis/issues/83))
+
+   *  Use FlightSize instead of cwnd to update ssthresh (#114
+      (https://github.com/NTAP/rfc8312bis/issues/114))
 
 B.2.  Since draft-ietf-tcpm-rfc8312bis-03
 
