@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-10-24T00:01:11.406720+00:00",
+  "timestamp": "2021-10-26T00:00:48.754181+00:00",
   "repo": "NTAP/rfc8312bis",
   "labels": [
     {
@@ -3060,7 +3060,7 @@
       "id": "MDU6SXNzdWU5ODM1NzQ3Mzg=",
       "title": "RFC 8511 handling of ECE signal (slow start vs congestion avoidance)",
       "url": "https://github.com/NTAP/rfc8312bis/issues/85",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "goelvidhi",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -3069,8 +3069,8 @@
       "labels": [],
       "body": "Markku Kojo said,\r\n> ABE (RFC 8511) is currently the only experimental RFC to modify\r\n  the TCP-sender response to ECE. ABE allows modifying multiplicative\r\n  decrease factor only for AIMD TCP and only when ECE arrives in\r\n  congestion avoidance, that is, not when the sender is in slow-start.\r\n>\r\n>  Applying a decrease factor of 0.7 (or higher) when a congestion\r\n  singnal arrives and ends the initial slow start would be\r\n  inconsiderate because it extends the convergence time from\r\n  the slow-start overshoot. ABE has found that using a larger decrease\r\n  factor yields performance improvement when applied in congestion\r\n  avoidance, but not otherwise. Do we have data that would support\r\n  different findings with CUBIC?",
       "createdAt": "2021-08-31T08:13:28Z",
-      "updatedAt": "2021-10-19T14:18:52Z",
-      "closedAt": null,
+      "updatedAt": "2021-10-25T11:50:01Z",
+      "closedAt": "2021-10-25T11:50:01Z",
       "comments": [
         {
           "author": "bbriscoe",
@@ -4376,7 +4376,7 @@
       "id": "I_kwDOEpK-U847umUk",
       "title": "Use FlightSize instead of cwnd",
       "url": "https://github.com/NTAP/rfc8312bis/issues/114",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "goelvidhi",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -4385,8 +4385,8 @@
       "labels": [],
       "body": "@markkukojo said,\r\n> More importantly. The draft says in Sec. 4.2:\r\n\"It does not make any changes to the TCP Fast Recovery and Fast\r\nRetransmit algorithms [RFC6582][RFC6675].\"\r\n\r\n> But it does modify RFC6582, RFC 6675, and RFC 5681 Fast Retransmit&Fast Recovery by applying beta_cubic to cwnd, not FlightSize. This is incorrect and would bring back an old design&implementation bug that was corrected more than two decades ago when RFC 2581 was published (and subsequently corrected also for RFC 6582 and RFC 6675). Please see the implementation note attached to Equation (4) of RFC 5681: \"An easy mistake to make is to simply use cwnd, rather than FlightSize, which in some implementations may incidentally increase well beyond rwnd.\"\r\n\r\n> Using cwnd in the equation will also result in incorrect outcome in some other cases as well, for example, if the sender is application limited.",
       "createdAt": "2021-09-21T08:52:56Z",
-      "updatedAt": "2021-10-20T15:01:51Z",
-      "closedAt": null,
+      "updatedAt": "2021-10-25T11:49:42Z",
+      "closedAt": "2021-10-25T11:49:42Z",
       "comments": [
         {
           "author": "nealcardwell",
@@ -12309,24 +12309,26 @@
       "id": "PR_kwDOEpK-U84tY0_G",
       "title": "From @bbriscoe",
       "url": "https://github.com/NTAP/rfc8312bis/pull/125",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "larseggert",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "Fixes #85.",
       "createdAt": "2021-10-19T14:18:18Z",
-      "updatedAt": "2021-10-22T17:31:25Z",
+      "updatedAt": "2021-10-25T11:50:04Z",
       "baseRepository": "NTAP/rfc8312bis",
       "baseRefName": "main",
       "baseRefOid": "3932f43e13cf100c050448d658bc492d3b476adc",
       "headRepository": "NTAP/rfc8312bis",
       "headRefName": "more-fixes-for-85",
       "headRefOid": "b07e56471f1fdd26cbf2eddc66959073cf1ac67b",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2021-10-25T11:50:01Z",
+      "mergedAt": "2021-10-25T11:50:01Z",
+      "mergedBy": "larseggert",
+      "mergeCommit": {
+        "oid": "28614f1d1eb319e1a6f681e4fabea7043e054758"
+      },
       "comments": [
         {
           "author": "goelvidhi",
@@ -12334,6 +12336,13 @@
           "body": "I am fine with this change. @markkukojo does this satisfy your concerns?",
           "createdAt": "2021-10-19T17:41:58Z",
           "updatedAt": "2021-10-19T17:41:58Z"
+        },
+        {
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "body": "Since we haven't heard from @markkukojo and the submission deadline is today, I am rolling this in now.",
+          "createdAt": "2021-10-25T11:49:32Z",
+          "updatedAt": "2021-10-25T11:49:32Z"
         }
       ],
       "reviews": [
@@ -12404,24 +12413,26 @@
       "id": "PR_kwDOEpK-U84tckY8",
       "title": "#114 Use FlightSize instead of cwnd",
       "url": "https://github.com/NTAP/rfc8312bis/pull/126",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "lisongxu",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "#114 ",
       "createdAt": "2021-10-20T15:21:02Z",
-      "updatedAt": "2021-10-22T21:06:08Z",
+      "updatedAt": "2021-10-25T11:49:43Z",
       "baseRepository": "NTAP/rfc8312bis",
       "baseRefName": "main",
-      "baseRefOid": "3932f43e13cf100c050448d658bc492d3b476adc",
+      "baseRefOid": "88d85e8584446e0c84fe36ddc1ca710cf2d88b78",
       "headRepository": "lisongxu/rfc8312bis",
       "headRefName": "main",
-      "headRefOid": "fa208d81a7e72af0a7fab295a83a8aa8610d5b05",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "554e6f560cc82f4a950fcb0a64ef6fdedcfe35d3",
+      "closedAt": "2021-10-25T11:49:43Z",
+      "mergedAt": "2021-10-25T11:49:42Z",
+      "mergedBy": "larseggert",
+      "mergeCommit": {
+        "oid": "2433c13b1c8dc3e45736ff243ff9ca30aa94a131"
+      },
       "comments": [
         {
           "author": "goelvidhi",
@@ -12629,6 +12640,46 @@
               "updatedAt": "2021-10-22T21:06:09Z"
             }
           ]
+        }
+      ]
+    },
+    {
+      "number": 127,
+      "id": "PR_kwDOEpK-U84tn3d4",
+      "title": "clarify first sentence in the abstract",
+      "url": "https://github.com/NTAP/rfc8312bis/pull/127",
+      "state": "OPEN",
+      "author": "nealcardwell",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "In the first sentence of the abstract, this commit:\r\n\r\n(1) removes the redundant (to the point of being confusing) phrase \r\n \"on the  sender side\" (standard Internet congestion control has always\r\n been sender-side)\r\n\r\n(2) clarifies that the \"window\" that is increased is the congestion window\r\n  (e.g., not the receive window)\r\n\r\n(3) Changes \"the linear\" increase function to \"a linear\" increase function,\r\n  since there is no single linear increase function",
+      "createdAt": "2021-10-25T12:39:05Z",
+      "updatedAt": "2021-10-25T13:39:56Z",
+      "baseRepository": "NTAP/rfc8312bis",
+      "baseRefName": "main",
+      "baseRefOid": "28614f1d1eb319e1a6f681e4fabea7043e054758",
+      "headRepository": "nealcardwell/rfc8312bis",
+      "headRefName": "patch-1",
+      "headRefOid": "5c60f196af6a5fa5f6266980f37cc1a31c6d2901",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpK-U84u-fwc",
+          "commit": {
+            "abbreviatedOid": "5c60f19"
+          },
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-10-25T13:39:56Z",
+          "updatedAt": "2021-10-25T13:39:56Z",
+          "comments": []
         }
       ]
     }
