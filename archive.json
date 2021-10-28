@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-10-26T00:00:48.754181+00:00",
+  "timestamp": "2021-10-28T00:00:49.635224+00:00",
   "repo": "NTAP/rfc8312bis",
   "labels": [
     {
@@ -12085,7 +12085,7 @@
       "labels": [],
       "body": "closes #83.\r\n\r\nWill add the changelog soon.",
       "createdAt": "2021-10-15T07:56:44Z",
-      "updatedAt": "2021-10-22T12:59:35Z",
+      "updatedAt": "2021-10-27T21:38:35Z",
       "baseRepository": "NTAP/rfc8312bis",
       "baseRefName": "main",
       "baseRefOid": "b37f22460569982b546fa9a6331b52593a58e3a4",
@@ -12168,6 +12168,13 @@
           "body": "Updated cwnd reduction with two different branches,\r\n<img width=\"666\" alt=\"Screen Shot 2021-10-20 at 2 47 40 AM\" src=\"https://user-images.githubusercontent.com/10913828/138070703-6f500bed-9228-4870-8b19-0db27e8993df.png\">\r\n\r\n\r\n@markkukojo @lisongxu @sangtaeha @larseggert please take a look.\r\n",
           "createdAt": "2021-10-20T09:48:40Z",
           "updatedAt": "2021-10-20T09:48:40Z"
+        },
+        {
+          "author": "markkukojo",
+          "authorAssociation": "COLLABORATOR",
+          "body": " \r\n> Can a sender use 1 dup ACK instead of 2 dup ACKs to transmit new data? If the outstanding data can be > cwnd + 2, and one data packet is still in transit, wouldn't that mean that sender can send 1 (corresponding to the dup ACK) + 2 segments when the dup ACK arrives?\r\n\r\nNot quite sure what you mean by \"If the outstanding data can be > cwnd + 2, ...\".\r\n\r\nAnyway, without SACK a TCP sender can send only one new segment per arriving DupAck, max two in total. This follows from the packet conservation principle as discussed in RFC 3042 a couple of paras later (one DupAck indicates one packet has left the network). RFC 3042 could be a bit clearer on this though. See also RFC 5681, Sec 3.2, step 1.\r\n\r\nWhen SACK is in use, a TCP sender may send 2 segments on arrival of one DupAck, if the SACK info indicates that two segments have left the network (see RFC 6675, Sec 5, step 3).  However, if cwnd=2,  SACK info in a DupAck cannot indicate more than one segment that has left the network.\r\n\r\nThe text in last para of sec 4.6 seems correct now. However, I would say it much stronger, that is:\r\n\r\ns/Note that CUBIC will continue to reduce/Note that CUBIC MUST continue to reduce/\r\n\r\ns/a sender with a _cwnd_ of 1 MSS needs to reduce/a sender with a _cwnd_ of 1 MSS MUST reduce/\r\n\r\nThese sentences should be requirements and RFC 3168 says that cwnd MUST be halved (=reduced) on ECE and later says that the lower bound for cwnd is 1 MSS. It also says that the TCP sender MUST reset retransmit timer.",
+          "createdAt": "2021-10-27T21:38:34Z",
+          "updatedAt": "2021-10-27T21:38:34Z"
         }
       ],
       "reviews": [
@@ -12648,24 +12655,26 @@
       "id": "PR_kwDOEpK-U84tn3d4",
       "title": "clarify first sentence in the abstract",
       "url": "https://github.com/NTAP/rfc8312bis/pull/127",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "nealcardwell",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "In the first sentence of the abstract, this commit:\r\n\r\n(1) removes the redundant (to the point of being confusing) phrase \r\n \"on the  sender side\" (standard Internet congestion control has always\r\n been sender-side)\r\n\r\n(2) clarifies that the \"window\" that is increased is the congestion window\r\n  (e.g., not the receive window)\r\n\r\n(3) Changes \"the linear\" increase function to \"a linear\" increase function,\r\n  since there is no single linear increase function",
       "createdAt": "2021-10-25T12:39:05Z",
-      "updatedAt": "2021-10-25T13:39:56Z",
+      "updatedAt": "2021-10-26T06:47:35Z",
       "baseRepository": "NTAP/rfc8312bis",
       "baseRefName": "main",
       "baseRefOid": "28614f1d1eb319e1a6f681e4fabea7043e054758",
       "headRepository": "nealcardwell/rfc8312bis",
       "headRefName": "patch-1",
       "headRefOid": "5c60f196af6a5fa5f6266980f37cc1a31c6d2901",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2021-10-26T06:47:35Z",
+      "mergedAt": "2021-10-26T06:47:35Z",
+      "mergedBy": "larseggert",
+      "mergeCommit": {
+        "oid": "8d33e39eeff3eb83ae1a4190ed13ad92b11d5b51"
+      },
       "comments": [],
       "reviews": [
         {
@@ -12679,6 +12688,19 @@
           "body": "",
           "createdAt": "2021-10-25T13:39:56Z",
           "updatedAt": "2021-10-25T13:39:56Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOEpK-U84vBWdX",
+          "commit": {
+            "abbreviatedOid": "5c60f19"
+          },
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-10-26T05:52:48Z",
+          "updatedAt": "2021-10-26T05:52:48Z",
           "comments": []
         }
       ]
