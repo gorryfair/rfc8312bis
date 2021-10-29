@@ -7,12 +7,12 @@ Internet-Draft                                                       UNL
 Obsoletes: 8312 (if approved)                                      S. Ha
 Updates: 5681 (if approved)                                     Colorado
 Intended status: Standards Track                                 I. Rhee
-Expires: 1 May 2022                                               Bowery
+Expires: 2 May 2022                                               Bowery
                                                                  V. Goel
                                                               Apple Inc.
                                                           L. Eggert, Ed.
                                                                   NetApp
-                                                         28 October 2021
+                                                         29 October 2021
 
 
                CUBIC for Fast and Long-Distance Networks
@@ -72,7 +72,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 1 May 2022.
+   This Internet-Draft will expire on 2 May 2022.
 
 Copyright Notice
 
@@ -649,10 +649,10 @@ ssthresh =
 
    Note that CUBIC MUST continue to reduce _cwnd_ in response to
    congestion events due to ECN-Echo ACKs until it reaches a value of 1
-   MSS.  If congestion persists, a sender with a _cwnd_ of 1 MSS MUST
-   reduce its sending rate even further.  It can achieve that by using a
-   retransmission timer with exponential backoff, as described in
-   [RFC3168].
+   MSS.  If congestion events indicated by ECN-Echo ACKs persist, a
+   sender with a _cwnd_ of 1 MSS MUST reduce its sending rate even
+   further.  It can achieve that by using a retransmission timer with
+   exponential backoff, as described in [RFC3168].
 
 4.7.  Fast Convergence
 
