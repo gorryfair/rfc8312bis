@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-10-28T00:00:49.635224+00:00",
+  "timestamp": "2021-10-31T00:00:57.504218+00:00",
   "repo": "NTAP/rfc8312bis",
   "labels": [
     {
@@ -3432,7 +3432,7 @@
       ],
       "body": "Markku Kojo said,\r\n> The draft says that CUBIC MAY implement DSACK [RFC3708], limited slow\r\n  start [RFC 3742], [RFC7661] and hybrid slow start [cites a paper].\r\n  Aren't the first three down references? Not sure if it is appropriate\r\n  for a Stds Track document to cite experimental work or a paper like\r\n  this even though it's a MAY.",
       "createdAt": "2021-08-31T08:24:27Z",
-      "updatedAt": "2021-10-19T09:04:23Z",
+      "updatedAt": "2021-10-28T17:08:32Z",
       "closedAt": null,
       "comments": [
         {
@@ -3672,6 +3672,41 @@
           "body": "We added that section in response to #23, and there was quite a bit of discussion and support for it. It seems odd to go back on this now?",
           "createdAt": "2021-10-19T09:04:23Z",
           "updatedAt": "2021-10-19T09:04:23Z"
+        },
+        {
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I know but what we added is trivial (reset the state to previous state).\r\nIt needs more work and probably can be better placed in a new RFC that tackles spurious retransmits. Reverting the state to previous needs to be more methodical than what we proposed. Esp, as the link condition could have changed from previously restored state to current state.",
+          "createdAt": "2021-10-28T06:23:28Z",
+          "updatedAt": "2021-10-28T06:23:28Z"
+        },
+        {
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "body": "OK. Could we get some others to chime on on removing this section? If there is consensus, I'll do a PR.",
+          "createdAt": "2021-10-28T09:22:42Z",
+          "updatedAt": "2021-10-28T09:22:42Z"
+        },
+        {
+          "author": "nealcardwell",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I strongly advocate to keep Section 4.9, \"Spurious Congestion Events\".\r\n\r\nSome responses to Vidhi's comments:\r\n\r\n> I know but what we added is trivial (reset the state to previous state).\r\n\r\nIt seems trivial once you write it down, but it's not obvious to implementors. The Linux TCP CUBIC code has had undo for a decade, but the undo of CUBIC is still incomplete and buggy because it only restores cwnd and ssthresh, not the CUBIC-specific values. Yuchung and I noticed this years ago, but didn't have development resources to fix it given that our team had moved on to a different congestion control algorithm. So one of the widest-used CUBIC implementation is still getting undo wrong. Yuchung and I were planning to resurrect and finish our in-progress patch to fix this to match 8312bis when 8312bis settled down. But if 8312bis omits this then Linux CUBIC undo and other implementations will lose momentum and/or fail to get it right.\r\n\r\nEven just specifying the set of variables to restore is hugely valuable, and will save the world from having more buggy implementations like Linux TCP CUBIC.\r\n\r\n> It needs more work and probably can be better placed in a new RFC that tackles spurious retransmits.\r\n\r\nThe 8312bis section on undo doesn't need more work, IMHO, because this draft doesn't need to specify everything that a TCP stack needs to do to handle undo events; it only needs to cover what CUBIC's response to an undo event should be.\r\n\r\nEven if someone later writes a new RFC that tackles spurious retransmits, it doesn't make sense for that future spurious retransmit RFC to specify all the variables settings that every IETF-documented CC algorithm (Reno, CUBIC, DCTCP, etc) should make upon undo events.\r\n\r\nFrom a protocol specification and software engineering standpoint, we should try to strictly separate loss detection/recovery (including detecting spurious retransmission events) from congestion control (including how to undo a congestion response, if the loss detection module decides to undo). In software engineering terms,  loss recovery drafts should cover whether to call cc->handle_loss() and cc->handle_undo_loss(), and this rfc8312bis should cover what cc->handle_loss() and cc->handl_undo_loss() do.\r\n\r\n> Reverting the state to previous needs to be more methodical than what we proposed.\r\n\r\nWhat is proposed is quite methodical and sufficient as far as CUBIC CC goes. Loss detection/recovery should make its own specification for what the loss detection/recovery algorithm need to do upon detection spurious recovery events, which the RACK RFC already does (spurious loss recovery events raise the reordering window).\r\n\r\n> Esp, as the link condition could have changed from previously restored state to current state.\r\n\r\nAll the existing algorithms or detecting spurious loss recoveries (FRTO, DSACKs, Eifel TS-based undo) detect spurious loss recoveries in 1-2 round trips, so in practice the link conditions change very little. Just restoring the CC algorithm state to what it was before the spurious loss episode is excellent in practice, in our experience looking at real-world traces on YouTube, google.com, and internal RPC traffic: it's simple and robust, and far better than not undoing at all, given that reordering is not rare, and will likely become more common over time.\r\n\r\nIf link conditions have changed and available bandwidth has decreased, then in practice the flow will see loss/ECN soon, and slow down. But in practice when there are undo events this is usually due to radio layer delay fluctuations or reordering, not due to sustained reductions in available bandwidth.\r\n",
+          "createdAt": "2021-10-28T13:11:08Z",
+          "updatedAt": "2021-10-28T13:11:08Z"
+        },
+        {
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I agree with @nealcardwell that it is better to keep this subsection, as we have noticed that several issues/bugs (not just cubic) are/were related to the undo component. We do not need to specify when to undo, but instead specify which variables to undo. ",
+          "createdAt": "2021-10-28T13:50:20Z",
+          "updatedAt": "2021-10-28T13:50:20Z"
+        },
+        {
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "body": "Thanks. Then @markkukojo needs to be a bit more specific about what changes he would want to see in the section to address his issue.",
+          "createdAt": "2021-10-28T17:08:32Z",
+          "updatedAt": "2021-10-28T17:08:32Z"
         }
       ]
     },
@@ -12701,6 +12736,89 @@
           "body": "",
           "createdAt": "2021-10-26T05:52:48Z",
           "updatedAt": "2021-10-26T05:52:48Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 128,
+      "id": "PR_kwDOEpK-U84txunF",
+      "title": "apply Markku's suggestion in PR #124",
+      "url": "https://github.com/NTAP/rfc8312bis/pull/128",
+      "state": "MERGED",
+      "author": "goelvidhi",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This fixes https://github.com/NTAP/rfc8312bis/pull/124#issuecomment-953331295",
+      "createdAt": "2021-10-28T06:15:53Z",
+      "updatedAt": "2021-10-28T09:23:09Z",
+      "baseRepository": "NTAP/rfc8312bis",
+      "baseRefName": "main",
+      "baseRefOid": "8d33e39eeff3eb83ae1a4190ed13ad92b11d5b51",
+      "headRepository": "goelvidhi/rfc8312bis",
+      "headRefName": "add-must-requirement",
+      "headRefOid": "fbfa6bed848036342b1c188423d33065c17bbdab",
+      "closedAt": "2021-10-28T09:23:09Z",
+      "mergedAt": "2021-10-28T09:23:09Z",
+      "mergedBy": "larseggert",
+      "mergeCommit": {
+        "oid": "6a84ca895bc631ce31f071f378a02145de690766"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 129,
+      "id": "PR_kwDOEpK-U84tzAcK",
+      "title": "replace vague \"If congestion persists\" phrase for CE handling",
+      "url": "https://github.com/NTAP/rfc8312bis/pull/129",
+      "state": "MERGED",
+      "author": "nealcardwell",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The text said: \"If congestion persists, a sender with a *cwnd* of 1 MSS MUST reduce\r\nits sending rate even further.\" But \"congestion persists\" is vague.\r\n\r\nIf this \"congestion\" is in the form of fast recovery events, a CUBIC\r\nresponse cutting the cwnd to 1 and using a timer to space out packets \r\nwould cause the connection to lose out badly to any competing Reno connections\r\nthat are not responding to fast recovery in this manner.\r\n\r\nThe text was presumably meant to just describe the response to CE marks,\r\nper RFC3168, so let's be explicit about that, to avoid Reno starving CUBIC.",
+      "createdAt": "2021-10-28T13:23:37Z",
+      "updatedAt": "2021-10-29T07:12:36Z",
+      "baseRepository": "NTAP/rfc8312bis",
+      "baseRefName": "main",
+      "baseRefOid": "6a84ca895bc631ce31f071f378a02145de690766",
+      "headRepository": "nealcardwell/rfc8312bis",
+      "headRefName": "patch-2",
+      "headRefOid": "bb59b4d1981a0f4f15542ea871e94ec8bd587986",
+      "closedAt": "2021-10-29T07:12:36Z",
+      "mergedAt": "2021-10-29T07:12:36Z",
+      "mergedBy": "larseggert",
+      "mergeCommit": {
+        "oid": "7cd66133528a1ce0dba4028bb8a5ea5c62d36723"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpK-U84vN0Ah",
+          "commit": {
+            "abbreviatedOid": "bb59b4d"
+          },
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-10-28T17:09:33Z",
+          "updatedAt": "2021-10-28T17:09:33Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOEpK-U84vP2gB",
+          "commit": {
+            "abbreviatedOid": "bb59b4d"
+          },
+          "author": "goelvidhi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-10-29T06:59:39Z",
+          "updatedAt": "2021-10-29T06:59:39Z",
           "comments": []
         }
       ]
