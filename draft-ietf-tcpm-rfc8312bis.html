@@ -23,10 +23,10 @@ CUBIC, it also moves the specification to the Standards Track,
 obsoleting RFC 8312.  This also requires updating RFC 5681, to allow
 for CUBIC's occasionally more aggressive sending behavior. 
     " name="description">
-<meta content="xml2rfc 3.10.0" name="generator">
+<meta content="xml2rfc 3.11.1" name="generator">
 <meta content="draft-ietf-tcpm-rfc8312bis-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.10.0
+  xml2rfc 3.11.1
     Python 3.9.5
     appdirs 1.4.4
     ConfigArgParse 1.3
@@ -1053,11 +1053,11 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">CUBIC</td>
-<td class="right">October 2021</td>
+<td class="right">November 2021</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Xu, et al.</td>
-<td class="center">Expires 2 May 2022</td>
+<td class="center">Expires 5 May 2022</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1076,12 +1076,12 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 <a href="https://datatracker.ietf.org/doc/html/rfc5681" class="eref">5681</a> (if approved)</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2021-10-29" class="published">29 October 2021</time>
+<time datetime="2021-11-01" class="published">1 November 2021</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2022-05-02">2 May 2022</time></dd>
+<dd class="expires"><time datetime="2022-05-05">5 May 2022</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1167,7 +1167,7 @@ do this.<a href="#section-note.2-3" class="pilcrow">¶</a></p>
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 2 May 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 5 May 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1185,9 +1185,9 @@ do this.<a href="#section-note.2-3" class="pilcrow">¶</a></p>
             publication of this document. Please review these documents
             carefully, as they describe your rights and restrictions with
             respect to this document. Code Components extracted from this
-            document must include Simplified BSD License text as described in
+            document must include Revised BSD License text as described in
             Section 4.e of the Trust Legal Provisions and are provided without
-            warranty as described in the Simplified BSD License.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
+            warranty as described in the Revised BSD License.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="toc">
@@ -1423,9 +1423,9 @@ guidelines specified in <span>[<a href="#RFC5033" class="xref">RFC5033</a>]</spa
       <h2 id="name-conventions">
 <a href="#section-2" class="section-number selfRef">2. </a><a href="#name-conventions" class="section-name selfRef">Conventions</a>
       </h2>
-<p id="section-2-1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
-NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED",
-"MAY", and "OPTIONAL" in this document are to be interpreted as
+<p id="section-2-1">The key words "<span class="bcp14">MUST</span>", "<span class="bcp14">MUST NOT</span>", "<span class="bcp14">REQUIRED</span>", "<span class="bcp14">SHALL</span>", "<span class="bcp14">SHALL</span>
+NOT", "<span class="bcp14">SHOULD</span>", "<span class="bcp14">SHOULD NOT</span>", "<span class="bcp14">RECOMMENDED</span>", "<span class="bcp14">NOT RECOMMENDED</span>",
+"<span class="bcp14">MAY</span>", and "<span class="bcp14">OPTIONAL</span>" in this document are to be interpreted as
 described in BCP 14 <span>[<a href="#RFC2119" class="xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="xref">RFC8174</a>]</span> when, and only when, they
 appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶</a></p>
 </section>
@@ -2102,7 +2102,7 @@ is non-decreasing and is less than the increase rate of slow start.<a href="#sec
             </svg><a href="#section-4.2-11.1" class="pilcrow">¶</a>
 </div>
 </div>
-<p id="section-4.2-12">The elapsed time <em>t</em> in <a href="#eq1" class="xref">Figure 1</a> MUST NOT include periods during
+<p id="section-4.2-12">The elapsed time <em>t</em> in <a href="#eq1" class="xref">Figure 1</a> <span class="bcp14">MUST NOT</span> include periods during
 which <em>cwnd</em> has not been updated due to an application limit (see
 <a href="#app-limited" class="xref">Section 5.8</a>).<a href="#section-4.2-12" class="pilcrow">¶</a></p>
 <p id="section-4.2-13">Depending on the value of the current congestion window size <em>cwnd</em>,
@@ -2324,13 +2324,13 @@ size <em>W<sub>est</sub></em> in the Reno-friendly region with<a href="#section-
 receiving a new ACK in congestion avoidance (where <em>cwnd</em> could be
 greater than or less than <em>W<sub>max</sub></em>), CUBIC checks whether
 W<sub>cubic</sub>(<em>t</em>) is less than <em>W<sub>est</sub></em>. If so, CUBIC is
-in the Reno-friendly region and <em>cwnd</em> SHOULD be set to
+in the Reno-friendly region and <em>cwnd</em> <span class="bcp14">SHOULD</span> be set to
 <em>W<sub>est</sub></em> at each reception of a new ACK.<a href="#section-4.3-8" class="pilcrow">¶</a></p>
 <p id="section-4.3-9"><em>W<sub>est</sub></em> is set equal to <em>cwnd<sub>start</sub></em> at the start
 of the congestion avoidance stage. After that, on every new ACK,
 <em>W<sub>est</sub></em> is updated using <a href="#eq4" class="xref">Figure 4</a>. Note that this equation
 is for a connection where Appropriate Byte Counting (ABC) <span>[<a href="#RFC3465" class="xref">RFC3465</a>]</span>
-is disabled. For a connection with ABC enabled, this equation SHOULD be
+is disabled. For a connection with ABC enabled, this equation <span class="bcp14">SHOULD</span> be
 adjusted by using the number of acknowledged bytes instead of acknowledged
 segments. Also note that this equation works for connections with
 enabled or disabled Delayed ACKs <span>[<a href="#RFC5681" class="xref">RFC5681</a>]</span>, as
@@ -2427,7 +2427,7 @@ the segments actually acknowledged by a new ACK.<a href="#section-4.3-9" class="
 <p id="section-4.3-11">Note that once <em>W<sub>est</sub></em> reaches <em>W<sub>max</sub></em>, that is,
 <em>W<sub>est</sub></em> &gt;= <em>W<sub>max</sub></em>, CUBIC needs to start probing to
 determine the new value of <em>W<sub>max</sub></em>. At this point,
-<span class="contact-name">α</span><em><sub>cubic</sub></em> SHOULD be set to 1 to ensure that
+<span class="contact-name">α</span><em><sub>cubic</sub></em> <span class="bcp14">SHOULD</span> be set to 1 to ensure that
 CUBIC can achieve the same congestion window increment as Reno,
 which uses AIMD(1, 0.5).<a href="#section-4.3-11" class="pilcrow">¶</a></p>
 </section>
@@ -2439,7 +2439,7 @@ which uses AIMD(1, 0.5).<a href="#section-4.3-11" class="pilcrow">¶</a></p>
         </h3>
 <p id="section-4.4-1">When receiving a new ACK in congestion avoidance, if CUBIC is not in the
 Reno-friendly region and <em>cwnd</em> is less than <em>W<sub>max</sub></em>, then
-CUBIC is in the concave region. In this region, <em>cwnd</em> MUST be
+CUBIC is in the concave region. In this region, <em>cwnd</em> <span class="bcp14">MUST</span> be
 incremented by<a href="#section-4.4-1" class="pilcrow">¶</a></p>
 <div id="section-4.4-2">
           <div class="alignCenter art-svg artwork" id="section-4.4-2.1">
@@ -2505,7 +2505,7 @@ careful in this region. The convex profile aims to
 increase the window very slowly at the beginning when <em>cwnd</em> is
 around <em>W<sub>max</sub></em> and then gradually increases its rate of increase.
 We also call this region the "maximum probing phase", since CUBIC is
-searching for a new <em>W<sub>max</sub></em>. In this region, <em>cwnd</em> MUST be
+searching for a new <em>W<sub>max</sub></em>. In this region, <em>cwnd</em> <span class="bcp14">MUST</span> be
 incremented by<a href="#section-4.5-3" class="pilcrow">¶</a></p>
 <div id="section-4.5-4">
           <div class="alignCenter art-svg artwork" id="section-4.5-4.1">
@@ -2561,12 +2561,12 @@ incremented by<a href="#section-4.5-3" class="pilcrow">¶</a></p>
 <p id="section-4.6-1">When a congestion event is detected by mechanisms described in
 <a href="#cubic-inc" class="xref">Section 3.1</a>, CUBIC updates <em>W<sub>max</sub></em> and reduces <em>cwnd</em>
 and <em>ssthresh</em> immediately as described below.
-In case of packet loss, the sender MUST reduce <em>cwnd</em>
+In case of packet loss, the sender <span class="bcp14">MUST</span> reduce <em>cwnd</em>
 and <em>ssthresh</em> immediately upon entering loss recovery, similar to
 <span>[<a href="#RFC5681" class="xref">RFC5681</a>]</span> (and <span>[<a href="#RFC6675" class="xref">RFC6675</a>]</span>). Note that other mechanisms,
 such as Proportional Rate Reduction <span>[<a href="#RFC6937" class="xref">RFC6937</a>]</span>, can be used
 to reduce the sending rate during loss recovery more gradually.
-The parameter <span class="contact-name">β</span><em><sub>cubic</sub></em> SHOULD be set to 0.7, which
+The parameter <span class="contact-name">β</span><em><sub>cubic</sub></em> <span class="bcp14">SHOULD</span> be set to 0.7, which
 is different from the multiplicative decrease factor used in <span>[<a href="#RFC5681" class="xref">RFC5681</a>]</span>
 (and <span>[<a href="#RFC6675" class="xref">RFC6675</a>]</span>) during fast recovery.<a href="#section-4.6-1" class="pilcrow">¶</a></p>
 <p id="section-4.6-2">In <a href="#eqssthresh" class="xref">Figure 5</a>, <em>flight_size</em> is the amount of outstanding data in
@@ -2898,10 +2898,10 @@ be adopted to mitigate this issue.<a href="#section-4.6-2" class="pilcrow">¶</a
 than 0.5 is slower convergence. We believe that while a more adaptive
 setting of <span class="contact-name">β</span><em><sub>cubic</sub></em> could result in faster
 convergence, it will make the analysis of CUBIC much harder.<a href="#section-4.6-4" class="pilcrow">¶</a></p>
-<p id="section-4.6-5">Note that CUBIC MUST continue to reduce <em>cwnd</em> in response to congestion
+<p id="section-4.6-5">Note that CUBIC <span class="bcp14">MUST</span> continue to reduce <em>cwnd</em> in response to congestion
 events due to ECN-Echo ACKs until it reaches a value of 1 MSS.
 If congestion events indicated by ECN-Echo ACKs persist, a sender with a
-<em>cwnd</em> of 1 MSS MUST reduce its sending rate even further. It can achieve
+<em>cwnd</em> of 1 MSS <span class="bcp14">MUST</span> reduce its sending rate even further. It can achieve
 that by using a retransmission timer with exponential backoff, as
 described in <span>[<a href="#RFC3168" class="xref">RFC3168</a>]</span>.<a href="#section-4.6-5" class="pilcrow">¶</a></p>
 </section>
@@ -2916,7 +2916,7 @@ joins the network, existing flows need to give up some of their
 bandwidth to allow the new flow some room for growth, if the existing
 flows have been using all the network bandwidth. To speed up this
 bandwidth release by existing flows, the following "Fast Convergence"
-mechanism SHOULD be implemented.<a href="#section-4.7-1" class="pilcrow">¶</a></p>
+mechanism <span class="bcp14">SHOULD</span> be implemented.<a href="#section-4.7-1" class="pilcrow">¶</a></p>
 <p id="section-4.7-2">With Fast Convergence, when a congestion event occurs, we update
 <em>W<sub>max</sub></em> as follows, before the window reduction as described
 in <a href="#mult-dec" class="xref">Section 4.6</a>.<a href="#section-4.7-2" class="pilcrow">¶</a></p>
@@ -3152,7 +3152,7 @@ earlier. This allows more time for the new flow to catch up to its
 congestion window size.<a href="#section-4.7-4" class="pilcrow">¶</a></p>
 <p id="section-4.7-5">Fast Convergence is designed for network environments with multiple
 CUBIC flows. In network environments with only a single CUBIC flow and
-without any other traffic, Fast Convergence SHOULD be disabled.<a href="#section-4.7-5" class="pilcrow">¶</a></p>
+without any other traffic, Fast Convergence <span class="bcp14">SHOULD</span> be disabled.<a href="#section-4.7-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="timeout">
@@ -3169,7 +3169,7 @@ increases its congestion window size using <a href="#eq1" class="xref">Figure 1<
 elapsed time since the beginning of the current congestion avoidance,
 <em>K</em> is set to 0, and <em>W<sub>max</sub></em> is set to the congestion window
 size at the beginning of the current congestion avoidance stage. In
-addition, for the Reno-friendly region, <em>W<sub>est</sub></em> SHOULD be
+addition, for the Reno-friendly region, <em>W<sub>est</sub></em> <span class="bcp14">SHOULD</span> be
 set to the congestion window size at the beginning of the current
 congestion avoidance.<a href="#section-4.8-2" class="pilcrow">¶</a></p>
 </section>
@@ -3187,7 +3187,7 @@ example, packet reordering could trigger this behavior. A high degree
 of packet reordering could cause multiple congestion window reduction
 events, where spurious losses are incorrectly interpreted as
 congestion signals, thus degrading CUBIC's performance significantly.<a href="#section-4.9-1" class="pilcrow">¶</a></p>
-<p id="section-4.9-2">When there is a congestion event, a CUBIC implementation SHOULD save
+<p id="section-4.9-2">When there is a congestion event, a CUBIC implementation <span class="bcp14">SHOULD</span> save
 the current value of the following variables before the congestion
 window reduction.<a href="#section-4.9-2" class="pilcrow">¶</a></p>
 <div id="section-4.9-3">
@@ -3362,10 +3362,10 @@ window reduction.<a href="#section-4.9-2" class="pilcrow">¶</a></p>
             </svg><a href="#section-4.9-3.1" class="pilcrow">¶</a>
 </div>
 </div>
-<p id="section-4.9-4">CUBIC MAY implement an algorithm to detect spurious retransmissions,
+<p id="section-4.9-4">CUBIC <span class="bcp14">MAY</span> implement an algorithm to detect spurious retransmissions,
 such as Forward RTO-Recovery <span>[<a href="#RFC5682" class="xref">RFC5682</a>]</span>. Experimental alternatives
 include DSACK <span>[<a href="#RFC3708" class="xref">RFC3708</a>]</span> and Eifel <span>[<a href="#RFC3522" class="xref">RFC3522</a>]</span>. Once a spurious
-congestion event is detected, CUBIC SHOULD restore the original values
+congestion event is detected, CUBIC <span class="bcp14">SHOULD</span> restore the original values
 of above-mentioned variables as follows if the current <em>cwnd</em> is lower
 than <em>prior_cwnd</em>. Restoring the original values ensures that CUBIC's
 performance is similar to what it would be without spurious losses.<a href="#section-4.9-4" class="pilcrow">¶</a></p>
@@ -3578,7 +3578,7 @@ performance is similar to what it would be without spurious losses.<a href="#sec
 </div>
 <p id="section-4.9-6">In rare cases, when the detection happens long after a spurious loss
 event and the current <em>cwnd</em> is already higher than <em>prior_cwnd</em>,
-CUBIC SHOULD continue to use the current and the most recent values of
+CUBIC <span class="bcp14">SHOULD</span> continue to use the current and the most recent values of
 these variables.<a href="#section-4.9-6" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -3587,9 +3587,9 @@ these variables.<a href="#section-4.9-6" class="pilcrow">¶</a></p>
         <h3 id="name-slow-start">
 <a href="#section-4.10" class="section-number selfRef">4.10. </a><a href="#name-slow-start" class="section-name selfRef">Slow Start</a>
         </h3>
-<p id="section-4.10-1">CUBIC MUST employ a slow-start algorithm, when <em>cwnd</em> is no more than
-<em>ssthresh</em>. In general, CUBIC SHOULD use the HyStart++ slow start
-algorithm <span>[<a href="#I-D.ietf-tcpm-hystartplusplus" class="xref">I-D.ietf-tcpm-hystartplusplus</a>]</span>, or MAY use the Reno TCP
+<p id="section-4.10-1">CUBIC <span class="bcp14">MUST</span> employ a slow-start algorithm, when <em>cwnd</em> is no more than
+<em>ssthresh</em>. In general, CUBIC <span class="bcp14">SHOULD</span> use the HyStart++ slow start
+algorithm <span>[<a href="#I-D.ietf-tcpm-hystartplusplus" class="xref">I-D.ietf-tcpm-hystartplusplus</a>]</span>, or <span class="bcp14">MAY</span> use the Reno TCP
 slow start algorithm <span>[<a href="#RFC5681" class="xref">RFC5681</a>]</span> in the rare cases when
 HyStart++ is not suitable. Experimental alternatives include
 hybrid slow start <span>[<a href="#HR08" class="xref">HR08</a>]</span>, a predecessor to HyStart++ that some CUBIC
@@ -4051,7 +4051,7 @@ However, we do not recommend setting <em>C</em> to a very low value like
 in fast and long-distance networks. Based on these observations and
 extensive deployment experience, we find <em>C</em>=0.4 gives a good balance
 between Reno-friendliness and aggressiveness of window increase.
-Therefore, <em>C</em> SHOULD be set to 0.4. With <em>C</em> set to 0.4, <a href="#eq6" class="xref">Figure 7</a> is
+Therefore, <em>C</em> <span class="bcp14">SHOULD</span> be set to 0.4. With <em>C</em> set to 0.4, <a href="#eq6" class="xref">Figure 7</a> is
 reduced to:<a href="#section-5.1-10" class="pilcrow">¶</a></p>
 <div id="eq7">
 <figure id="figure-8">
@@ -4592,7 +4592,7 @@ information about TCP security concerns can be found in <span>[<a href="#RFC5681
           <li class="normal" id="appendix-B.1-1.7">Change terminology from "AIMD" to "Reno"
 (<a href="https://github.com/NTAP/rfc8312bis/issues/108">#108</a>)<a href="#appendix-B.1-1.7" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="appendix-B.1-1.8">Moved MUST NOT from app-limited section to main cubic AI section
+          <li class="normal" id="appendix-B.1-1.8">Moved <span class="bcp14">MUST NOT</span> from app-limited section to main cubic AI section
 (<a href="https://github.com/NTAP/rfc8312bis/issues/97">#97</a>)<a href="#appendix-B.1-1.8" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="appendix-B.1-1.9">Clarify cwnd decrease during multiplicative decrease
