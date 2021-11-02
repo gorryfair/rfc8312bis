@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-10-31T00:00:57.504218+00:00",
+  "timestamp": "2021-11-02T00:00:43.352375+00:00",
   "repo": "NTAP/rfc8312bis",
   "labels": [
     {
@@ -2992,7 +2992,7 @@
       "id": "MDU6SXNzdWU5ODM1Njk2MjI=",
       "title": "RFC 8311 updates sender's response to CE / ECE",
       "url": "https://github.com/NTAP/rfc8312bis/issues/84",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "goelvidhi",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -3001,8 +3001,8 @@
       "labels": [],
       "body": "Markku Kojo said,\r\n> RFC 8311 (sec 4.1) allows modifying the TCP-sender response to\r\n  ECE for experimental purposes only. Has there been any discussion\r\n  with tsvwg in that modifying the TCP-response to ECE in CUBIC is\r\n  conflict with RFC 8311 as CUBIC is currently intended to become\r\n  a Standards Track RFC?",
       "createdAt": "2021-08-31T08:08:32Z",
-      "updatedAt": "2021-10-16T06:17:54Z",
-      "closedAt": null,
+      "updatedAt": "2021-11-01T09:49:17Z",
+      "closedAt": "2021-11-01T09:49:17Z",
       "comments": [
         {
           "author": "goelvidhi",
@@ -3052,6 +3052,13 @@
           "body": ">In particular, when there is little or no experimental results to support a stds track update; as Bob has recently testified that there has been hardly any ECN enabled routers in the Internet, the long deployment experience cannot include experience on modified ECN response. At the same time, RFC 8511 (ABE) documents findings saying that positive results with a larger MD factor were found only when the sender is in CA. This does not support using a larger MD factor when an ECN capable sender is in slow start.\r\n\r\nThe second statement is a bit of a contradiction of the first. If we can't believe the long deployment experience of CUBIC for ECN, then how can we believe RFC 8511's findings about large MD factor during CA.",
           "createdAt": "2021-10-16T06:17:53Z",
           "updatedAt": "2021-10-16T06:17:53Z"
+        },
+        {
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "body": "No answer from @markkukojo, closing.",
+          "createdAt": "2021-11-01T09:49:17Z",
+          "updatedAt": "2021-11-01T09:49:17Z"
         }
       ]
     },
@@ -3205,7 +3212,7 @@
       "labels": [],
       "body": "Markku Kojo said,\r\n> The draft states that RACK (and QUIC loss detection) can be used\r\n  with CUBIC to detect losses. However, it seems to have gone\r\n  unnoticed that RACK may also detect loss of a retransmission in\r\n  which case the congestion control response is required to be taken\r\n  twice, i.e., ssthresh and cwnd must be lowered again (MUST in\r\n  RFC 5681 Sec. 4.3). Once RACK got published all new congestion\r\n  controls and updates to existing RFCs must include this essential\r\n  congestion control response, if the congestion control mechanism\r\n  intends to use RACK for loss detection.\r\n>\r\n>  This draft does not have any such requirement nor does it specify\r\n  how this is done?",
       "createdAt": "2021-08-31T08:19:05Z",
-      "updatedAt": "2021-10-15T08:20:35Z",
+      "updatedAt": "2021-11-01T09:48:54Z",
       "closedAt": null,
       "comments": [
         {
@@ -3284,6 +3291,13 @@
           "body": "Thank you @markkukojo for the detailed explanation.\r\n\r\n>Because RFC 8985 and RFC 6675 do not give this necessary info, this draft basically should provide it but it is not the role of this draft as a pure congestion control algorithm.\r\n\r\nI agree with this statement and the reason is QUIC (recovery time is set to when the loss was first detected on ACK and retransmitted packets are sent after that with new packet numbers and sent timestamp) can very clearly detect original losses and rexmit losses and that is documented well in RFC 9002. So, CUBIC just works with QUIC without any modification. Although the response in congestion control is the same for both type of losses which I think is the right thing.\r\n\r\nSo, I think there is no update needed in CUBIC for this issue.\r\n\r\n",
           "createdAt": "2021-10-15T08:19:44Z",
           "updatedAt": "2021-10-15T08:20:35Z"
+        },
+        {
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "body": "@markkukojo do you agree with closing? If not, what **concrete** text changes would you like to propose?",
+          "createdAt": "2021-11-01T09:48:54Z",
+          "updatedAt": "2021-11-01T09:48:54Z"
         }
       ]
     },
@@ -3724,7 +3738,7 @@
       "labels": [],
       "body": "[Markku Kojo said](https://mailarchive.ietf.org/arch/msg/tcpm/nd4Af8QRQMDkp_R_9ZQMkI4yGAc):\r\n> I regret to say that the discussion in Sec 5. brings up surprisingly little data to back up the claims that are made. Given the long deployment experience that is emphasised in the draft, there, however, is little evidence (measurement data) summarised and cited to back up the claims. \"There is a long deployment experience\" does not provide any evidence as such. There should be a lot of studies with measurement data accumulated over the years that would support the assertions in the doc. Or, is there?",
       "createdAt": "2021-08-31T10:48:59Z",
-      "updatedAt": "2021-10-18T17:40:07Z",
+      "updatedAt": "2021-11-01T09:47:44Z",
       "closedAt": null,
       "comments": [
         {
@@ -3775,6 +3789,13 @@
           "body": "Let's add some text about and references to some (or all) of those and assume the issue is addressed.",
           "createdAt": "2021-10-18T17:40:07Z",
           "updatedAt": "2021-10-18T17:40:07Z"
+        },
+        {
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "body": "@lisongxu/@sangtaeha  could we get a PR for this, please?",
+          "createdAt": "2021-11-01T09:47:44Z",
+          "updatedAt": "2021-11-01T09:47:44Z"
         }
       ]
     },
@@ -3783,7 +3804,7 @@
       "id": "MDU6SXNzdWU5ODM3MTg4OTM=",
       "title": "Sec 5.1",
       "url": "https://github.com/NTAP/rfc8312bis/issues/92",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "larseggert",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -3792,8 +3813,8 @@
       "labels": [],
       "body": "[Markku Kojo said](https://mailarchive.ietf.org/arch/msg/tcpm/nd4Af8QRQMDkp_R_9ZQMkI4yGAc):\r\n>Sec 5.1\r\n>\r\n>In this subsection, one should show the impact of CUBIC when competing with AIMD TCP. The numbers in tables are derived from\r\nanalytical models that give average window size with fixed random loss probabilities and unlimited bandwidth. That is not the same as when flows are combeting in the same congested bottleneck that builds a queue.\r\nLoss probabilities for different flows are likely to be different especially at lower levels of statistical multiplexing.\r\n>\r\n>The first para of sec 5.1 does not sound like true. Simply looking at the original CUBIC paper [HRX08] reveals that CUBIC dominates AIMD TCP (SACK TCP) in the regions where SACK TCP alone is able to fully utilize the available bandwidth (Figure 10 c up until 200 Mbps, and to some extent in Fig 10 a with 40 ms delay). And \u00edn all cases where SACK TCP alone is not able to utilize all available b/w, CUBIC steals multiple times more b/w from SACK TCP than what SACK TCP is not able to utilize. Figures 5 and 6 tell the same story. Has something changed and/or is there possibly data that provides alternative evidence.\r\n>\r\n>In addition, the recommended value for constant C and the two alternative values presented in the draft are the same as in the original paper. It would be interesting to see if there has been any experimentation with different values and what might be the outcome?",
       "createdAt": "2021-08-31T10:49:35Z",
-      "updatedAt": "2021-10-11T07:26:02Z",
-      "closedAt": null,
+      "updatedAt": "2021-11-01T09:47:14Z",
+      "closedAt": "2021-11-01T09:47:14Z",
       "comments": [
         {
           "author": "larseggert",
@@ -3822,6 +3843,13 @@
           "body": "@markkukojo, please comment on the above?",
           "createdAt": "2021-10-11T07:26:02Z",
           "updatedAt": "2021-10-11T07:26:02Z"
+        },
+        {
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "body": "No response from @markkukojo in three weeks, closing.",
+          "createdAt": "2021-11-01T09:47:13Z",
+          "updatedAt": "2021-11-01T09:47:13Z"
         }
       ]
     },
@@ -4006,7 +4034,7 @@
       "labels": [],
       "body": "[Markku Kojo said](https://mailarchive.ietf.org/arch/msg/tcpm/nd4Af8QRQMDkp_R_9ZQMkI4yGAc):\r\n>Sec 5.6\r\n>\r\n>Competing CUBIC flows will converge but it happens very slowly and requires a large amount of data to send, i.e., short flows are more unlikely to live long enough to converge. This seems to be case at least according to the results in original paper [HRX08, Fig 4 b].\r\nSummary and citing some performance data would be very useful and much more convincing.",
       "createdAt": "2021-08-31T10:51:06Z",
-      "updatedAt": "2021-10-19T11:02:12Z",
+      "updatedAt": "2021-11-01T16:09:13Z",
       "closedAt": null,
       "comments": [
         {
@@ -4057,6 +4085,20 @@
           "body": "The best ref I know is below. Altho' it's a general Cubic evaluation, it focuses a lot on convergence, including insightful critique.\r\n\r\nLeith, D. J.; Shorten, R. N. & McCullagh, G. \"Experimental evaluation of Cubic-TCP\" Proc. Int'l Wkshp on Protocols for Future, Large-scale & Diverse Network Transports (PFLDNeT'07), 2007\r\n\r\nHere's my BiBTeX in case useful:\r\n\r\n@InProceedings{Leith07:Cubic_Eval,\r\n  author      = {Douglas J. Leith and Robert N. Shorten and G. McCullagh},\r\n  title       = {{Experimental evaluation of Cubic-TCP}{}},\r\n  booktitle   = {Proc. Int'l Wkshp on Protocols for Future, Large-scale \\& Diverse Network Transports (PFLDNeT'07)},\r\n  year        = {2007},\r\n  url         = {https://www.hamilton.ie/net/pfldnet2007_cubic_final.pdf},\r\n  affiliation = {Hamilton Inst.},\r\n  keywords    = {Data Communication, Networks, Internet, Quality of Service, QoS, Congestion Control, Rate Control, Algorithms, Protocols, Probing, Convergence},\r\n  owner       = {RJB},\r\n  timestamp   = {2010.10.07},\r\n}",
           "createdAt": "2021-10-19T11:02:12Z",
           "updatedAt": "2021-10-19T11:02:12Z"
+        },
+        {
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "body": "@lisongxu could we get a PR for this, please?",
+          "createdAt": "2021-11-01T09:46:41Z",
+          "updatedAt": "2021-11-01T09:46:41Z"
+        },
+        {
+          "author": "lisongxu",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Thanks, Bob! @bbriscoe That paper evaluated an earlier version of Cubic. The latest Cubic (since around 2008) has removed the window clamping for both the concave and convex regions, and thus improved the convergence for high BDP networks. ",
+          "createdAt": "2021-11-01T16:09:12Z",
+          "updatedAt": "2021-11-01T16:09:12Z"
         }
       ]
     },
@@ -12819,6 +12861,46 @@
           "body": "",
           "createdAt": "2021-10-29T06:59:39Z",
           "updatedAt": "2021-10-29T06:59:39Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 130,
+      "id": "PR_kwDOEpK-U84t77JM",
+      "title": "issue 96",
+      "url": "https://github.com/NTAP/rfc8312bis/pull/130",
+      "state": "OPEN",
+      "author": "lisongxu",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "https://github.com/NTAP/rfc8312bis/issues/96",
+      "createdAt": "2021-11-01T16:25:37Z",
+      "updatedAt": "2021-11-01T19:17:59Z",
+      "baseRepository": "NTAP/rfc8312bis",
+      "baseRefName": "main",
+      "baseRefOid": "5b8830aa98c6e1c73895aa2cf0c18bd39829fc8a",
+      "headRepository": "lisongxu/rfc8312bis",
+      "headRefName": "main",
+      "headRefOid": "20b8b3fd62388d4ada8856767d2bbded4a65542c",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpK-U84vXA_7",
+          "commit": {
+            "abbreviatedOid": "20b8b3f"
+          },
+          "author": "larseggert",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-11-01T19:17:51Z",
+          "updatedAt": "2021-11-01T19:17:51Z",
           "comments": []
         }
       ]
