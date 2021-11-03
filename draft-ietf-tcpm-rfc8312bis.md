@@ -666,7 +666,7 @@ from one RTT to another, resulting in *flight_size* that is significantly
 less than *cwnd* on a congestion event. This may decrease *cwnd* to a
 much lower value than necessary. To avoid suboptimal performance with
 such applications, the mechanisms described in {{?RFC7661}} can be used 
-to mitigate this issue, would allow using a value between *cwnd* 
+to mitigate this issue as it would allow using a value between *cwnd* 
 and *flight_size* to calculate the new *ssthresh* in {{eqssthresh}}. 
 Some implementations of CUBIC use *cwnd* when calculating a new *ssthresh*.
 
