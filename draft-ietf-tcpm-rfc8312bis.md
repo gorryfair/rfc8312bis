@@ -668,7 +668,7 @@ much lower value than necessary. To avoid suboptimal performance with
 such applications, the mechanisms described in {{?RFC7661}} can be used 
 to mitigate this issue as it would allow using a value between *cwnd* 
 and *flight_size* to calculate the new *ssthresh* in {{eqssthresh}}. 
-Some implementations of CUBIC use *cwnd* when calculating a new *ssthresh*.
+Some implementations of CUBIC use *cwnd* instead of *flight_size* when calculating a new *ssthresh* using {{eqssthresh}}.
 
 ~~~ math
 \begin{array}{lll}
