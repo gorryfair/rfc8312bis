@@ -1117,6 +1117,8 @@ These individuals suggested improvements to this document:
   ([#96](https://github.com/NTAP/rfc8312bis/issues/96))
 - Add more test results to Section 5 and update some references
   ([#91](https://github.com/NTAP/rfc8312bis/issues/91))
+- Change wording around setting ssthresh
+  ([#131](https://github.com/NTAP/rfc8312bis/issues/131))
 
 ## Since draft-ietf-tcpm-rfc8312bis-04
 
